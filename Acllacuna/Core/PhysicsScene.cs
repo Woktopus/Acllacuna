@@ -34,9 +34,6 @@ namespace Acllacuna
 			world = null;
 
 			gravity = new Vector2(0, 10);
-
-			platforms = new List<Body>();
-			platformsImages = new List<Image>();
 		}
 
 		public override void LoadContent(ContentManager content, GraphicsDevice graph)
@@ -78,62 +75,13 @@ namespace Acllacuna
 				ConvertUnits.ToSimUnits(graph.Viewport.Height), 0f,
 				0f, 1f
 			);
-
-			///////////////////////////////////////////////////////////////////////////////
-
-			for (int i = 0; i < 5; ++i)
-			{
-				Body platform = BodyFactory.CreateRectangle(world, 1f, 1f, 1f);
-
-				platform.CollisionCategories = Category.Cat1;
-				platform.CollidesWith = Category.Cat2;
-
-				platform.BodyType = BodyType.Static;
-				platform.Position = new Vector2(2 + (i * 3), 10);
-
-				Image platformImage = new Image();
-				platformImage.LoadContent(
-					 content,
-					 "Graphics/minecraft", Color.White,
-					 ConvertUnits.ToDisplayUnits(platform.Position)
-				 );
-
-				platformImage.ScaleToAABB(PhysicsUtils.GetAABBFromBody(platform));
-
-				platforms.Add(platform);
-				platformsImages.Add(platformImage);
-			}
 		}
 
-		/*bool onBeginContact( Contact contact )
+		bool onBeginContact( Contact contact )
 		{
-			Fixture fixtureA = contact.FixtureA;
-			Fixture fixtureB = contact.FixtureB;
-
-			Body bodyA = fixtureA.Body;
-			Body bodyB = fixtureB.Body;
-
-			BodyData dataA = (BodyData)bodyA.UserData;
-			BodyData dataB = (BodyData)bodyB.UserData;
-
-			if (dataA.name == "player" && dataB.name == "platform")
-			{
-				if (bodyA.Position.Y + (dataA.size.Y / 2) > bodyB.Position.Y - (dataB.size.Y / 2))
-				{
-					return false;
-				}
-			}
-
-			if (dataB.name == "player" && dataA.name == "platform")
-			{
-				if (bodyB.Position.Y + (dataB.size.Y / 2) > bodyA.Position.Y - (dataA.size.Y / 2))
-				{
-					return false;
-				}
-			}
-
+			// ...
 			return true;
-		}*/
+		}
 
 		void onEndContact( Contact contact )
 		{
@@ -165,12 +113,6 @@ namespace Acllacuna
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			debugView.RenderDebugData(ref projection);
-
-			int platformCount = platforms.Count;
-			for (int i = 0; i < platformCount; ++i)
-			{
-				platformsImages[i].Draw(spriteBatch);
-			}
 		}
 	}
 }
