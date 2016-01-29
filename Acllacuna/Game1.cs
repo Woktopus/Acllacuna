@@ -16,6 +16,11 @@ namespace Acllacuna
 		{
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
+
+            //Initialisation du serfice helper & init des services d'inputs et de son 
+            ServiceHelper.Game = this;
+            Components.Add(new InputManagerService(this));
+            Components.Add(new SoundService(this));
 		}
 
 		/// <summary>
