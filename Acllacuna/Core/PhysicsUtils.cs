@@ -5,10 +5,14 @@ using FarseerPhysics.Dynamics;
 
 using Microsoft.Xna.Framework;
 
+using System;
+
 namespace Acllacuna
 {
 	public class PhysicsUtils
 	{
+		public static float FPS = 60f;
+
 		public static AABB GetAABBFromBody(Body body)
 		{
 			Transform t;
@@ -28,6 +32,33 @@ namespace Acllacuna
 			}
 
 			return aabb;
+		}
+
+		public static float GetVerticalSpeedToReach(World world, float height)
+		{
+			if (height <= 0)
+			{
+				return 0;
+			}
+
+			float t = 1 / FPS;
+			Vector2 gravityStep = world.Gravity * t * t;
+
+			//ax² + bx + c = 0
+			float a = 0.5f / gravityStep.Y;
+			float b = 0.5f;
+			float c = height;
+
+			double solution1 = (-b - Math.Sqrt(Math.Abs(b * b - 4f * a * c))) / (2f * a);
+			double solution2 = (-b + Math.Sqrt(Math.Abs(b * b - 4f * a * c))) / (2f * a);
+
+			float verticalSpeed = (float)solution1;
+			if (verticalSpeed < 0)
+			{
+				verticalSpeed = (float)solution2;
+			}
+
+			return verticalSpeed * FPS;
 		}
 	}
 }

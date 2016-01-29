@@ -26,14 +26,11 @@ namespace Acllacuna
 		protected DebugViewXNA debugView;
 		protected Matrix projection;
 
-        Block block;
-
 		public PhysicsScene()
 		{
 			world = null;
 
-			gravity = new Vector2(0, 10);
-            block = new Block();
+			gravity = new Vector2(0, 20);
 		}
 
 		public override void LoadContent(ContentManager content, GraphicsDevice graph)
@@ -75,9 +72,6 @@ namespace Acllacuna
 				ConvertUnits.ToSimUnits(graph.Viewport.Height), 0f,
 				0f, 1f
 			);
-
-            
-
 		}
 
 		bool onBeginContact( Contact contact )
@@ -110,7 +104,7 @@ namespace Acllacuna
 			base.Update(gameTime);
 
 			// variable time step but never less then 30 Hz
-			world.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalSeconds, (1f / 30f)));
+			world.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalSeconds, (1f / PhysicsUtils.FPS)));
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
