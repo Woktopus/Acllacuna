@@ -26,11 +26,14 @@ namespace Acllacuna
 		protected DebugViewXNA debugView;
 		protected Matrix projection;
 
+        Block block;
+
 		public PhysicsScene()
 		{
 			world = null;
 
 			gravity = new Vector2(0, 10);
+            block = new Block();
 		}
 
 		public override void LoadContent(ContentManager content, GraphicsDevice graph)
@@ -51,7 +54,7 @@ namespace Acllacuna
 			}
 			
 			// register
-			//world.ContactManager.BeginContact += onBeginContact;
+			world.ContactManager.BeginContact += onBeginContact;
 			world.ContactManager.EndContact += onEndContact;
 			world.ContactManager.PreSolve += onPreSolve;
 			world.ContactManager.PostSolve += onPostSolve;
@@ -72,6 +75,9 @@ namespace Acllacuna
 				ConvertUnits.ToSimUnits(graph.Viewport.Height), 0f,
 				0f, 1f
 			);
+
+            
+
 		}
 
 		bool onBeginContact( Contact contact )
