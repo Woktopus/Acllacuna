@@ -31,9 +31,13 @@ namespace Acllacuna
 		/// </summary>
 		protected override void Initialize()
 		{
-			// TODO: Add your initialization logic here
-
-			base.Initialize();
+            // TODO: Add your initialization logic here
+            SceneManager.Instance.Initialize();
+            SceneManager.Instance.Dimensions = new Vector2(750, 540);
+            graphics.PreferredBackBufferWidth = (int)SceneManager.Instance.Dimensions.X;
+            graphics.PreferredBackBufferHeight = (int)SceneManager.Instance.Dimensions.Y;
+            graphics.ApplyChanges();
+            base.Initialize();
 		}
 
 		/// <summary>
@@ -45,8 +49,9 @@ namespace Acllacuna
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
-			// TODO: use this.Content to load your game content here
-		}
+            // TODO: use this.Content to load your game content here
+            SceneManager.Instance.LoadContent(Content, GraphicsDevice);
+        }
 
 		/// <summary>
 		/// UnloadContent will be called once per game and is the place to unload
@@ -67,9 +72,9 @@ namespace Acllacuna
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
-			// TODO: Add your update logic here
-
-			base.Update(gameTime);
+            // TODO: Add your update logic here
+            SceneManager.Instance.Update(gameTime);
+            base.Update(gameTime);
 		}
 
 		/// <summary>
@@ -80,9 +85,13 @@ namespace Acllacuna
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
-			// TODO: Add your drawing code here
-
-			base.Draw(gameTime);
+            // TODO: Add your drawing code here
+            // Start drawing
+            spriteBatch.Begin();
+            SceneManager.Instance.Draw(spriteBatch);
+            // Stop drawing
+            spriteBatch.End();
+            base.Draw(gameTime);
 		}
 	}
 }
