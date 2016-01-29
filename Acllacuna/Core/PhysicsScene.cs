@@ -26,9 +26,6 @@ namespace Acllacuna
 		protected DebugViewXNA debugView;
 		protected Matrix projection;
 
-		List<Body> platforms;
-		List<Image> platformsImages;
-
 		public PhysicsScene()
 		{
 			world = null;
