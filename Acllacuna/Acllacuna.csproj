@@ -38,6 +38,18 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Core\Animation.cs" />
+    <Compile Include="Core\GameScene.cs" />
+    <Compile Include="Core\Image.cs" />
+    <Compile Include="Core\ParallaxingBackground.cs" />
+    <Compile Include="Core\PhysicsScene.cs" />
+    <Compile Include="Core\PhysicsUtils.cs" />
+    <Compile Include="Core\Scene.cs" />
+    <Compile Include="Core\SceneManager.cs" />
+    <Compile Include="Core\SplashScreen.cs" />
+    <Compile Include="Core\Text.cs" />
+    <Compile Include="Core\TitleScene.cs" />
+    <Compile Include="Core\Transition.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
