@@ -413,6 +413,10 @@ namespace Acllacuna
 
             Enemy enemy = enemies
                 .FirstOrDefault(i => i.id == enemyID);
+			if (enemy == null)
+			{
+				return;
+			}
 
             enemy.sensorsContacts[sensorID]--;
         }
