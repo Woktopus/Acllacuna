@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;using FarseerPhysics;
+using System.Collections.Generic;
+using FarseerPhysics;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Dynamics.Contacts;
@@ -11,213 +12,231 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Acllacuna
 {
-	public class Player
-	{
-        private PhysicsScene physicsScene; 
+    public class Player
+    {
+        private PhysicsScene physicsScene;
 
-		protected Body body;
+        protected Body body;
 
-		protected Fixture[] feet;
+        protected Fixture[] feet;
 
-		protected Animation animation;
+        protected Animation animation;
 
-		protected Vector2 size;
+        protected Vector2 size;
 
-		public int contactsWithFloor;
+        public int contactsWithFloor;
 
-		protected float desiredHorizontalVelocity;
+        protected float desiredHorizontalVelocity;
 
-		protected bool hasJumped;
+        protected bool hasJumped;
 
-		protected bool hasMoved;
+        protected bool hasMoved;
+
+        public float projectileCooldown;
+
+        //FireRate
+        const float SECONDS_IN_MINUTE = 60f;
+        const float RATE_OF_FIRE = 200f;
+        TimeSpan laserSpawnTime = TimeSpan.FromSeconds(SECONDS_IN_MINUTE / RATE_OF_FIRE);
+        TimeSpan previousLaserSpawnTime = TimeSpan.Zero;
 
         //Stats
         public DirectionEnum directionRegard { get; set; }
         public int Health { get; set; }
         public int Ammo { get; set; }
 
-		public Player()
-		{
-			animation = new Animation();
+        public Player()
+        {
+            animation = new Animation();
 
-			contactsWithFloor = 0;
+            contactsWithFloor = 0;
 
             Health = 100;
             Ammo = 100;
 
-			feet = new Fixture[3];
+            feet = new Fixture[3];
 
-			hasJumped = false;
+            hasJumped = false;
 
-			hasMoved = false;
-		}
+            hasMoved = false;
 
-		public Vector2 GetPositionFromBody()
-		{
-			return body.Position;
-		}
+            projectileCooldown = 0f;
+        }
+
+        public Vector2 GetPositionFromBody()
+        {
+            return body.Position;
+        }
 
         public void LoadContent(World world, ContentManager content, Vector2 position, PhysicsScene physicsScene)
-		{
-			SetSize();
+        {
+            SetSize();
 
             this.physicsScene = physicsScene;
 
-			body = BodyFactory.CreateRectangle(world, size.X, size.Y - 0.1f, 1f);
-			
-			body.BodyType = BodyType.Dynamic;
+            body = BodyFactory.CreateRectangle(world, size.X, size.Y - 0.1f, 1f);
 
-			body.FixedRotation = true;
+            body.BodyType = BodyType.Dynamic;
 
-			body.Position = position;
+            body.FixedRotation = true;
 
-			body.Mass = 50;
+            body.Position = position;
 
-			CircleShape circle1 = new CircleShape(0.1f, 1f);
-			CircleShape circle2 = new CircleShape(0.1f, 1f);
-			CircleShape circle3 = new CircleShape(0.1f, 1f);
-			CircleShape circle4 = new CircleShape(0.1f, 1f);
-			CircleShape circle5 = new CircleShape(0.1f, 1f);
+            body.Mass = 50;
 
-			circle1.Position = new Vector2(-((size.X / 2) - 0.2f), (size.Y - 0.1f) / 2);
-			circle2.Position = new Vector2(0, (size.Y - 0.1f) / 2);
-			circle3.Position = new Vector2((size.X / 2) - 0.2f, (size.Y - 0.1f) / 2);
-			circle4.Position = new Vector2(-size.X / 2, 0);
-			circle5.Position = new Vector2(size.X / 2, 0);
+            CircleShape circle1 = new CircleShape(0.1f, 1f);
+            CircleShape circle2 = new CircleShape(0.1f, 1f);
+            CircleShape circle3 = new CircleShape(0.1f, 1f);
+            CircleShape circle4 = new CircleShape(0.1f, 1f);
+            CircleShape circle5 = new CircleShape(0.1f, 1f);
 
-			feet[0] = body.CreateFixture(circle1);
-			feet[1] = body.CreateFixture(circle2);
-			feet[2] = body.CreateFixture(circle3);
+            circle1.Position = new Vector2(-((size.X / 2) - 0.2f), (size.Y - 0.1f) / 2);
+            circle2.Position = new Vector2(0, (size.Y - 0.1f) / 2);
+            circle3.Position = new Vector2((size.X / 2) - 0.2f, (size.Y - 0.1f) / 2);
+            circle4.Position = new Vector2(-size.X / 2, 0);
+            circle5.Position = new Vector2(size.X / 2, 0);
 
-			body.CreateFixture(circle4).UserData = 0;
-			body.CreateFixture(circle5).UserData = 0;
+            feet[0] = body.CreateFixture(circle1);
+            feet[1] = body.CreateFixture(circle2);
+            feet[2] = body.CreateFixture(circle3);
+
+            body.CreateFixture(circle4).UserData = 0;
+            body.CreateFixture(circle5).UserData = 0;
 
             directionRegard = DirectionEnum.RIGHT;
 
-			SetIDS();
+            SetIDS();
 
-			LoadAnimation(content);
-		}
+            LoadAnimation(content);
+        }
 
-		protected virtual void SetSize()
-		{
-			this.size = new Vector2(2.5f, 3f);
-		}
+        protected virtual void SetSize()
+        {
+            this.size = new Vector2(2.5f, 3f);
+        }
 
-		protected virtual void SetIDS()
-		{
-			body.FixtureList[0].UserData = (int)0;
-			feet[0].UserData = (int)1;
-			feet[1].UserData = (int)1;
-			feet[2].UserData = (int)1;
-		}
+        protected virtual void SetIDS()
+        {
+            body.FixtureList[0].UserData = (int)0;
+            feet[0].UserData = (int)1;
+            feet[1].UserData = (int)1;
+            feet[2].UserData = (int)1;
+        }
 
-		protected virtual void LoadAnimation(ContentManager content)
-		{
-			animation.LoadContent(content, "Graphics/Spritesheet", Color.White, GetDrawPosition(), 150, new Vector2(4, 4));
+        protected virtual void LoadAnimation(ContentManager content)
+        {
+            animation.LoadContent(content, "Graphics/Spritesheet", Color.White, GetDrawPosition(), 150, new Vector2(4, 4));
 
-			animation.SelectAnimation(0);
+            animation.SelectAnimation(0);
 
-			animation.ScaleToMeters(size);
+            animation.ScaleToMeters(size);
 
-			animation.isActive = true;
-		}
+            animation.isActive = true;
+        }
 
-		public void Update(GameTime gameTime, World world)
-		{
-			feet[0].Friction = 1000;
-			feet[1].Friction = 1000;
-			feet[2].Friction = 1000;
+        public void Update(GameTime gameTime, World world)
+        {
+            feet[0].Friction = 1000;
+            feet[1].Friction = 1000;
+            feet[2].Friction = 1000;
 
-			SetVelocity(world);
+            SetVelocity(world, gameTime);
 
-			if (hasMoved && animation.isEnded && contactsWithFloor > 0)
-			{
-				animation.SelectAnimation(1);
-				animation.loop = false;
-			}
+            if (hasMoved && animation.isEnded && contactsWithFloor > 0)
+            {
+                animation.SelectAnimation(1);
+                animation.loop = false;
+            }
 
-			if (hasJumped)
-			{
-				hasJumped = false;
-				animation.SelectAnimation(2);
-				animation.loop = false;
-			}
+            if (hasJumped)
+            {
+                hasJumped = false;
+                animation.SelectAnimation(2);
+                animation.loop = false;
+            }
 
-			if (desiredHorizontalVelocity != 0)
-			{
-				feet[0].Friction = 0;
-				feet[1].Friction = 0;
-				feet[2].Friction = 0;
-			}
+            if (desiredHorizontalVelocity != 0)
+            {
+                feet[0].Friction = 0;
+                feet[1].Friction = 0;
+                feet[2].Friction = 0;
+            }
 
-			for (ContactEdge contactEdge = body.ContactList; contactEdge != null; contactEdge = contactEdge.Next)
-			{
-				contactEdge.Contact.ResetFriction();
-			}
+            for (ContactEdge contactEdge = body.ContactList; contactEdge != null; contactEdge = contactEdge.Next)
+            {
+                contactEdge.Contact.ResetFriction();
+            }
 
-			animation.position = GetDrawPosition();
-			animation.Update(gameTime);
-		}
+            animation.position = GetDrawPosition();
+            animation.Update(gameTime);
+        }
 
-		protected virtual void SetVelocity(World world)
-		{
-			KeyboardState keyboardInput = ServiceHelper.Get<InputManagerService>().Keyboard.GetState();
+        protected virtual void SetVelocity(World world, GameTime gameTime)
+        {
+            KeyboardState keyboardInput = ServiceHelper.Get<InputManagerService>().Keyboard.GetState();
 
-			Vector2 velocity = body.LinearVelocity;
-			
-			hasMoved = false;
+            Vector2 velocity = body.LinearVelocity;
 
-			desiredHorizontalVelocity = velocity.X * 0.95f;
-			if (keyboardInput.IsKeyDown(Keys.Left))
-			{
-				desiredHorizontalVelocity = MathHelper.Max(velocity.X - 0.5f, -5.0f);
-				hasMoved = true;
+            hasMoved = false;
+
+            desiredHorizontalVelocity = velocity.X * 0.95f;
+            if (keyboardInput.IsKeyDown(Keys.Left))
+            {
+                desiredHorizontalVelocity = MathHelper.Max(velocity.X - 0.5f, -5.0f);
+                hasMoved = true;
                 this.directionRegard = DirectionEnum.LEFT;
-			}
-			if (keyboardInput.IsKeyDown(Keys.Right))
-			{
-				desiredHorizontalVelocity = MathHelper.Min(velocity.X + 0.5f, 5.0f);
-				hasMoved = true;
+            }
+            if (keyboardInput.IsKeyDown(Keys.Right))
+            {
+                desiredHorizontalVelocity = MathHelper.Min(velocity.X + 0.5f, 5.0f);
+                hasMoved = true;
                 this.directionRegard = DirectionEnum.RIGHT;
             }
 
-			float velocityChange = desiredHorizontalVelocity - velocity.X;
-			float impulse = body.Mass * velocityChange;
+            float velocityChange = desiredHorizontalVelocity - velocity.X;
+            float impulse = body.Mass * velocityChange;
 
-			body.ApplyLinearImpulse(new Vector2(impulse, 0), body.WorldCenter);
+            body.ApplyLinearImpulse(new Vector2(impulse, 0), body.WorldCenter);
 
-			if (keyboardInput.IsKeyDown(Keys.Up) && contactsWithFloor > 0)
-			{
-				float jumpVelocity = PhysicsUtils.GetVerticalSpeedToReach(world, 2);
-				body.LinearVelocity = new Vector2(velocity.X, -jumpVelocity);
-				hasJumped = true;
-			}
+            if (keyboardInput.IsKeyDown(Keys.Up) && contactsWithFloor > 0)
+            {
+                float jumpVelocity = PhysicsUtils.GetVerticalSpeedToReach(world, 2);
+                body.LinearVelocity = new Vector2(velocity.X, -jumpVelocity);
+                hasJumped = true;
+            }
 
             if (keyboardInput.IsKeyDown(Keys.Space))
             {
-                LaunchProjectile();
-            }
-		}
-
-        public void LaunchProjectile()
-        {
-            if (Ammo > 0)
-            {
-                this.physicsScene.projectileFactory.LaunchProjectile(this.directionRegard, 
-                    new Vector2(1, 1), body.Position, "Graphics/Projectile/lame_hitbox", 10);
-                Ammo--;
+                if (Ammo > 0)
+                {
+                    if (gameTime.TotalGameTime - previousLaserSpawnTime > laserSpawnTime)
+                    {
+                        previousLaserSpawnTime = gameTime.TotalGameTime;
+                        LaunchProjectile();
+                    }
+                    else
+                    {
+                        projectileCooldown -= gameTime.ElapsedGameTime.Milliseconds;
+                    }
+                }
             }
         }
 
-		public void Draw(SpriteBatch spriteBatch)
-		{
-			animation.Draw(spriteBatch);
-		}
+        public void LaunchProjectile()
+        {
+            this.physicsScene.projectileFactory.LaunchProjectile(this.directionRegard,
+            new Vector2(1, 1), body.Position, "Graphics/Projectile/lame_hitbox", 10);
+            Ammo--;
+        }
 
-		protected Vector2 GetDrawPosition()
-		{
-			return ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, 0.1f / 2));
-		}
-	}
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            animation.Draw(spriteBatch);
+        }
+
+        protected Vector2 GetDrawPosition()
+        {
+            return ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, 0.1f / 2));
+        }
+    }
 }

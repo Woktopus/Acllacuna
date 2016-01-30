@@ -39,7 +39,7 @@ namespace Acllacuna
 			animation.ScaleToMeters(size);
 		}
 
-		protected override void SetVelocity(World world)
+		protected override void SetVelocity(World world, GameTime gameTime)
 		{
 
 		}
