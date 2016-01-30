@@ -167,7 +167,10 @@ namespace Acllacuna
                 int collectibleItemId = (int)fixtureA.UserData - 500;
                 CollectibleItem item = collectibleItems
                     .FirstOrDefault(i => i.id == collectibleItemId);
-                
+                if (item == null)
+				{
+					return;
+				}
                 
                 if (item.type == CollectibleItemType.HEALTH)
                 {
@@ -195,7 +198,11 @@ namespace Acllacuna
             {
                 int collectibleItemId = (int)fixtureB.UserData - 500;
                 CollectibleItem item = collectibleItems
-                    .FirstOrDefault(i => i.id == collectibleItemId);
+					.FirstOrDefault(i => i.id == collectibleItemId);
+				if (item == null)
+				{
+					return;
+				}
 
 
                 if (item.type == CollectibleItemType.HEALTH)
