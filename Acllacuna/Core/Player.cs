@@ -18,7 +18,7 @@ namespace Acllacuna
 
 		Vector2 size;
 
-		int contactsWithFloor;
+		public int contactsWithFloor;
 
 		public Player()
 		{
@@ -75,7 +75,7 @@ namespace Acllacuna
 
 			body.ApplyLinearImpulse(new Vector2(impulse, 0), body.WorldCenter);
 
-			if (keyboardInput.IsKeyDown(Keys.Up))
+			if (keyboardInput.IsKeyDown(Keys.Up) && contactsWithFloor > 0)
 			{
 				float jumpVelocity = PhysicsUtils.GetVerticalSpeedToReach(world, 2);
 				body.LinearVelocity = new Vector2(velocity.X, -jumpVelocity);

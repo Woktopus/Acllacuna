@@ -28,6 +28,8 @@ namespace Acllacuna
 
 		Player player;
 
+		MovingPlatforme platform;
+
 		public PhysicsScene()
 		{
 			world = null;
@@ -35,6 +37,8 @@ namespace Acllacuna
 			gravity = new Vector2(0, 20);
 
 			player = new Player();
+
+			platform = new MovingPlatforme();
 		}
 
 		public override void LoadContent(ContentManager content, GraphicsDevice graph)
@@ -76,6 +80,10 @@ namespace Acllacuna
 				ConvertUnits.ToSimUnits(graph.Viewport.Height), 0f,
 				0f, 1f
 			);
+
+			player.LoadContent(world, content, new Vector2(10, 0));
+
+			platform.LoadContent(world, new Vector2(6, 1), new Vector2(10, 10), content, "Graphics/cube2", PlatformeDirection.LEFT_RIGHT, 3f, 3f);
 		}
 
 		bool onBeginContact( Contact contact )
@@ -85,7 +93,11 @@ namespace Acllacuna
 
 			if ((int)fixtureA.UserData == 1)
 			{
-
+				player.contactsWithFloor++;
+			}
+			if ((int)fixtureB.UserData == 1)
+			{
+				player.contactsWithFloor++;
 			}
 
 			return true;
@@ -93,7 +105,17 @@ namespace Acllacuna
 
 		void onEndContact( Contact contact )
 		{
-			// ...
+			Fixture fixtureA = contact.FixtureA;
+			Fixture fixtureB = contact.FixtureB;
+
+			if ((int)fixtureA.UserData == 1)
+			{
+				player.contactsWithFloor--;
+			}
+			if ((int)fixtureB.UserData == 1)
+			{
+				player.contactsWithFloor--;
+			}
 		}
 
 		void onPreSolve( Contact contact, ref Manifold oldManifold )
@@ -114,12 +136,20 @@ namespace Acllacuna
 		{
 			base.Update(gameTime, game);
 
+			platform.Update(gameTime);
+
+			player.Update(gameTime, world);
+
 			// variable time step but never less then 30 Hz
 			world.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalSeconds, (1f / PhysicsUtils.FPS)));
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
+			platform.Draw(spriteBatch);
+
+			player.Draw(spriteBatch);
+
 			debugView.RenderDebugData(ref projection);
 		}
 	}

@@ -34,6 +34,9 @@ namespace Acllacuna
         {
             //Initialisation du body 
             body = BodyFactory.CreateRectangle(world, size.X, size.Y, 1f);
+
+			body.FixtureList[0].UserData = (int)3;
+
             body.BodyType = BodyType.Kinematic;
             body.Position = position;
             this.bodySize = size;
