@@ -58,7 +58,7 @@ namespace Acllacuna
 
             feet = new Fixture[3];
 
-			bumpers = new Fixture[6];
+			bumpers = new Fixture[10];
 
 			hasJumped = false;
             hasMoved = false;
@@ -96,6 +96,10 @@ namespace Acllacuna
 			CircleShape circle7 = new CircleShape(0.1f, 1f);
 			CircleShape circle8 = new CircleShape(0.1f, 1f);
 			CircleShape circle9 = new CircleShape(0.1f, 1f);
+			CircleShape circle10 = new CircleShape(0.1f, 1f);
+			CircleShape circle11 = new CircleShape(0.1f, 1f);
+			CircleShape circle12 = new CircleShape(0.1f, 1f);
+			CircleShape circle13 = new CircleShape(0.1f, 1f);
 
             circle1.Position = new Vector2(-((size.X / 2) - 0.2f), (size.Y - 0.1f) / 2);
             circle2.Position = new Vector2(0, (size.Y - 0.1f) / 2);
@@ -107,6 +111,10 @@ namespace Acllacuna
 			circle7.Position = new Vector2(size.X / 2, -(size.Y - 0.1f) / 2);
 			circle8.Position = new Vector2(size.X / 2, (size.Y - 0.1f) / 2);
 			circle9.Position = new Vector2(size.X / 2, 0);
+			circle10.Position = new Vector2(size.X / 2, -(size.Y - 0.1f) / 4);
+			circle11.Position = new Vector2(size.X / 2, (size.Y - 0.1f) / 4);
+			circle12.Position = new Vector2(-size.X / 2, -(size.Y - 0.1f) / 4);
+			circle13.Position = new Vector2(-size.X / 2, (size.Y - 0.1f) / 4);
 
 			feet[0] = body.CreateFixture(circle1);
 			feet[1] = body.CreateFixture(circle2);
@@ -118,6 +126,10 @@ namespace Acllacuna
 			bumpers[3] = body.CreateFixture(circle7);
 			bumpers[4] = body.CreateFixture(circle8);
 			bumpers[5] = body.CreateFixture(circle9);
+			bumpers[6] = body.CreateFixture(circle10);
+			bumpers[7] = body.CreateFixture(circle11);
+			bumpers[8] = body.CreateFixture(circle12);
+			bumpers[9] = body.CreateFixture(circle13);
 
             directionRegard = DirectionEnum.RIGHT;
 
@@ -143,6 +155,10 @@ namespace Acllacuna
 			bumpers[3].UserData = (int)0;
 			bumpers[4].UserData = (int)0;
 			bumpers[5].UserData = (int)0;
+			bumpers[6].UserData = (int)0;
+			bumpers[7].UserData = (int)0;
+			bumpers[8].UserData = (int)0;
+			bumpers[9].UserData = (int)0;
 		}
 
 		protected virtual void LoadAnimation(ContentManager content)

@@ -277,57 +277,32 @@ namespace Acllacuna
 			Fixture fixtureA = contact.FixtureA;
 			Fixture fixtureB = contact.FixtureB;
 
-			if ((int)fixtureA.UserData <= -100 && (int)fixtureA.UserData > -200
+			int id = 0;
+
+			if ((int)fixtureA.UserData <= -100
 				&& ((int)fixtureB.UserData == 2
 				|| (int)fixtureB.UserData == 3))
 			{
-				int enemyID = -((int)fixtureA.UserData + 100);
-
-				Enemy enemy = enemies
-					.FirstOrDefault(i => i.id == enemyID);
-
-				enemy.sensorsContacts[0]++;
-				return;
+				id = (int)fixtureA.UserData;
 			}
-
-			if ((int)fixtureB.UserData <= -100 && (int)fixtureB.UserData > -200
+			else if ((int)fixtureB.UserData <= -100
 				&& ((int)fixtureA.UserData == 2
 				|| (int)fixtureA.UserData == 3))
 			{
-				int enemyID = -((int)fixtureB.UserData + 100);
-
-				Enemy enemy = enemies
-					.FirstOrDefault(i => i.id == enemyID);
-
-				enemy.sensorsContacts[0]++;
-				return;
+				id = (int)fixtureB.UserData;
 			}
-
-			if ((int)fixtureA.UserData <= -200 && (int)fixtureA.UserData > -300
-				&& ((int)fixtureB.UserData == 2
-				|| (int)fixtureB.UserData == 3))
+			else
 			{
-				int enemyID = -((int)fixtureA.UserData + 200);
-
-				Enemy enemy = enemies
-					.FirstOrDefault(i => i.id == enemyID);
-
-				enemy.sensorsContacts[1]++;
 				return;
 			}
 
-			if ((int)fixtureB.UserData <= -200 && (int)fixtureB.UserData > -300
-				&& ((int)fixtureA.UserData == 2
-				|| (int)fixtureA.UserData == 3))
-			{
-				int enemyID = -((int)fixtureB.UserData + 200);
+			int enemyID = (-id) % 100;
+			int sensorID = ((-id) / 100) - 1;
 
-				Enemy enemy = enemies
-					.FirstOrDefault(i => i.id == enemyID);
+			Enemy enemy = enemies
+				.FirstOrDefault(i => i.id == enemyID);
 
-				enemy.sensorsContacts[1]++;
-				return;
-			}
+			enemy.sensorsContacts[sensorID]++;
 		}
 
 		private void EndContactForEnemy(Contact contact)
@@ -335,57 +310,32 @@ namespace Acllacuna
 			Fixture fixtureA = contact.FixtureA;
 			Fixture fixtureB = contact.FixtureB;
 
-			if ((int)fixtureA.UserData <= -100 && (int)fixtureA.UserData > -200
+			int id = 0;
+
+			if ((int)fixtureA.UserData <= -100
 				&& ((int)fixtureB.UserData == 2
 				|| (int)fixtureB.UserData == 3))
 			{
-				int enemyID = -((int)fixtureA.UserData + 100);
-
-				Enemy enemy = enemies
-					.FirstOrDefault(i => i.id == enemyID);
-
-				enemy.sensorsContacts[0]--;
-				return;
+				id = (int)fixtureA.UserData;
 			}
-
-			if ((int)fixtureB.UserData <= -100 && (int)fixtureB.UserData > -200
+			else if ((int)fixtureB.UserData <= -100
 				&& ((int)fixtureA.UserData == 2
 				|| (int)fixtureA.UserData == 3))
 			{
-				int enemyID = -((int)fixtureB.UserData + 100);
-
-				Enemy enemy = enemies
-					.FirstOrDefault(i => i.id == enemyID);
-
-				enemy.sensorsContacts[0]--;
-				return;
+				id = (int)fixtureB.UserData;
 			}
-
-			if ((int)fixtureA.UserData <= -200 && (int)fixtureA.UserData > -300
-				&& ((int)fixtureB.UserData == 2
-				|| (int)fixtureB.UserData == 3))
+			else
 			{
-				int enemyID = -((int)fixtureA.UserData + 200);
-
-				Enemy enemy = enemies
-					.FirstOrDefault(i => i.id == enemyID);
-
-				enemy.sensorsContacts[1]--;
 				return;
 			}
 
-			if ((int)fixtureB.UserData <= -200 && (int)fixtureB.UserData > -300
-				&& ((int)fixtureA.UserData == 2
-				|| (int)fixtureA.UserData == 3))
-			{
-				int enemyID = -((int)fixtureB.UserData + 200);
+			int enemyID = (-id) % 100;
+			int sensorID = ((-id) / 100) - 1;
 
-				Enemy enemy = enemies
-					.FirstOrDefault(i => i.id == enemyID);
+			Enemy enemy = enemies
+				.FirstOrDefault(i => i.id == enemyID);
 
-				enemy.sensorsContacts[1]--;
-				return;
-			}
+			enemy.sensorsContacts[sensorID]--;
 		}
 
 		void onPreSolve( Contact contact, ref Manifold oldManifold )

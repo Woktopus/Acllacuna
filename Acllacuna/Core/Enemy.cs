@@ -26,13 +26,15 @@ namespace Acllacuna
 			id = NextID;
 			NextID++;
 
-			direction = DirectionEnum.RIGHT;
+			direction = DirectionEnum.LEFT;
 			shouldMove = true;
 
-			sensors = new Fixture[2];
-			sensorsContacts = new int[2];
+			sensors = new Fixture[4];
+			sensorsContacts = new int[4];
 			sensorsContacts[0] = 0;
 			sensorsContacts[1] = 0;
+			sensorsContacts[2] = 0;
+			sensorsContacts[3] = 0;
 		}
 
 		protected override void SetSize()
@@ -52,6 +54,10 @@ namespace Acllacuna
 			bumpers[3].UserData = (int)100;
 			bumpers[4].UserData = (int)100;
 			bumpers[5].UserData = (int)100;
+			bumpers[6].UserData = (int)100;
+			bumpers[7].UserData = (int)100;
+			bumpers[8].UserData = (int)100;
+			bumpers[9].UserData = (int)100;
 		}
 
 		protected override void LoadAnimation(ContentManager content)
@@ -69,21 +75,32 @@ namespace Acllacuna
 
 			CircleShape circle1 = new CircleShape(0.1f, 1f);
 			CircleShape circle2 = new CircleShape(0.1f, 1f);
+			CircleShape circle3 = new CircleShape(0.1f, 1f);
+			CircleShape circle4 = new CircleShape(0.1f, 1f);
+
 			circle1.Position = new Vector2(-((size.X / 2) + 0.2f), (size.Y + 0.1f) / 2);
 			circle2.Position = new Vector2((size.X / 2) + 0.2f, (size.Y + 0.1f) / 2);
+			circle3.Position = new Vector2(-((size.X / 2) + 0.2f), (size.Y - 0.3f) / 2);
+			circle4.Position = new Vector2((size.X / 2) + 0.2f, (size.Y - 0.3f) / 2);
+
 			sensors[0] = body.CreateFixture(circle1, (int)-(100 + id));
 			sensors[1] = body.CreateFixture(circle2, (int)-(200 + id));
+			sensors[2] = body.CreateFixture(circle3, (int)-(300 + id));
+			sensors[3] = body.CreateFixture(circle4, (int)-(400 + id));
+
 			sensors[0].IsSensor = true;
 			sensors[1].IsSensor = true;
+			sensors[2].IsSensor = true;
+			sensors[3].IsSensor = true;
 		}
 
 		protected override void SetVelocity(World world, GameTime gameTime)
 		{
-			if (sensorsContacts[0] == 0)
+			if (sensorsContacts[0] == 0 || sensorsContacts[2] > 0)
 			{
 				direction = DirectionEnum.RIGHT;
 			}
-			else if (sensorsContacts[1] == 0)
+			else if (sensorsContacts[1] == 0 || sensorsContacts[3] > 0)
 			{
 				direction = DirectionEnum.LEFT;
 			}
