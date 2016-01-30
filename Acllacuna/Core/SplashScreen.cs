@@ -24,13 +24,13 @@ namespace Acllacuna
             base.UnloadContent();
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime, Game game)
         {
-            base.Update(gameTime);
+            base.Update(gameTime,game);
             time += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (time > 3f)
             {
-                SceneManager.Instance.AddScene(new PhysicsScene());
+                SceneManager.Instance.AddScene(new MenuScene());
             }
             
         }

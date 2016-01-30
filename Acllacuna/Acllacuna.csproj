@@ -39,7 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Core\Animation.cs" />
-    <Compile Include="Core\Block.cs" />
+    <Compile Include="Core\Button.cs" />
     <Compile Include="Core\Image.cs" />
     <Compile Include="Core\MovingPlatform.cs" />
     <Compile Include="Core\ParallaxingBackground.cs" />
@@ -47,6 +47,8 @@
     <Compile Include="Core\PhysicsUtils.cs" />
     <Compile Include="Core\PlatformeDirection.cs" />
     <Compile Include="Core\Player.cs" />
+    <Compile Include="Core\MenuScene.cs" />
+    <Compile Include="Core\ParallaxingBackground.cs" /> 
     <Compile Include="Core\Scene.cs" />
     <Compile Include="Core\SceneManager.cs" />
     <Compile Include="Core\SplashScreen.cs" />
@@ -77,16 +79,22 @@
     <Content Include="Content\cube2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\fade.png">
+    <Content Include="Content\Graphics\Menu\jouer.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Menu\option.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Menu\quitter.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Transition\fade.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Splash\woktopus.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\minecraft.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\null.png">
+    <Content Include="Content\Graphics\Transition\null.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico" />
@@ -104,6 +112,7 @@
       <Name>Farseer Physics MonoGame</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <!-- Specify the search path explicitly so the ResolveAssemblyReferences task picks the right ones -->
   <Target Name="BeforeResolveReferences">
     <CreateProperty Value="$(MSBuildProgramFiles32)\MonoGame\v3.0\Assemblies\Windows;$(AssemblySearchPaths)">

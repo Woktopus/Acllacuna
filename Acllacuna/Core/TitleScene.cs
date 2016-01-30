@@ -28,9 +28,9 @@ namespace Acllacuna
             base.UnloadContent();
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime,Game game)
         {
-            base.Update(gameTime);
+            base.Update(gameTime, game);
             var input = ServiceHelper.Get<InputManagerService>().Keyboard.GetState();
             if (input.IsKeyDown(Keys.A))
             {
