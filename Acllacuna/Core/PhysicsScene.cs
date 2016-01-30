@@ -4,21 +4,20 @@ using System.Linq;
 
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 
 using FarseerPhysics.Dynamics;
-using FarseerPhysics.Factories;
 using FarseerPhysics;
 using FarseerPhysics.Collision;
-using FarseerPhysics.Common;
 using FarseerPhysics.DebugView;
-using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics.Contacts;
+using Microsoft.Xna.Framework.Media;
+using System.Media;
+using System.IO;
 
 namespace Acllacuna
 {
-	public class PhysicsScene : Scene
+    public class PhysicsScene : Scene
 	{
 		public World world;
 
@@ -40,6 +39,9 @@ namespace Acllacuna
 
         public Map map;
         public DynamicMap dynMap;
+        public MapBackground mapBack;
+
+        SoundPlayer song;
 
 		public PhysicsScene()
 		{
@@ -57,6 +59,8 @@ namespace Acllacuna
 		
             map = new Map("");
             dynMap = new DynamicMap("");
+            mapBack = new MapBackground("");
+
             projectiles = new List<Projectile>();
             projectileFactory = new ProjectileFactory();
             
@@ -65,7 +69,9 @@ namespace Acllacuna
         public override void LoadContent(ContentManager content, GraphicsDevice graph)
 		{
 			base.LoadContent(content, graph);
-
+            song = new SoundPlayer(Path.Combine(Environment.CurrentDirectory, "Content/Song/VirginInca.wav"));
+            song.Load();
+            song.Play();
 			Settings.UseFPECollisionCategories = true;
 
 			ConvertUnits.SetDisplayUnitToSimUnitRatio(32f);
@@ -111,6 +117,7 @@ namespace Acllacuna
 			
             map.LoadContent(content, world);
             dynMap.LoadContent(content, world);
+            mapBack.LoadContent(content);
 
             CollectibleItem item = new CollectibleItem();
             item.LoadContent(world, new Vector2(1, 1), new Vector2(21, 8), content,  CollectibleItemType.AMMO);
@@ -428,8 +435,9 @@ namespace Acllacuna
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, camera.TranslationMatrix);
+            mapBack.Draw(spriteBatch);
 
-			map.Draw(spriteBatch);
+            map.Draw(spriteBatch);
             dynMap.Draw(spriteBatch);
             foreach (CollectibleItem item in collectibleItems)
             {

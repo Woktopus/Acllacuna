@@ -95,5 +95,28 @@ namespace Acllacuna
             }
             return listDyn;
         }
+
+        public String[,] backgroundMap()
+        {
+            String[] taille = list[0].Split(separator);
+            height = int.Parse(taille[1]);
+            width = int.Parse(taille[0]);
+            list.RemoveAt(0);
+            String[,] listBack = new string[width, height];
+
+            int i = 0, j = 0;
+            foreach (String ligne in list)
+            {
+                j = 0;
+                String[] objetBack = ligne.Split(separator);
+                foreach (String a in objetBack)
+                {
+                    listBack[i, j] = a;
+                    j++;
+                }
+                i++;
+            }
+            return listBack;
+        }
     }
 }
