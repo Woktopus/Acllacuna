@@ -15,18 +15,21 @@ namespace Acllacuna
 
         public Body body { get; set; }
         public Image image { get; set; }
-
+        public bool haveCollision;
         public Block()
         {
             
         }
 
-        public void LoadContent(World world, Vector2 size, Vector2 position, ContentManager Content, string texturePath )
+        public void LoadContent(World world, Vector2 size, Vector2 position, ContentManager Content, string texturePath, bool collision)
         {
             //Initialisation du body 
-            body = BodyFactory.CreateRectangle(world, size.X, size.Y, 1f);
-            body.BodyType = BodyType.Static;
-            body.Position = position;
+            if (collision)
+            {
+                body = BodyFactory.CreateRectangle(world, size.X, size.Y, 1f);
+                body.BodyType = BodyType.Static;
+                body.Position = position;
+            }
 
             //Initialisation de l'image du block
             Vector2 imagePosition = new Vector2(ConvertUnits.ToDisplayUnits(position.X),ConvertUnits.ToDisplayUnits(position.Y));

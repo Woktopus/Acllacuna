@@ -42,8 +42,10 @@
     <Compile Include="Core\Block.cs" />
     <Compile Include="Core\Button.cs" />
     <Compile Include="Core\Image.cs" />
+    <Compile Include="Core\Map.cs" />
     <Compile Include="Core\MovingPlatforme.cs" />
     <Compile Include="Core\ParallaxingBackground.cs" />
+    <Compile Include="Core\Parser.cs" />
     <Compile Include="Core\PhysicsScene.cs" />
     <Compile Include="Core\PhysicsUtils.cs" />
     <Compile Include="Core\PlatformeDirection.cs" />
@@ -98,6 +100,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico" />
+    <Content Include="Map\Map1.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
