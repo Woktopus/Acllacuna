@@ -13,11 +13,13 @@ namespace Acllacuna
 {
 	public class Player
 	{
-        private PhysicsScene physicsScene; 
+        private PhysicsScene physicsScene;
 
 		protected Body body;
 
 		protected Fixture[] feet;
+
+		protected Fixture[] bumpers;
 
 		protected Animation animation;
 
@@ -42,9 +44,11 @@ namespace Acllacuna
 
 			contactsWithFloor = 0;
 
-            Health = 50;
+			Health = 50;
 
 			feet = new Fixture[3];
+
+			bumpers = new Fixture[6];
 
 			hasJumped = false;
 
@@ -75,21 +79,35 @@ namespace Acllacuna
 			CircleShape circle1 = new CircleShape(0.1f, 1f);
 			CircleShape circle2 = new CircleShape(0.1f, 1f);
 			CircleShape circle3 = new CircleShape(0.1f, 1f);
-			CircleShape circle4 = new CircleShape(0.1f, 1f);
-			CircleShape circle5 = new CircleShape(0.1f, 1f);
 
 			circle1.Position = new Vector2(-((size.X / 2) - 0.2f), (size.Y - 0.1f) / 2);
 			circle2.Position = new Vector2(0, (size.Y - 0.1f) / 2);
 			circle3.Position = new Vector2((size.X / 2) - 0.2f, (size.Y - 0.1f) / 2);
-			circle4.Position = new Vector2(-size.X / 2, 0);
-			circle5.Position = new Vector2(size.X / 2, 0);
 
 			feet[0] = body.CreateFixture(circle1);
 			feet[1] = body.CreateFixture(circle2);
 			feet[2] = body.CreateFixture(circle3);
 
-			body.CreateFixture(circle4).UserData = 0;
-			body.CreateFixture(circle5).UserData = 0;
+			CircleShape circle4 = new CircleShape(0.1f, 1f);
+			CircleShape circle5 = new CircleShape(0.1f, 1f);
+			CircleShape circle6 = new CircleShape(0.1f, 1f);
+			CircleShape circle7 = new CircleShape(0.1f, 1f);
+			CircleShape circle8 = new CircleShape(0.1f, 1f);
+			CircleShape circle9 = new CircleShape(0.1f, 1f);
+
+			circle4.Position = new Vector2(-size.X / 2, -(size.Y - 0.1f) / 2);
+			circle5.Position = new Vector2(-size.X / 2, (size.Y - 0.1f) / 2);
+			circle6.Position = new Vector2(-size.X / 2, 0);
+			circle7.Position = new Vector2(size.X / 2, -(size.Y - 0.1f) / 2);
+			circle8.Position = new Vector2(size.X / 2, (size.Y - 0.1f) / 2);
+			circle9.Position = new Vector2(size.X / 2, 0);
+
+			bumpers[0] = body.CreateFixture(circle4);
+			bumpers[1] = body.CreateFixture(circle5);
+			bumpers[2] = body.CreateFixture(circle6);
+			bumpers[3] = body.CreateFixture(circle7);
+			bumpers[4] = body.CreateFixture(circle8);
+			bumpers[5] = body.CreateFixture(circle9);
 
             directionRegard = DirectionEnum.RIGHT;
 
@@ -109,6 +127,12 @@ namespace Acllacuna
 			feet[0].UserData = (int)1;
 			feet[1].UserData = (int)1;
 			feet[2].UserData = (int)1;
+			bumpers[0].UserData = (int)0;
+			bumpers[1].UserData = (int)0;
+			bumpers[2].UserData = (int)0;
+			bumpers[3].UserData = (int)0;
+			bumpers[4].UserData = (int)0;
+			bumpers[5].UserData = (int)0;
 		}
 
 		protected virtual void LoadAnimation(ContentManager content)
