@@ -24,7 +24,6 @@ namespace Acllacuna
 
         public void LoadContent(ContentManager Content)
         {
-            Console.WriteLine(Environment.CurrentDirectory);
             if (File.Exists(Path.Combine(Environment.CurrentDirectory,path)))
             {
                 try
