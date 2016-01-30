@@ -13,17 +13,17 @@ namespace Acllacuna
 {
 	public class Player
 	{
-		Body body;
+		protected Body body;
 
-		Fixture[] feet;
+		protected Fixture[] feet;
 
-		Image image;
+		protected Image image;
 
-		Vector2 size;
+		protected Vector2 size;
 
 		public int contactsWithFloor;
 
-		float desiredHorizontalVelocity;
+		protected float desiredHorizontalVelocity;
 
 		public Player()
 		{
@@ -36,7 +36,7 @@ namespace Acllacuna
 
 		public void LoadContent(World world, ContentManager content, Vector2 position)
 		{
-			SetSize(new Vector2(2.5f, 3f));
+			SetSize();
 
 			body = BodyFactory.CreateRectangle(world, size.X, size.Y - 0.1f, 1f);
 			
@@ -65,9 +65,9 @@ namespace Acllacuna
 			LoadAnimation(content);
 		}
 
-		protected virtual void SetSize(Vector2 size)
+		protected virtual void SetSize()
 		{
-			this.size = size;
+			this.size = new Vector2(2.5f, 3f);
 		}
 
 		protected virtual void SetIDS()
@@ -141,7 +141,7 @@ namespace Acllacuna
 			image.Draw(spriteBatch);
 		}
 
-		private Vector2 GetDrawPosition()
+		protected Vector2 GetDrawPosition()
 		{
 			return ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, 0.1f / 2));
 		}

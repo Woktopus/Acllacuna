@@ -29,8 +29,12 @@ namespace Acllacuna
 		Player player;
 
 		MovingPlatforme platform;
+
         Block b;
-        public Dictionary<int,CollectibleItem> collectibleItems { get; set; }
+
+        public Dictionary<int, CollectibleItem> collectibleItems { get; set; }
+
+		public List<Enemy> enemies;
 
 		public PhysicsScene()
 		{
@@ -41,8 +45,12 @@ namespace Acllacuna
 			player = new Player();
 
 			platform = new MovingPlatforme();
+
             b = new Block();
+
             collectibleItems = new Dictionary<int, CollectibleItem>();
+
+			enemies = new List<Enemy>();
 		}
 
 		public override void LoadContent(ContentManager content, GraphicsDevice graph)
@@ -88,14 +96,31 @@ namespace Acllacuna
 			player.LoadContent(world, content, new Vector2(10, 0));
 
 			platform.LoadContent(world, new Vector2(6, 1), new Vector2(10, 10), content, "Graphics/cube2", PlatformeDirection.LEFT_RIGHT, 3f, 3f);
+
             b.LoadContent(world, new Vector2(5, 2), new Vector2(20, 10), content, "Graphics/cube1");
 
             CollectibleItem item = new CollectibleItem();
             item.LoadContent(world, new Vector2(1, 1), new Vector2(21, 8), content, "Graphics/Collectible/plume");
             collectibleItems.Add(item.id,item);
+
+			Enemy enemy = new Enemy();
+			enemy.LoadContent(world, content, new Vector2(12, 0));
+			enemies.Add(enemy);
         }
 
 		bool onBeginContact( Contact contact )
+		{
+			BeginContactForPlayer(contact);
+
+			return true;
+		}
+
+		void onEndContact( Contact contact )
+		{
+			EndContactForPlayer(contact);
+		}
+
+		private void BeginContactForPlayer(Contact contact)
 		{
 			Fixture fixtureA = contact.FixtureA;
 			Fixture fixtureB = contact.FixtureB;
@@ -112,20 +137,23 @@ namespace Acllacuna
 			{
 				player.contactsWithFloor++;
 			}
-
-			return true;
 		}
 
-		void onEndContact( Contact contact )
+		private void EndContactForPlayer(Contact contact)
 		{
 			Fixture fixtureA = contact.FixtureA;
 			Fixture fixtureB = contact.FixtureB;
 
-			if ((int)fixtureA.UserData == 1)
+			if ((int)fixtureA.UserData == 1
+				&& ((int)fixtureB.UserData == 2
+				|| (int)fixtureB.UserData == 3))
 			{
 				player.contactsWithFloor--;
 			}
-			if ((int)fixtureB.UserData == 1)
+
+			if ((int)fixtureB.UserData == 1
+				&& ((int)fixtureA.UserData == 2
+				|| (int)fixtureA.UserData == 3))
 			{
 				player.contactsWithFloor--;
 			}
@@ -150,6 +178,12 @@ namespace Acllacuna
 			base.Update(gameTime, game);
 
 			platform.Update(gameTime);
+
+			foreach (Enemy enemy in enemies)
+			{
+				enemy.Update(gameTime, world);
+			}
+
 			player.Update(gameTime, world);
 
 			// variable time step but never less then 30 Hz
@@ -159,11 +193,19 @@ namespace Acllacuna
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			platform.Draw(spriteBatch);
+
             b.Draw(spriteBatch);
+
             foreach (KeyValuePair<int,CollectibleItem> item in collectibleItems)
             {
                 item.Value.Draw(spriteBatch);
-            }
+			}
+
+			foreach (Enemy enemy in enemies)
+			{
+				enemy.Draw(spriteBatch);
+			}
+
 			player.Draw(spriteBatch);
 
 			debugView.RenderDebugData(ref projection);
