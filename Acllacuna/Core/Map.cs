@@ -54,7 +54,7 @@ namespace Acllacuna
 
                         b.LoadContent(world, new Vector2(2, 2), new Vector2((i * 2) + 1, (j * 2) + 1), Content,mondico[Math.Abs(map[i,j])], false);
                         listBlock.Add(b);
-                    } else if (map[i, j] > 0) { 
+                    } else if (map[i, j] > 0) {
                         Block b = new Block();
                         b.LoadContent(world, new Vector2(2, 2), new Vector2((i * 2)+1, (j * 2) + 1), Content, mondico[Math.Abs(map[i, j])], true);
                         listBlock.Add(b);

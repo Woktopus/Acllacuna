@@ -54,7 +54,7 @@ namespace Acllacuna
             String[] taille = list[0].Split(separator);
             height = int.Parse(taille[0]);
             width = int.Parse(taille[1]);
-            int[,] map = new int[int.Parse(taille[1]), int.Parse(taille[0])];
+            int[,] map = new int[width, height];
             list.RemoveAt(0);
             int i = 0,j=0;
             foreach (String ligne in list)
@@ -68,15 +68,32 @@ namespace Acllacuna
                 }
                 j++;
             }
-            /*for (int a = 0; a <= 9; a++)
-            {
-                for (int b = 0; b <= 9; b++)
-                {
-                    Console.WriteLine(map[b, a]);
-                }
-            }*/
+            return map;
+        }
 
-                    return map;
+        public int[,] dynMap()
+        {
+            String[] taille = list[0].Split(separator);
+            height = int.Parse(taille[1]);
+            width = int.Parse(taille[0]);
+            int[,] listDyn = new int[width, height];
+            list.RemoveAt(0);
+            list.RemoveAt(0);
+
+           
+            int i = 0, j = 0;
+            foreach (String ligne in list)
+            {
+                j = 0;
+                String[] objetDyn = ligne.Split(separator);
+                foreach (String a in objetDyn)
+                {
+                    listDyn[i,j] = int.Parse(a);
+                    j++;
+                }
+                i++;
+            }
+            return listDyn;
         }
     }
 }

@@ -44,6 +44,7 @@
     <Compile Include="Core\Camera.cs" />
     <Compile Include="Core\CollectibleItem.cs" />
     <Compile Include="Core\CollectibleItemType.cs" />
+    <Compile Include="Core\DynamicMap.cs" />
     <Compile Include="Core\Enemy.cs" />
     <Compile Include="Core\Image.cs" />
     <Compile Include="Core\Map.cs" />
@@ -110,6 +111,9 @@
     <Content Include="Content\Graphics\virgin10%25.png" />
     <Content Include="Icon.ico" />
     <Content Include="Map\Map1.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map\Map1Dyn.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
