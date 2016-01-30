@@ -1,6 +1,7 @@
 ﻿using FarseerPhysics;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics;
+using FarseerPhysics.Dynamics.Contacts;
 using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -13,6 +14,8 @@ namespace Acllacuna
 	class Player
 	{
 		Body body;
+
+		Fixture feet;
 
 		Image image;
 
@@ -32,6 +35,8 @@ namespace Acllacuna
 		public void LoadContent(World world, ContentManager content, Vector2 position)
 		{
 			body = BodyFactory.CreateRectangle(world, size.X, size.Y - (size.X / 2), 1f);
+
+			body.FixtureList[0].UserData = (int)0;
 			
 			body.BodyType = BodyType.Dynamic;
 
@@ -45,7 +50,7 @@ namespace Acllacuna
 
 			circle.Position = new Vector2(0, (size.Y - (size.X / 2)) / 2);
 
-			Fixture feet = body.CreateFixture(circle);
+			feet = body.CreateFixture(circle);
 
 			feet.UserData = (int)1;
 
@@ -60,14 +65,25 @@ namespace Acllacuna
 
 			Vector2 velocity = body.LinearVelocity;
 
+			feet.Friction = 1000;
+
 			float desiredVelocity = 0f;
 			if (keyboardInput.IsKeyDown(Keys.Left))
 			{
 				desiredVelocity = MathHelper.Max(velocity.X - 0.5f, -5.0f);
+
+				feet.Friction = 0;
 			}
 			if (keyboardInput.IsKeyDown(Keys.Right))
 			{
 				desiredVelocity = MathHelper.Min(velocity.X + 0.5f, 5.0f);
+
+				feet.Friction = 0;
+			}
+
+			for (ContactEdge contactEdge = body.ContactList; contactEdge != null; contactEdge = contactEdge.Next)
+			{
+				contactEdge.Contact.ResetFriction();
 			}
 
 			float velocityChange = desiredVelocity - velocity.X;
