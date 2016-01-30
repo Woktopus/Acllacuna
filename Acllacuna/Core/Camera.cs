@@ -39,6 +39,18 @@ namespace Acllacuna
 			}
 		}
 
+		public Matrix DebugMatrix
+		{
+			get
+			{
+				return Matrix.CreateTranslation(-ConvertUnits.ToSimUnits(position.X), -ConvertUnits.ToSimUnits(position.Y), 0)
+					* Matrix.CreateRotationZ(rotation)
+					* Matrix.CreateScale(new Vector3(zoom, zoom, 1))
+					* Matrix.CreateTranslation(new Vector3(new Vector2(ConvertUnits.ToSimUnits(viewportWidth * 0.5f), ConvertUnits.ToSimUnits(viewportHeight * 0.5f)), 0)
+				);
+			}
+		}
+
 		private Vector2 ClampedPosition(Vector2 position, Map map)
 		{
 			var cameraMax = new Vector2(

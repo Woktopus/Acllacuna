@@ -266,8 +266,10 @@ namespace Acllacuna
 			}
 
 			player.Draw(spriteBatch);
-            
-            //debugView.RenderDebugData(ref projection);
+
+			Matrix cameraMatrix = camera.DebugMatrix;
+
+			debugView.RenderDebugData(ref projection, ref cameraMatrix);
 		}
 	}
 }
