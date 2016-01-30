@@ -65,6 +65,25 @@ namespace Acllacuna
 			}
 		}
 
+        public void DrawFlipVertically(SpriteBatch spriteBatch)
+        {
+            if (texture != null)
+			{
+                origin = new Vector2(-(sourceRect.Width * scale.X) / 2, -(sourceRect.Height * scale.Y) / 2);
+				spriteBatch.Draw(texture, position + origin, sourceRect, textureColor * alpha, rotation, Vector2.Zero, scale, SpriteEffects.FlipVertically, 0.0f);
+			}
+        }
+
+
+        public void DrawFlipHorizontally(SpriteBatch spriteBatch)
+        {
+            if (texture != null)
+            {
+                origin = new Vector2(-(sourceRect.Width * scale.X) / 2, -(sourceRect.Height * scale.Y) / 2);
+                spriteBatch.Draw(texture, position + origin, sourceRect, textureColor * alpha, rotation, Vector2.Zero, scale, SpriteEffects.FlipHorizontally, 0.0f);
+            }
+        }
+
 		public void ScaleToAABB(AABB aabb)
 		{
 			this.scale = new Vector2(

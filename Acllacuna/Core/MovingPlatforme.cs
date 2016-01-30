@@ -121,7 +121,6 @@ namespace Acllacuna
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            //image.Draw(spriteBatch);
             for (int i = 0; i < bodySize.Y; i++)
             {
                 for (int j = 0; j < bodySize.X; j++)

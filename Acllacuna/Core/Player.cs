@@ -42,7 +42,8 @@ namespace Acllacuna
 
 			contactsWithFloor = 0;
 
-            Health = 50;
+            Health = 100;
+            Ammo = 100;
 
 			feet = new Fixture[3];
 
@@ -195,7 +196,7 @@ namespace Acllacuna
 
             if (keyboardInput.IsKeyDown(Keys.Space))
             {
-                this.physicsScene.projectileFactory.LaunchProjectile(this.directionRegard, new Vector2(1, 1), body.Position, "Graphics/Projectile/lame_hitbox", 5);
+                LaunchProjectile();
             }
 		}
 
@@ -203,7 +204,9 @@ namespace Acllacuna
         {
             if (Ammo > 0)
             {
-                
+                this.physicsScene.projectileFactory.LaunchProjectile(this.directionRegard, 
+                    new Vector2(1, 1), body.Position, "Graphics/Projectile/lame_hitbox", 10);
+                Ammo--;
             }
         }
 
