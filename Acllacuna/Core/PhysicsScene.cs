@@ -26,13 +26,15 @@ namespace Acllacuna
 		protected DebugViewXNA debugView;
 		protected Matrix projection;
 
-        public MovingPlateforme MyProperty { get; set; }
+        public MovingPlatforme p { get; set; }
 
 		public PhysicsScene()
 		{
+
 			world = null;
 
 			gravity = new Vector2(0, 20);
+            p = new MovingPlatforme();
 		}
 
 		public override void LoadContent(ContentManager content, GraphicsDevice graph)
@@ -74,6 +76,9 @@ namespace Acllacuna
 				ConvertUnits.ToSimUnits(graph.Viewport.Height), 0f,
 				0f, 1f
 			);
+
+            p.LoadContent(world, new Vector2(3, 1), new Vector2(10, 10), content, "cube1", PlatformeDirection.RIGHT_LEFT, 6, 5);
+
 		}
 
 		bool onBeginContact( Contact contact )
@@ -101,16 +106,17 @@ namespace Acllacuna
 			base.UnloadContent();
 		}
 
-		public override void Update(GameTime gameTime)
+		public override void Update(GameTime gameTime, Game game)
 		{
-			base.Update(gameTime);
-
+			base.Update(gameTime, game);
+            p.Update(gameTime);
 			// variable time step but never less then 30 Hz
 			world.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalSeconds, (1f / PhysicsUtils.FPS)));
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
+            p.Draw(spriteBatch);
 			debugView.RenderDebugData(ref projection);
 		}
 	}

@@ -41,14 +41,13 @@
     <Compile Include="Core\Animation.cs" />
     <Compile Include="Core\Button.cs" />
     <Compile Include="Core\Image.cs" />
-    <Compile Include="Core\MovingPlatform.cs" />
+    <Compile Include="Core\MovingPlatforme.cs" />
     <Compile Include="Core\ParallaxingBackground.cs" />
     <Compile Include="Core\PhysicsScene.cs" />
     <Compile Include="Core\PhysicsUtils.cs" />
     <Compile Include="Core\PlatformeDirection.cs" />
     <Compile Include="Core\Player.cs" />
     <Compile Include="Core\MenuScene.cs" />
-    <Compile Include="Core\ParallaxingBackground.cs" /> 
     <Compile Include="Core\Scene.cs" />
     <Compile Include="Core\SceneManager.cs" />
     <Compile Include="Core\SplashScreen.cs" />
