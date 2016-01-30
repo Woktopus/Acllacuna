@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Acllacuna
 {
-    class Scene
+    public class Scene
     {
         protected ContentManager content;
         public GraphicsDevice graphicDevice;
