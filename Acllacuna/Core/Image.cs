@@ -72,5 +72,13 @@ namespace Acllacuna
 				ConvertUnits.ToDisplayUnits(aabb.Height) / sourceRect.Height
 			);
 		}
+
+        public void ScaleToMeters(Vector2 sizeInMeters)
+        {
+            this.scale = new Vector2(
+                ConvertUnits.ToDisplayUnits(sizeInMeters.X) / sourceRect.Width,
+                ConvertUnits.ToDisplayUnits(sizeInMeters.Y) / sourceRect.Height
+            );
+        }
 	}
 }

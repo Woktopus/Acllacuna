@@ -30,7 +30,7 @@ namespace Acllacuna
 		{
 			world = null;
 
-			gravity = new Vector2(0, 10);
+			gravity = new Vector2(0, 20);
 		}
 
 		public override void LoadContent(ContentManager content, GraphicsDevice graph)
@@ -51,7 +51,7 @@ namespace Acllacuna
 			}
 			
 			// register
-			//world.ContactManager.BeginContact += onBeginContact;
+			world.ContactManager.BeginContact += onBeginContact;
 			world.ContactManager.EndContact += onEndContact;
 			world.ContactManager.PreSolve += onPreSolve;
 			world.ContactManager.PostSolve += onPostSolve;
@@ -104,7 +104,7 @@ namespace Acllacuna
 			base.Update(gameTime);
 
 			// variable time step but never less then 30 Hz
-			world.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalSeconds, (1f / 30f)));
+			world.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalSeconds, (1f / PhysicsUtils.FPS)));
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
