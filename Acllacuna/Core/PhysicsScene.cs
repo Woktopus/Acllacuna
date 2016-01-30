@@ -27,37 +27,33 @@ namespace Acllacuna
 		protected DebugViewXNA debugView;
 		protected Matrix projection;
 
-		Player player;
-
-		MovingPlatforme platform;
-
-        Block b;
-        Block floor;
+        Player player;
 
         public List<CollectibleItem> collectibleItems { get; set; }
 
 		public List<Enemy> enemies;
 
+        public Map map;
+
 		public PhysicsScene()
 		{
-			world = null;
 
+			world = null;
 			gravity = new Vector2(0, 20);
+            
+
 
 			player = new Player();
-
-			platform = new MovingPlatforme();
-
-
-            b = new Block();
-            floor = new Block();
 
             collectibleItems = new List<CollectibleItem>();
 
 			enemies = new List<Enemy>();
-		}
+		
+            map = new Map("");
 
-		public override void LoadContent(ContentManager content, GraphicsDevice graph)
+        }
+
+        public override void LoadContent(ContentManager content, GraphicsDevice graph)
 		{
 			base.LoadContent(content, graph);
 
@@ -99,11 +95,8 @@ namespace Acllacuna
 
 			player.LoadContent(world, content, new Vector2(10, 0));
 
-			platform.LoadContent(world, new Vector2(6, 1), new Vector2(10, 10), content, "Graphics/cube2", PlatformeDirection.LEFT_RIGHT, 3f, 3f);
 
-            b.LoadContent(world, new Vector2(5, 2), new Vector2(20, 10), content, "Graphics/cube1");
-            floor.LoadContent(world, new Vector2(60, 1), new Vector2(10, 15), content, "Graphics/cube1");
-
+            map.LoadContent(content, world);
 
             CollectibleItem item = new CollectibleItem();
             item.LoadContent(world, new Vector2(1, 1), new Vector2(21, 8), content, "Graphics/Collectible/plume", CollectibleItemType.HEALTH);
@@ -118,8 +111,10 @@ namespace Acllacuna
 		{
             BeginContactForCollectibleItem(contact);
 			BeginContactForPlayer(contact);
-			return true;
-		}
+            return true;
+        }
+
+		
 
 		void onEndContact( Contact contact )
 		{
@@ -238,27 +233,13 @@ namespace Acllacuna
 		public override void Update(GameTime gameTime, Game game)
 		{
 			base.Update(gameTime, game);
-
-			platform.Update(gameTime);
-
-			foreach (Enemy enemy in enemies)
-			{
-				enemy.Update(gameTime, world);
-			}
-
-			player.Update(gameTime, world);
-
-			// variable time step but never less then 30 Hz
+            
+            // variable time step but never less then 30 Hz
 			world.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalSeconds, (1f / PhysicsUtils.FPS)));
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			platform.Draw(spriteBatch);
-
-            b.Draw(spriteBatch);
-            floor.Draw(spriteBatch);
-
             foreach (CollectibleItem item in collectibleItems)
             {
                 item.Draw(spriteBatch);
@@ -271,7 +252,9 @@ namespace Acllacuna
 
 			player.Draw(spriteBatch);
 
-			debugView.RenderDebugData(ref projection);
+            map.Draw(spriteBatch);
+            
+            debugView.RenderDebugData(ref projection);
 		}
 	}
 }

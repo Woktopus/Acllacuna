@@ -31,7 +31,7 @@ namespace Acllacuna
 
 		protected override void LoadAnimation(ContentManager content)
 		{
-			image.LoadContent(content, "Graphics/virgin", Color.Black, GetDrawPosition());
+			image.LoadContent(content, "Graphics/virgin", Color.DarkRed, GetDrawPosition());
 
 			image.ScaleToMeters(size);
 		}
