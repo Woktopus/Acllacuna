@@ -31,6 +31,8 @@ namespace Acllacuna
                 body.Position = position;
             }
 
+			body.FixtureList[0].UserData = (int)2;
+
             //Initialisation de l'image du block
             Vector2 imagePosition = new Vector2(ConvertUnits.ToDisplayUnits(position.X),ConvertUnits.ToDisplayUnits(position.Y));
             image = new Image();

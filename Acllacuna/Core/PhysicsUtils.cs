@@ -11,7 +11,7 @@ namespace Acllacuna
 {
 	public class PhysicsUtils
 	{
-		public static float FPS = 60f;
+		public static float FPS = 30f;
 
 		public static AABB GetAABBFromBody(Body body)
 		{
