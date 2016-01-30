@@ -100,11 +100,15 @@ namespace Acllacuna
 			Fixture fixtureA = contact.FixtureA;
 			Fixture fixtureB = contact.FixtureB;
 
-			if ((int)fixtureA.UserData == 1)
+			if ((int)fixtureA.UserData == 1
+				&& ((int)fixtureB.UserData == 2
+				|| (int)fixtureB.UserData == 3))
 			{
 				player.contactsWithFloor++;
 			}
-			if ((int)fixtureB.UserData == 1)
+			if ((int)fixtureB.UserData == 1
+				&& ((int)fixtureA.UserData == 2
+				|| (int)fixtureA.UserData == 3))
 			{
 				player.contactsWithFloor++;
 			}

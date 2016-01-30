@@ -11,11 +11,11 @@ using System;
 
 namespace Acllacuna
 {
-	class Player
+	public class Player
 	{
 		Body body;
 
-		Fixture feet;
+		Fixture[] feet;
 
 		Image image;
 
@@ -23,20 +23,22 @@ namespace Acllacuna
 
 		public int contactsWithFloor;
 
+		float desiredHorizontalVelocity;
+
 		public Player()
 		{
 			image = new Image();
 
-			size = new Vector2(2.5f, 3f);
-
 			contactsWithFloor = 0;
+
+			feet = new Fixture[3];
 		}
 
 		public void LoadContent(World world, ContentManager content, Vector2 position)
 		{
-			body = BodyFactory.CreateRectangle(world, size.X, size.Y - (size.X / 2), 1f);
+			SetSize(new Vector2(2.5f, 3f));
 
-			body.FixtureList[0].UserData = (int)0;
+			body = BodyFactory.CreateRectangle(world, size.X, size.Y - 0.1f, 1f);
 			
 			body.BodyType = BodyType.Dynamic;
 
@@ -46,14 +48,38 @@ namespace Acllacuna
 
 			body.Mass = 50;
 
-			CircleShape circle = new CircleShape(size.X / 2, 1f);
+			CircleShape circle1 = new CircleShape(0.1f, 1f);
+			CircleShape circle2 = new CircleShape(0.1f, 1f);
+			CircleShape circle3 = new CircleShape(0.1f, 1f);
 
-			circle.Position = new Vector2(0, (size.Y - (size.X / 2)) / 2);
+			circle1.Position = new Vector2(-((size.X/ 2) - 0.1f), (size.Y - 0.1f) / 2);
+			circle2.Position = new Vector2(0, (size.Y - 0.1f) / 2);
+			circle3.Position = new Vector2((size.X / 2) - 0.1f, (size.Y - 0.1f) / 2);
 
-			feet = body.CreateFixture(circle);
+			feet[0] = body.CreateFixture(circle1);
+			feet[1] = body.CreateFixture(circle2);
+			feet[2] = body.CreateFixture(circle3);
 
-			feet.UserData = (int)1;
+			SetIDS();
 
+			LoadAnimation(content);
+		}
+
+		protected virtual void SetSize(Vector2 size)
+		{
+			this.size = size;
+		}
+
+		protected virtual void SetIDS()
+		{
+			body.FixtureList[0].UserData = (int)0;
+			feet[0].UserData = (int)1;
+			feet[1].UserData = (int)1;
+			feet[2].UserData = (int)1;
+		}
+
+		protected virtual void LoadAnimation(ContentManager content)
+		{
 			image.LoadContent(content, "Graphics/virgin", Color.White, GetDrawPosition());
 
 			image.ScaleToMeters(size);
@@ -61,24 +87,17 @@ namespace Acllacuna
 
 		public void Update(GameTime gameTime, World world)
 		{
-			KeyboardState keyboardInput = ServiceHelper.Get<InputManagerService>().Keyboard.GetState();
+			feet[0].Friction = 1000;
+			feet[1].Friction = 1000;
+			feet[2].Friction = 1000;
 
-			Vector2 velocity = body.LinearVelocity;
+			SetVelocity(world);
 
-			feet.Friction = 1000;
-
-			float desiredVelocity = 0f;
-			if (keyboardInput.IsKeyDown(Keys.Left))
+			if (desiredHorizontalVelocity != 0)
 			{
-				desiredVelocity = MathHelper.Max(velocity.X - 0.5f, -5.0f);
-
-				feet.Friction = 0;
-			}
-			if (keyboardInput.IsKeyDown(Keys.Right))
-			{
-				desiredVelocity = MathHelper.Min(velocity.X + 0.5f, 5.0f);
-
-				feet.Friction = 0;
+				feet[0].Friction = 0;
+				feet[1].Friction = 0;
+				feet[2].Friction = 0;
 			}
 
 			for (ContactEdge contactEdge = body.ContactList; contactEdge != null; contactEdge = contactEdge.Next)
@@ -86,7 +105,26 @@ namespace Acllacuna
 				contactEdge.Contact.ResetFriction();
 			}
 
-			float velocityChange = desiredVelocity - velocity.X;
+			image.position = GetDrawPosition();
+		}
+
+		protected virtual void SetVelocity(World world)
+		{
+			KeyboardState keyboardInput = ServiceHelper.Get<InputManagerService>().Keyboard.GetState();
+
+			Vector2 velocity = body.LinearVelocity;
+
+			desiredHorizontalVelocity = 0f;
+			if (keyboardInput.IsKeyDown(Keys.Left))
+			{
+				desiredHorizontalVelocity = MathHelper.Max(velocity.X - 0.5f, -5.0f);
+			}
+			if (keyboardInput.IsKeyDown(Keys.Right))
+			{
+				desiredHorizontalVelocity = MathHelper.Min(velocity.X + 0.5f, 5.0f);
+			}
+
+			float velocityChange = desiredHorizontalVelocity - velocity.X;
 			float impulse = body.Mass * velocityChange;
 
 			body.ApplyLinearImpulse(new Vector2(impulse, 0), body.WorldCenter);
@@ -96,8 +134,6 @@ namespace Acllacuna
 				float jumpVelocity = PhysicsUtils.GetVerticalSpeedToReach(world, 2);
 				body.LinearVelocity = new Vector2(velocity.X, -jumpVelocity);
 			}
-
-			image.position = GetDrawPosition();
 		}
 
 		public void Draw(SpriteBatch spriteBatch)
@@ -107,7 +143,7 @@ namespace Acllacuna
 
 		private Vector2 GetDrawPosition()
 		{
-			return ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, (size.Y / 2) / 2));
+			return ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, 0.1f / 2));
 		}
 	}
 }
