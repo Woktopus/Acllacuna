@@ -134,6 +134,14 @@ namespace Acllacuna
 			EndContactForPlayer(contact);
 		}
 
+        private void BeginContactForProjectile(Contact contact)
+        {
+            Fixture fixtureA = contact.FixtureA;
+            Fixture fixtureB = contact.FixtureB;
+
+
+        }
+
         private void BeginContactForCollectibleItem(Contact contact)
         {
             Fixture fixtureA = contact.FixtureA;
