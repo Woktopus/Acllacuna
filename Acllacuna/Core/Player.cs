@@ -18,17 +18,21 @@ namespace Acllacuna
 
 		Vector2 size;
 
+		int contactsWithFloor;
+
 		public Player()
 		{
 			image = new Image();
 
 			size = new Vector2(2.5f, 3f);
+
+			contactsWithFloor = 0;
 		}
 
 		public void LoadContent(World world, ContentManager content, Vector2 position)
 		{
 			body = BodyFactory.CreateRectangle(world, size.X, size.Y - (size.X / 2), 1f);
-
+			
 			body.BodyType = BodyType.Dynamic;
 
 			body.FixedRotation = true;
@@ -41,7 +45,9 @@ namespace Acllacuna
 
 			circle.Position = new Vector2(0, (size.Y - (size.X / 2)) / 2);
 
-			body.CreateFixture(circle);
+			Fixture feet = body.CreateFixture(circle);
+
+			feet.UserData = (int)1;
 
 			image.LoadContent(content, "Graphics/virgin", Color.White, GetDrawPosition());
 

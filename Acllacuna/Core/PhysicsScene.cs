@@ -26,11 +26,15 @@ namespace Acllacuna
 		protected DebugViewXNA debugView;
 		protected Matrix projection;
 
+		Player player;
+
 		public PhysicsScene()
 		{
 			world = null;
 
 			gravity = new Vector2(0, 20);
+
+			player = new Player();
 		}
 
 		public override void LoadContent(ContentManager content, GraphicsDevice graph)
@@ -76,7 +80,14 @@ namespace Acllacuna
 
 		bool onBeginContact( Contact contact )
 		{
-			// ...
+			Fixture fixtureA = contact.FixtureA;
+			Fixture fixtureB = contact.FixtureB;
+
+			if ((int)fixtureA.UserData == 1)
+			{
+
+			}
+
 			return true;
 		}
 
