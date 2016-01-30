@@ -11,10 +11,10 @@ namespace Acllacuna
 {
     public class MovingPlatforme
     {
-
         public Body body { get; set; }
-        public Image image { get; set; }
-
+        public Vector2 bodySize { get; set; }
+        //public Image image { get; set; }
+        public Image[,] images  { get; set; }
 
 
         public PlatformeDirection pattern { get; set; }
@@ -36,12 +36,26 @@ namespace Acllacuna
             body = BodyFactory.CreateRectangle(world, size.X, size.Y, 1f);
             body.BodyType = BodyType.Kinematic;
             body.Position = position;
+            this.bodySize = size;
 
             //Initialisation de l'image du block
-            Vector2 imagePosition = new Vector2(ConvertUnits.ToDisplayUnits(position.X), ConvertUnits.ToDisplayUnits(position.Y));
-            image = new Image();
-            image.LoadContent(Content, texturePath, Color.White, imagePosition);
-            image.ScaleToMeters(size);
+            //Vector2 imagePosition = new Vector2(ConvertUnits.ToDisplayUnits(position.X), ConvertUnits.ToDisplayUnits(position.Y));
+            //image = new Image();
+            //image.LoadContent(Content, texturePath, Color.White, imagePosition);
+            //image.ScaleToMeters(size);
+
+            //Initialise la liste d'images
+            images = new Image[(int)size.Y, (int)size.X];
+            for (int i = 0; i < size.Y; i++)
+            {
+                for (int j = 0; j < size.X; j++)
+                {
+                    Image img = new Image();
+                    img.LoadContent(Content, texturePath, Color.White, new Vector2(j, i));
+                    img.ScaleToMeters(new Vector2(1, 1));
+                    images[i, j] = img;
+                }
+            }
 
             this.pattern = pattern;
             this.dist = 0;
@@ -98,12 +112,26 @@ namespace Acllacuna
                 dist = 0;
             }
             body.LinearVelocity = speedDirection;
-            image.position = ConvertUnits.ToDisplayUnits(body.Position);
+            //image.position = ConvertUnits.ToDisplayUnits(body.Position);
+            for (int i = 0; i < bodySize.Y; i++)
+            {
+                for (int j = 0; j < bodySize.X; j++)
+                {
+                    images[i,j].position = ConvertUnits.ToDisplayUnits(body.Position - new Vector2(bodySize.X/2,bodySize.Y/2) + new Vector2(j, i)+ new Vector2(0.5f,0.5f));
+                }
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            image.Draw(spriteBatch);
+            //image.Draw(spriteBatch);
+            for (int i = 0; i < bodySize.Y; i++)
+            {
+                for (int j = 0; j < bodySize.X; j++)
+                {
+                    images[i, j].Draw(spriteBatch);
+                }
+            }
         }
     }
 }
