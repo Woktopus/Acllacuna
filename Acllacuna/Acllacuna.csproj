@@ -44,6 +44,7 @@
     <Compile Include="Core\Camera.cs" />
     <Compile Include="Core\CollectibleItem.cs" />
     <Compile Include="Core\CollectibleItemType.cs" />
+    <Compile Include="Core\DirectionEnum.cs" />
     <Compile Include="Core\Enemy.cs" />
     <Compile Include="Core\Image.cs" />
     <Compile Include="Core\Map.cs" />
@@ -55,6 +56,8 @@
     <Compile Include="Core\Player.cs" />
     <Compile Include="Core\PlatformeDirection.cs" />
     <Compile Include="Core\MenuScene.cs" />
+    <Compile Include="Core\Projectile.cs" />
+    <Compile Include="Core\ProjectileFactory.cs" />
     <Compile Include="Core\Scene.cs" />
     <Compile Include="Core\SceneManager.cs" />
     <Compile Include="Core\SplashScreen.cs" />
@@ -95,6 +98,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Menu\quitter.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Projectile\lame_hitbox.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Transition\fade.png">
