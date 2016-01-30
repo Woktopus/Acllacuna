@@ -97,6 +97,9 @@
     <Content Include="Content\Graphics\Menu\quitter.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Graphics\Spritesheet.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Transition\fade.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -106,8 +109,6 @@
     <Content Include="Content\Graphics\Transition\null.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\virgin.png" />
-    <Content Include="Content\Graphics\virgin10%25.png" />
     <Content Include="Icon.ico" />
     <Content Include="Map\Map1.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -17,7 +17,7 @@ namespace Acllacuna
 
 		protected Fixture[] feet;
 
-		protected Image image;
+		protected Animation animation;
 
 		protected Vector2 size;
 
@@ -25,19 +25,27 @@ namespace Acllacuna
 
 		protected float desiredHorizontalVelocity;
 
+		protected bool hasJumped;
+
+		protected bool hasMoved;
+
         //Stats
         public int Health { get; set; }
         public int Ammo { get; set; }
 
 		public Player()
 		{
-			image = new Image();
+			animation = new Animation();
 
 			contactsWithFloor = 0;
 
             Health = 50;
 
 			feet = new Fixture[3];
+
+			hasJumped = false;
+
+			hasMoved = false;
 		}
 
 		public Vector2 GetPositionFromBody()
@@ -91,9 +99,13 @@ namespace Acllacuna
 
 		protected virtual void LoadAnimation(ContentManager content)
 		{
-			image.LoadContent(content, "Graphics/virgin", Color.White, GetDrawPosition());
+			animation.LoadContent(content, "Graphics/Spritesheet", Color.White, GetDrawPosition(), 150, new Vector2(4, 4));
 
-			image.ScaleToMeters(size);
+			animation.SelectAnimation(0);
+
+			animation.ScaleToMeters(size);
+
+			animation.isActive = true;
 		}
 
 		public void Update(GameTime gameTime, World world)
@@ -103,6 +115,19 @@ namespace Acllacuna
 			feet[2].Friction = 1000;
 
 			SetVelocity(world);
+
+			if (hasMoved && animation.isEnded && contactsWithFloor > 0)
+			{
+				animation.SelectAnimation(1);
+				animation.loop = false;
+			}
+
+			if (hasJumped)
+			{
+				hasJumped = false;
+				animation.SelectAnimation(2);
+				animation.loop = false;
+			}
 
 			if (desiredHorizontalVelocity != 0)
 			{
@@ -116,7 +141,8 @@ namespace Acllacuna
 				contactEdge.Contact.ResetFriction();
 			}
 
-			image.position = GetDrawPosition();
+			animation.position = GetDrawPosition();
+			animation.Update(gameTime);
 		}
 
 		protected virtual void SetVelocity(World world)
@@ -124,15 +150,19 @@ namespace Acllacuna
 			KeyboardState keyboardInput = ServiceHelper.Get<InputManagerService>().Keyboard.GetState();
 
 			Vector2 velocity = body.LinearVelocity;
+			
+			hasMoved = false;
 
-			desiredHorizontalVelocity = 0f;
+			desiredHorizontalVelocity = velocity.X * 0.95f;
 			if (keyboardInput.IsKeyDown(Keys.Left))
 			{
 				desiredHorizontalVelocity = MathHelper.Max(velocity.X - 0.5f, -5.0f);
+				hasMoved = true;
 			}
 			if (keyboardInput.IsKeyDown(Keys.Right))
 			{
 				desiredHorizontalVelocity = MathHelper.Min(velocity.X + 0.5f, 5.0f);
+				hasMoved = true;
 			}
 
 			float velocityChange = desiredHorizontalVelocity - velocity.X;
@@ -144,12 +174,13 @@ namespace Acllacuna
 			{
 				float jumpVelocity = PhysicsUtils.GetVerticalSpeedToReach(world, 2);
 				body.LinearVelocity = new Vector2(velocity.X, -jumpVelocity);
+				hasJumped = true;
 			}
 		}
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			image.Draw(spriteBatch);
+			animation.Draw(spriteBatch);
 		}
 
 		protected Vector2 GetDrawPosition()
