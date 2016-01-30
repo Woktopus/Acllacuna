@@ -14,6 +14,7 @@ namespace Acllacuna
 
 		public Game1()
 		{
+            this.IsMouseVisible = true;
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
 
@@ -73,7 +74,7 @@ namespace Acllacuna
 				Exit();
 
             // TODO: Add your update logic here
-            SceneManager.Instance.Update(gameTime);
+            SceneManager.Instance.Update(gameTime,this);
             base.Update(gameTime);
 		}
 

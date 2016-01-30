@@ -103,7 +103,7 @@ namespace Acllacuna
 
         public void Initialize()
         {
-            currentScene = new SplashScreen();
+            currentScene = new MenuScene();
             fade = new Transition();
             //inputManager = new InputManager();
         }
@@ -114,16 +114,16 @@ namespace Acllacuna
             content = new ContentManager(Content.ServiceProvider, "Content");
             currentScene.LoadContent(content, graph);
 
-            nullImage = this.content.Load<Texture2D>("null");
-            fadeTexture = this.content.Load<Texture2D>("fade");
+            nullImage = this.content.Load<Texture2D>("Graphics/Transition/null");
+            fadeTexture = this.content.Load<Texture2D>("Graphics/Transition/fade");
             fade.LoadContent(content, fadeTexture, Vector2.Zero);
             fade.Scale = Dimensions.X;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, Game game)
         {
             if (!transition)
-                currentScene.Update(gameTime);
+                currentScene.Update(gameTime,game);
             else
                 Transition(gameTime);
         }

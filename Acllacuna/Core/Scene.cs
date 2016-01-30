@@ -24,6 +24,11 @@ namespace Acllacuna
             content.Unload();
         }
 
+        public virtual void Update(GameTime gameTime, Game game)
+        {
+
+        }
+
         public virtual void Update(GameTime gameTime)
         {
 
