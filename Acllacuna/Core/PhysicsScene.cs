@@ -26,6 +26,8 @@ namespace Acllacuna
 		protected DebugViewXNA debugView;
 		protected Matrix projection;
 
+        public MovingPlateforme MyProperty { get; set; }
+
 		public PhysicsScene()
 		{
 			world = null;

@@ -9,7 +9,7 @@ using FarseerPhysics;
 
 namespace Acllacuna
 {
-    public class MovingPlatform
+    public class MovingPlatforme
     {
 
         public Body body { get; set; }
@@ -22,7 +22,7 @@ namespace Acllacuna
         public float dist { get; set; }
         public float maxDist { get; set; }
 
-        public MovingPlatform()
+        public MovingPlatforme()
         {
         }
 
