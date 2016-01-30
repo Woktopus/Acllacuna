@@ -44,6 +44,7 @@
     <Compile Include="Core\Camera.cs" />
     <Compile Include="Core\CollectibleItem.cs" />
     <Compile Include="Core\CollectibleItemType.cs" />
+    <Compile Include="Core\DirectionEnum.cs" />
     <Compile Include="Core\DynamicMap.cs" />
     <Compile Include="Core\Enemy.cs" />
     <Compile Include="Core\Image.cs" />
@@ -56,6 +57,8 @@
     <Compile Include="Core\Player.cs" />
     <Compile Include="Core\PlatformeDirection.cs" />
     <Compile Include="Core\MenuScene.cs" />
+    <Compile Include="Core\Projectile.cs" />
+    <Compile Include="Core\ProjectileFactory.cs" />
     <Compile Include="Core\Scene.cs" />
     <Compile Include="Core\SceneManager.cs" />
     <Compile Include="Core\SplashScreen.cs" />
@@ -98,6 +101,8 @@
     <Content Include="Content\Graphics\Menu\quitter.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Graphics\Projectile\lame_hitbox.png" />
+    <Content Include="Content\Graphics\Spritesheet.png" />
     <Content Include="Content\Graphics\Transition\fade.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -107,8 +112,6 @@
     <Content Include="Content\Graphics\Transition\null.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\virgin.png" />
-    <Content Include="Content\Graphics\virgin10%25.png" />
     <Content Include="Icon.ico" />
     <Content Include="Map\Map1.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

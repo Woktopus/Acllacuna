@@ -39,6 +39,7 @@ namespace Acllacuna
 
 
         public Map map;
+        public DynamicMap dynMap;
 
 		public PhysicsScene()
 		{
@@ -55,7 +56,7 @@ namespace Acllacuna
 			enemies = new List<Enemy>();
 		
             map = new Map("");
-
+            dynMap = new DynamicMap("");
             projectiles = new List<Projectile>();
             projectileFactory = new ProjectileFactory();
             
@@ -88,7 +89,7 @@ namespace Acllacuna
 
 			camera.viewportWidth = graph.Viewport.Width;
 			camera.viewportHeight = graph.Viewport.Height;
-
+            camera.zoom = 0.25f;
 			// NOTE: you should probably unregister on destructor or wherever is relevant...
 
 			if (debugView == null)
@@ -109,6 +110,7 @@ namespace Acllacuna
 			player.LoadContent(world, content, new Vector2(12, 10), this);
 			
             map.LoadContent(content, world);
+            dynMap.LoadContent(content, world);
 
             CollectibleItem item = new CollectibleItem();
             item.LoadContent(world, new Vector2(1, 1), new Vector2(21, 8), content,  CollectibleItemType.AMMO);
@@ -250,6 +252,7 @@ namespace Acllacuna
 		public override void Update(GameTime gameTime, Game game)
 		{
 			base.Update(gameTime, game);
+            dynMap.Update(gameTime);
 
             foreach (Projectile projectile in projectiles)
             {
@@ -274,7 +277,7 @@ namespace Acllacuna
 			spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, camera.TranslationMatrix);
 
 			map.Draw(spriteBatch);
-
+            dynMap.Draw(spriteBatch);
             foreach (CollectibleItem item in collectibleItems)
             {
                 item.Draw(spriteBatch);

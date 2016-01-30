@@ -8,7 +8,7 @@ namespace Acllacuna
 	public class Camera
 	{
 		public Vector2 position { get; private set; }
-		public float zoom { get; private set; }
+		public float zoom { get; set; }
 		public float rotation { get; private set; }
 		public int viewportWidth { get; set; }
 		public int viewportHeight { get; set; }

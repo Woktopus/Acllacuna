@@ -1,3 +1,4 @@
-﻿1;9
+﻿2;9
 Id;position.X;position.Y;size.X;size.Y;Direction;Distance;vitesse;texture
-1;32;10;3;1;1;4;5;1
+1;62;61;3;1;2;4;5;1
+1;67;58;4;1;2;4;7;1
