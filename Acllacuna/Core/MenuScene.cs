@@ -45,7 +45,7 @@ namespace Acllacuna
             jouer.Update(gameTime);
             option.Update(gameTime);
             quitter.Update(gameTime);
-            base.Update(gameTime);
+            base.Update(gameTime,game);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
