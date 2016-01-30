@@ -41,6 +41,7 @@ namespace Acllacuna
 		protected override void SetSize()
 		{
 			this.size = new Vector2(2.5f, 4f);
+			this.sizeRatio = new Vector2(0.7f, 0.9f);
 		}
 
 		protected override void SetIDS()
@@ -73,6 +74,8 @@ namespace Acllacuna
 		public override void LoadContent(World world, ContentManager content, Vector2 position, PhysicsScene physicsScene)
 		{
 			base.LoadContent(world, content, position, physicsScene);
+
+			Vector2 size = this.size * sizeRatio;
 
 			CircleShape circle1 = new CircleShape(0.1f, 1f);
 			CircleShape circle2 = new CircleShape(0.1f, 1f);

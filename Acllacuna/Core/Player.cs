@@ -26,6 +26,8 @@ namespace Acllacuna
 
         protected Vector2 size;
 
+		protected Vector2 sizeRatio;
+
         public int contactsWithFloor;
 
         protected float desiredHorizontalVelocity;
@@ -76,6 +78,8 @@ namespace Acllacuna
 			SetSize();
 
             this.physicsScene = physicsScene;
+
+			Vector2 size = this.size * sizeRatio;
 
             body = BodyFactory.CreateRectangle(world, size.X, size.Y - 0.1f, 1f);
 
@@ -141,6 +145,7 @@ namespace Acllacuna
 		protected virtual void SetSize()
 		{
 			this.size = new Vector2(2.5f, 3f);
+			this.sizeRatio = new Vector2(0.7f, 0.9f);
 		}
 
 		protected virtual void SetIDS()
@@ -281,7 +286,7 @@ namespace Acllacuna
 
         protected Vector2 GetDrawPosition()
         {
-            return ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, 0.1f / 2));
+            return ConvertUnits.ToDisplayUnits(body.Position);
         }
     }
 }
