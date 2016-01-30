@@ -123,9 +123,10 @@ namespace Acllacuna
 
 		bool onBeginContact( Contact contact )
 		{
+            
             BeginContactForCollectibleItem(contact);
 			BeginContactForPlayer(contact);
-
+            BeginContactForProjectile(contact);
 			BeginContactForEnemy(contact);
 
             return true;
@@ -146,12 +147,51 @@ namespace Acllacuna
             if ((int)fixtureA.UserData >= 600 && (int)fixtureA.UserData < 700)
             {
                 int projectileId = (int)fixtureA.UserData - 600;
+                Projectile proj = projectiles.FirstOrDefault(p => p.id == projectileId);
+
+                int userDataFixtureB = (int)fixtureB.UserData;
+
+                if ((int)fixtureB.UserData == 2)
+                {
+                    //Mur
+                    proj.body.Dispose();
+                    projectiles.Remove(proj);
+                }
+                else if ((int)fixtureB.UserData == 3)
+                {
+                    //pf
+                    proj.body.Dispose();
+                    projectiles.Remove(proj);
+                }
+                else if ((int)fixtureB.UserData >= 100 && (int)fixtureB.UserData < 200)
+                {
+                    //enemy
+                }
 
             }
-            if ((int)fixtureB.UserData >= 600 && (int)fixtureB.UserData < 700)
+             if ((int)fixtureB.UserData >= 600 && (int)fixtureB.UserData < 700)
             {
                 int projectileId = (int)fixtureB.UserData - 600;
+                 Projectile proj = projectiles.FirstOrDefault(p => p.id == projectileId);
 
+                int userDataFixtureA = (int)fixtureA.UserData;
+
+                if ((int)fixtureA.UserData == 2)
+                {
+                    //Mur
+                    proj.body.Dispose();
+                    projectiles.Remove(proj);
+                }
+                else if ((int)fixtureA.UserData == 3)
+                {
+                    //pf
+                    proj.body.Dispose();
+                    projectiles.Remove(proj);
+                }
+                else if ((int)fixtureA.UserData >= 100 && (int)fixtureA.UserData < 200)
+                {
+                    //enemy
+                }
             }
 
         }
