@@ -12,6 +12,7 @@ namespace Acllacuna
 	public class PhysicsUtils
 	{
 		public static float FPS = 30f;
+        public static Vector2 gravity = new Vector2(0, 20);
 
 		public static AABB GetAABBFromBody(Body body)
 		{
