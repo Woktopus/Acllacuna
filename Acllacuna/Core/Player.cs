@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;using FarseerPhysics;
+using System.Collections.Generic;
+using FarseerPhysics;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Dynamics.Contacts;
@@ -15,51 +16,60 @@ namespace Acllacuna
 	{
         private PhysicsScene physicsScene;
 
-		protected Body body;
+        protected Body body;
 
-		protected Fixture[] feet;
+        protected Fixture[] feet;
 
 		protected Fixture[] bumpers;
 
 		protected Animation animation;
 
-		protected Vector2 size;
+        protected Vector2 size;
 
-		public int contactsWithFloor;
+        public int contactsWithFloor;
 
-		protected float desiredHorizontalVelocity;
+        protected float desiredHorizontalVelocity;
 
-		protected bool hasJumped;
+        protected bool hasJumped;
 
-		protected bool hasMoved;
+        protected bool hasMoved;
+
+        public float projectileCooldown;
+
+        //FireRate
+        const float SECONDS_IN_MINUTE = 60f;
+        const float RATE_OF_FIRE = 200f;
+        TimeSpan laserSpawnTime = TimeSpan.FromSeconds(SECONDS_IN_MINUTE / RATE_OF_FIRE);
+        TimeSpan previousLaserSpawnTime = TimeSpan.Zero;
 
         //Stats
         public DirectionEnum directionRegard { get; set; }
         public int Health { get; set; }
         public int Ammo { get; set; }
 
-		public Player()
-		{
-			animation = new Animation();
+        public Player()
+        {
+            animation = new Animation();
 
-			contactsWithFloor = 0;
+            contactsWithFloor = 0;
 
             Health = 100;
             Ammo = 100;
 
-			feet = new Fixture[3];
+            feet = new Fixture[3];
 
 			bumpers = new Fixture[6];
 
 			hasJumped = false;
+            hasMoved = false;
 
-			hasMoved = false;
-		}
+            projectileCooldown = 0f;
+        }
 
-		public Vector2 GetPositionFromBody()
-		{
-			return body.Position;
-		}
+        public Vector2 GetPositionFromBody()
+        {
+            return body.Position;
+        }
 
         public virtual void LoadContent(World world, ContentManager content, Vector2 position, PhysicsScene physicsScene)
 		{
@@ -67,34 +77,29 @@ namespace Acllacuna
 
             this.physicsScene = physicsScene;
 
-			body = BodyFactory.CreateRectangle(world, size.X, size.Y - 0.1f, 1f);
-			
-			body.BodyType = BodyType.Dynamic;
+            body = BodyFactory.CreateRectangle(world, size.X, size.Y - 0.1f, 1f);
 
-			body.FixedRotation = true;
+            body.BodyType = BodyType.Dynamic;
 
-			body.Position = position;
+            body.FixedRotation = true;
 
-			body.Mass = 50;
+            body.Position = position;
 
-			CircleShape circle1 = new CircleShape(0.1f, 1f);
-			CircleShape circle2 = new CircleShape(0.1f, 1f);
-			CircleShape circle3 = new CircleShape(0.1f, 1f);
+            body.Mass = 50;
 
-			circle1.Position = new Vector2(-((size.X / 2) - 0.2f), (size.Y - 0.1f) / 2);
-			circle2.Position = new Vector2(0, (size.Y - 0.1f) / 2);
-			circle3.Position = new Vector2((size.X / 2) - 0.2f, (size.Y - 0.1f) / 2);
-
-			feet[0] = body.CreateFixture(circle1);
-			feet[1] = body.CreateFixture(circle2);
-			feet[2] = body.CreateFixture(circle3);
-
-			CircleShape circle4 = new CircleShape(0.1f, 1f);
-			CircleShape circle5 = new CircleShape(0.1f, 1f);
+            CircleShape circle1 = new CircleShape(0.1f, 1f);
+            CircleShape circle2 = new CircleShape(0.1f, 1f);
+            CircleShape circle3 = new CircleShape(0.1f, 1f);
+            CircleShape circle4 = new CircleShape(0.1f, 1f);
+            CircleShape circle5 = new CircleShape(0.1f, 1f);
 			CircleShape circle6 = new CircleShape(0.1f, 1f);
 			CircleShape circle7 = new CircleShape(0.1f, 1f);
 			CircleShape circle8 = new CircleShape(0.1f, 1f);
 			CircleShape circle9 = new CircleShape(0.1f, 1f);
+
+            circle1.Position = new Vector2(-((size.X / 2) - 0.2f), (size.Y - 0.1f) / 2);
+            circle2.Position = new Vector2(0, (size.Y - 0.1f) / 2);
+            circle3.Position = new Vector2((size.X / 2) - 0.2f, (size.Y - 0.1f) / 2);
 
 			circle4.Position = new Vector2(-size.X / 2, -(size.Y - 0.1f) / 2);
 			circle5.Position = new Vector2(-size.X / 2, (size.Y - 0.1f) / 2);
@@ -102,6 +107,10 @@ namespace Acllacuna
 			circle7.Position = new Vector2(size.X / 2, -(size.Y - 0.1f) / 2);
 			circle8.Position = new Vector2(size.X / 2, (size.Y - 0.1f) / 2);
 			circle9.Position = new Vector2(size.X / 2, 0);
+
+			feet[0] = body.CreateFixture(circle1);
+			feet[1] = body.CreateFixture(circle2);
+			feet[2] = body.CreateFixture(circle3);
 
 			bumpers[0] = body.CreateFixture(circle4);
 			bumpers[1] = body.CreateFixture(circle5);
@@ -138,7 +147,7 @@ namespace Acllacuna
 
 		protected virtual void LoadAnimation(ContentManager content)
 		{
-			animation.LoadContent(content, "Graphics/Spritesheet", Color.White, GetDrawPosition(), 150, new Vector2(4, 4));
+			animation.LoadContent(content, "Graphics/Spritesheet", Color.White, GetDrawPosition(), 150, new Vector2(4, 5));
 
 			animation.SelectAnimation(0);
 
@@ -153,7 +162,7 @@ namespace Acllacuna
 			feet[1].Friction = 1000;
 			feet[2].Friction = 1000;
 
-			SetVelocity(world);
+			SetVelocity(world, gameTime);
 
 			if (hasMoved && animation.isEnded && contactsWithFloor > 0)
 			{
@@ -184,7 +193,7 @@ namespace Acllacuna
 			animation.Update(gameTime);
 		}
 
-		protected virtual void SetVelocity(World world)
+		protected virtual void SetVelocity(World world, GameTime gameTime)
 		{
 			KeyboardState keyboardInput = ServiceHelper.Get<InputManagerService>().Keyboard.GetState();
 
@@ -198,18 +207,18 @@ namespace Acllacuna
 				desiredHorizontalVelocity = MathHelper.Max(velocity.X - 0.5f, -5.0f);
 				hasMoved = true;
                 this.directionRegard = DirectionEnum.LEFT;
-			}
-			if (keyboardInput.IsKeyDown(Keys.Right))
-			{
-				desiredHorizontalVelocity = MathHelper.Min(velocity.X + 0.5f, 5.0f);
-				hasMoved = true;
+            }
+            if (keyboardInput.IsKeyDown(Keys.Right))
+            {
+                desiredHorizontalVelocity = MathHelper.Min(velocity.X + 0.5f, 5.0f);
+                hasMoved = true;
                 this.directionRegard = DirectionEnum.RIGHT;
             }
 
-			float velocityChange = desiredHorizontalVelocity - velocity.X;
-			float impulse = body.Mass * velocityChange;
+            float velocityChange = desiredHorizontalVelocity - velocity.X;
+            float impulse = body.Mass * velocityChange;
 
-			body.ApplyLinearImpulse(new Vector2(impulse, 0), body.WorldCenter);
+            body.ApplyLinearImpulse(new Vector2(impulse, 0), body.WorldCenter);
 
 			if (keyboardInput.IsKeyDown(Keys.Up) && contactsWithFloor > 0)
 			{
@@ -220,18 +229,26 @@ namespace Acllacuna
 
             if (keyboardInput.IsKeyDown(Keys.Space))
             {
-                LaunchProjectile();
+                if (Ammo > 0)
+                {
+                    if (gameTime.TotalGameTime - previousLaserSpawnTime > laserSpawnTime)
+                    {
+                        previousLaserSpawnTime = gameTime.TotalGameTime;
+                        LaunchProjectile();
+                    }
+                    else
+                    {
+                        projectileCooldown -= gameTime.ElapsedGameTime.Milliseconds;
+                    }
+                }
             }
-		}
+        }
 
         public void LaunchProjectile()
         {
-            if (Ammo > 0)
-            {
-                this.physicsScene.projectileFactory.LaunchProjectile(this.directionRegard, 
-                    new Vector2(1, 1), body.Position, "Graphics/Projectile/lame_hitbox", 10);
-                Ammo--;
-            }
+            this.physicsScene.projectileFactory.LaunchProjectile(this.directionRegard,
+            new Vector2(1, 1), body.Position, "Graphics/Projectile/lame_hitbox", 10);
+            Ammo--;
         }
 
 		public void Draw(SpriteBatch spriteBatch)
@@ -246,9 +263,9 @@ namespace Acllacuna
 			}
 		}
 
-		protected Vector2 GetDrawPosition()
-		{
-			return ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, 0.1f / 2));
-		}
-	}
+        protected Vector2 GetDrawPosition()
+        {
+            return ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, 0.1f / 2));
+        }
+    }
 }

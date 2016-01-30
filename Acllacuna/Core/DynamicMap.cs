@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Acllacuna
 {
-    class DynamicMap
+    public class DynamicMap
     {
         String path;
         Parser parse;

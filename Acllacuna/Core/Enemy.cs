@@ -56,7 +56,7 @@ namespace Acllacuna
 
 		protected override void LoadAnimation(ContentManager content)
 		{
-			animation.LoadContent(content, "Graphics/Spritesheet", Color.DarkRed, GetDrawPosition(), 200, new Vector2(4, 4));
+			animation.LoadContent(content, "Graphics/Spritesheet", Color.DarkRed, GetDrawPosition(), 200, new Vector2(4, 5));
 
 			animation.SelectAnimation(0);
 
@@ -77,7 +77,7 @@ namespace Acllacuna
 			sensors[1].IsSensor = true;
 		}
 
-		protected override void SetVelocity(World world)
+		protected override void SetVelocity(World world, GameTime gameTime)
 		{
 			if (sensorsContacts[0] == 0)
 			{
