@@ -125,7 +125,7 @@ namespace Acllacuna
 
         protected virtual void LoadAnimation(ContentManager content)
         {
-            animation.LoadContent(content, "Graphics/Spritesheet", Color.White, GetDrawPosition(), 150, new Vector2(4, 4));
+            animation.LoadContent(content, "Graphics/Spritesheet", Color.White, GetDrawPosition(), 150, new Vector2(4, 5));
 
             animation.SelectAnimation(0);
 
