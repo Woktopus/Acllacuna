@@ -30,7 +30,7 @@ namespace Acllacuna
         }
 
 
-        public void LoadContent(World world, Vector2 size, Vector2 position, ContentManager Content, string texturePath)
+        public void LoadContent(World world, Vector2 size, Vector2 position, ContentManager Content, string texturePath, CollectibleItemType type)
         {
             //Initialisation du body
             body = BodyFactory.CreateRectangle(world, size.X, size.Y, 1f);
@@ -45,6 +45,9 @@ namespace Acllacuna
             image = new Image();
             image.LoadContent(Content, texturePath, Color.White, imagePosition);
             image.ScaleToMeters(size);
+
+            this.type = type;
+
         }
 
         public void Update()

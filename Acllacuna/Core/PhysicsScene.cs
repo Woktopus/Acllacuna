@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
@@ -31,8 +32,9 @@ namespace Acllacuna
 		MovingPlatforme platform;
 
         Block b;
+        Block floor;
 
-        public Dictionary<int, CollectibleItem> collectibleItems { get; set; }
+        public List<CollectibleItem> collectibleItems { get; set; }
 
 		public List<Enemy> enemies;
 
@@ -46,9 +48,11 @@ namespace Acllacuna
 
 			platform = new MovingPlatforme();
 
-            b = new Block();
 
-            collectibleItems = new Dictionary<int, CollectibleItem>();
+            b = new Block();
+            floor = new Block();
+
+            collectibleItems = new List<CollectibleItem>();
 
 			enemies = new List<Enemy>();
 		}
@@ -98,10 +102,12 @@ namespace Acllacuna
 			platform.LoadContent(world, new Vector2(6, 1), new Vector2(10, 10), content, "Graphics/cube2", PlatformeDirection.LEFT_RIGHT, 3f, 3f);
 
             b.LoadContent(world, new Vector2(5, 2), new Vector2(20, 10), content, "Graphics/cube1");
+            floor.LoadContent(world, new Vector2(60, 1), new Vector2(10, 15), content, "Graphics/cube1");
+
 
             CollectibleItem item = new CollectibleItem();
-            item.LoadContent(world, new Vector2(1, 1), new Vector2(21, 8), content, "Graphics/Collectible/plume");
-            collectibleItems.Add(item.id,item);
+            item.LoadContent(world, new Vector2(1, 1), new Vector2(21, 8), content, "Graphics/Collectible/plume", CollectibleItemType.HEALTH);
+            collectibleItems.Add(item);
 
 			Enemy enemy = new Enemy();
 			enemy.LoadContent(world, content, new Vector2(12, 0));
@@ -110,8 +116,8 @@ namespace Acllacuna
 
 		bool onBeginContact( Contact contact )
 		{
+            BeginContactForCollectibleItem(contact);
 			BeginContactForPlayer(contact);
-
 			return true;
 		}
 
@@ -119,6 +125,61 @@ namespace Acllacuna
 		{
 			EndContactForPlayer(contact);
 		}
+
+        private void BeginContactForCollectibleItem(Contact contact)
+        {
+            Fixture fixtureA = contact.FixtureA;
+            Fixture fixtureB = contact.FixtureB;
+
+            if ((int)fixtureA.UserData >= 500 && (int)fixtureA.UserData<600
+                && (int)fixtureB.UserData == 0)
+            {
+                int collectibleItemId = (int)fixtureA.UserData - 500;
+                CollectibleItem item = collectibleItems
+                    .FirstOrDefault(i => i.id == collectibleItemId);
+                
+                
+                if (item.type == CollectibleItemType.HEALTH)
+                {
+                    //Ajouter santé player ici
+                    if (player.Health < 100)
+                    {
+                        player.Health += 20;
+                        collectibleItems.Remove(item);
+                    }
+                    
+                }
+                if (item.type == CollectibleItemType.AMMO)
+                {
+                    //Ajouter munition ici
+                }
+            }
+            if ((int)fixtureB.UserData >= 500 && (int)fixtureB.UserData<600
+                && (int)fixtureA.UserData == 0)
+            {
+                int collectibleItemId = (int)fixtureB.UserData - 500;
+                CollectibleItem item = collectibleItems
+                    .FirstOrDefault(i => i.id == collectibleItemId);
+
+
+                if (item.type == CollectibleItemType.HEALTH)
+                {
+                    //Ajouter santé player ici
+                    if (player.Health < 100)
+                    {
+                        player.Health += 20;
+                        item.body.Dispose();
+                        collectibleItems.Remove(item);
+                    }
+
+                }
+                if (item.type == CollectibleItemType.AMMO)
+                {
+                    //Ajouter munition ici
+                }
+            }
+
+        }
 
 		private void BeginContactForPlayer(Contact contact)
 		{
@@ -138,7 +199,8 @@ namespace Acllacuna
 				player.contactsWithFloor++;
 			}
 		}
-
+    
+            
 		private void EndContactForPlayer(Contact contact)
 		{
 			Fixture fixtureA = contact.FixtureA;
@@ -195,10 +257,11 @@ namespace Acllacuna
 			platform.Draw(spriteBatch);
 
             b.Draw(spriteBatch);
+            floor.Draw(spriteBatch);
 
-            foreach (KeyValuePair<int,CollectibleItem> item in collectibleItems)
+            foreach (CollectibleItem item in collectibleItems)
             {
-                item.Value.Draw(spriteBatch);
+                item.Draw(spriteBatch);
 			}
 
 			foreach (Enemy enemy in enemies)

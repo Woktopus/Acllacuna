@@ -25,11 +25,17 @@ namespace Acllacuna
 
 		protected float desiredHorizontalVelocity;
 
+        //Stats
+        public int Health { get; set; }
+        public int Ammo { get; set; }
+
 		public Player()
 		{
 			image = new Image();
 
 			contactsWithFloor = 0;
+
+            Health = 50;
 
 			feet = new Fixture[3];
 		}
