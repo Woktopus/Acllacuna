@@ -39,6 +39,7 @@ namespace Acllacuna
             body.BodyType = BodyType.Kinematic;
             body.Position = position;
             this.bodySize = size;
+            body.IsSensor = true;
 
             //Initialisation de l'image du block
             Vector2 imagePosition = new Vector2(ConvertUnits.ToDisplayUnits(position.X), ConvertUnits.ToDisplayUnits(position.Y));
@@ -48,26 +49,43 @@ namespace Acllacuna
 
             if (direction == DirectionEnum.LEFT)
             {
-                image.rotation = 180f;
                 this.speedDirection = new Vector2(-1,0);
             }
             else
             {
                 this.speedDirection = new Vector2(1, 0);
             }
-
+            this.direction = direction;
            
             this.speed = speed;
         }
 
         public void Update(GameTime gameTime)
         {
-
+            if (direction == DirectionEnum.RIGHT)
+            {
+                Vector2 impulse = new Vector2(1,0)* speed;
+                body.LinearVelocity = impulse;
+                image.position = ConvertUnits.ToDisplayUnits(body.Position);
+            }
+            else
+            {
+                Vector2 impulse = new Vector2(-1, 0) * speed;
+                body.LinearVelocity = impulse;
+                image.position = ConvertUnits.ToDisplayUnits(body.Position);
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            image.Draw(spriteBatch);
+            if (direction == DirectionEnum.RIGHT)
+            {
+                 image.Draw(spriteBatch);
+            }
+            else
+            {
+                image.DrawFlipHorizontally(spriteBatch);
+            }
         }
 
     }

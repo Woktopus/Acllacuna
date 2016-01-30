@@ -44,7 +44,8 @@ namespace Acllacuna
 
 			contactsWithFloor = 0;
 
-			Health = 50;
+            Health = 100;
+            Ammo = 100;
 
 			feet = new Fixture[3];
 
@@ -60,7 +61,7 @@ namespace Acllacuna
 			return body.Position;
 		}
 
-        public void LoadContent(World world, ContentManager content, Vector2 position, PhysicsScene physicsScene)
+        public virtual void LoadContent(World world, ContentManager content, Vector2 position, PhysicsScene physicsScene)
 		{
 			SetSize();
 
@@ -212,14 +213,14 @@ namespace Acllacuna
 
 			if (keyboardInput.IsKeyDown(Keys.Up) && contactsWithFloor > 0)
 			{
-				float jumpVelocity = PhysicsUtils.GetVerticalSpeedToReach(world, 2);
+				float jumpVelocity = PhysicsUtils.GetVerticalSpeedToReach(world, 3);
 				body.LinearVelocity = new Vector2(velocity.X, -jumpVelocity);
 				hasJumped = true;
 			}
 
             if (keyboardInput.IsKeyDown(Keys.Space))
             {
-                this.physicsScene.projectileFactory.LaunchProjectile(this.directionRegard, new Vector2(1, 1), body.Position, "Graphics/Projectile/lame_hitbox", 5);
+                LaunchProjectile();
             }
 		}
 
@@ -227,13 +228,22 @@ namespace Acllacuna
         {
             if (Ammo > 0)
             {
-                
+                this.physicsScene.projectileFactory.LaunchProjectile(this.directionRegard, 
+                    new Vector2(1, 1), body.Position, "Graphics/Projectile/lame_hitbox", 10);
+                Ammo--;
             }
         }
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			animation.Draw(spriteBatch);
+			if (directionRegard == DirectionEnum.RIGHT)
+			{
+				animation.Draw(spriteBatch);
+			}
+			else
+			{
+				animation.DrawFlipHorizontally(spriteBatch);
+			}
 		}
 
 		protected Vector2 GetDrawPosition()

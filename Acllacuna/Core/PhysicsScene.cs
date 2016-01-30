@@ -106,7 +106,7 @@ namespace Acllacuna
 
             projectileFactory.LoadContent(this, content);
 
-			player.LoadContent(world, content, new Vector2(12, 10), this);
+			player.LoadContent(world, content, new Vector2(14, 10), this);
 			
             map.LoadContent(content, world);
 
@@ -124,12 +124,16 @@ namespace Acllacuna
             BeginContactForCollectibleItem(contact);
 			BeginContactForPlayer(contact);
 
+			BeginContactForEnemy(contact);
+
             return true;
         }
 
 		void onEndContact( Contact contact )
 		{
 			EndContactForPlayer(contact);
+
+			EndContactForEnemy(contact);
 		}
 
         private void BeginContactForCollectibleItem(Contact contact)
@@ -152,7 +156,8 @@ namespace Acllacuna
                     {
                         player.Health += 20;
                         item.body.Dispose();
-                        collectibleItems.Remove(item);
+						collectibleItems.Remove(item);
+						return;
                     }
                     
                 }
@@ -161,7 +166,8 @@ namespace Acllacuna
                     //Ajouter munition ici
                     player.Ammo += 5;
                     item.body.Dispose();
-                    collectibleItems.Remove(item);
+					collectibleItems.Remove(item);
+					return;
                 }
             }
             if ((int)fixtureB.UserData >= 500 && (int)fixtureB.UserData<600
@@ -179,7 +185,8 @@ namespace Acllacuna
                     {
                         player.Health += 20;
                         item.body.Dispose();
-                        collectibleItems.Remove(item);
+						collectibleItems.Remove(item);
+						return;
                     }
 
                 }
@@ -188,7 +195,8 @@ namespace Acllacuna
                     //Ajouter munition ici
                     player.Ammo += 5;
                     item.body.Dispose();
-                    collectibleItems.Remove(item);
+					collectibleItems.Remove(item);
+					return;
                 }
             }
 
@@ -204,15 +212,17 @@ namespace Acllacuna
 				|| (int)fixtureB.UserData == 3))
 			{
 				player.contactsWithFloor++;
+				return;
 			}
 			if ((int)fixtureB.UserData == 1
 				&& ((int)fixtureA.UserData == 2
 				|| (int)fixtureA.UserData == 3))
 			{
 				player.contactsWithFloor++;
+				return;
 			}
 		}
-            
+
 		private void EndContactForPlayer(Contact contact)
 		{
 			Fixture fixtureA = contact.FixtureA;
@@ -223,6 +233,7 @@ namespace Acllacuna
 				|| (int)fixtureB.UserData == 3))
 			{
 				player.contactsWithFloor--;
+				return;
 			}
 
 			if ((int)fixtureB.UserData == 1
@@ -230,6 +241,123 @@ namespace Acllacuna
 				|| (int)fixtureA.UserData == 3))
 			{
 				player.contactsWithFloor--;
+				return;
+			}
+		}
+
+		private void BeginContactForEnemy(Contact contact)
+		{
+			Fixture fixtureA = contact.FixtureA;
+			Fixture fixtureB = contact.FixtureB;
+
+			if ((int)fixtureA.UserData <= -100 && (int)fixtureA.UserData > -200
+				&& ((int)fixtureB.UserData == 2
+				|| (int)fixtureB.UserData == 3))
+			{
+				int enemyID = -((int)fixtureA.UserData + 100);
+
+				Enemy enemy = enemies
+					.FirstOrDefault(i => i.id == enemyID);
+
+				enemy.sensorsContacts[0]++;
+				return;
+			}
+
+			if ((int)fixtureB.UserData <= -100 && (int)fixtureB.UserData > -200
+				&& ((int)fixtureA.UserData == 2
+				|| (int)fixtureA.UserData == 3))
+			{
+				int enemyID = -((int)fixtureB.UserData + 100);
+
+				Enemy enemy = enemies
+					.FirstOrDefault(i => i.id == enemyID);
+
+				enemy.sensorsContacts[0]++;
+				return;
+			}
+
+			if ((int)fixtureA.UserData <= -200 && (int)fixtureA.UserData > -300
+				&& ((int)fixtureB.UserData == 2
+				|| (int)fixtureB.UserData == 3))
+			{
+				int enemyID = -((int)fixtureA.UserData + 200);
+
+				Enemy enemy = enemies
+					.FirstOrDefault(i => i.id == enemyID);
+
+				enemy.sensorsContacts[1]++;
+				return;
+			}
+
+			if ((int)fixtureB.UserData <= -200 && (int)fixtureB.UserData > -300
+				&& ((int)fixtureA.UserData == 2
+				|| (int)fixtureA.UserData == 3))
+			{
+				int enemyID = -((int)fixtureB.UserData + 200);
+
+				Enemy enemy = enemies
+					.FirstOrDefault(i => i.id == enemyID);
+
+				enemy.sensorsContacts[1]++;
+				return;
+			}
+		}
+
+		private void EndContactForEnemy(Contact contact)
+		{
+			Fixture fixtureA = contact.FixtureA;
+			Fixture fixtureB = contact.FixtureB;
+
+			if ((int)fixtureA.UserData <= -100 && (int)fixtureA.UserData > -200
+				&& ((int)fixtureB.UserData == 2
+				|| (int)fixtureB.UserData == 3))
+			{
+				int enemyID = -((int)fixtureA.UserData + 100);
+
+				Enemy enemy = enemies
+					.FirstOrDefault(i => i.id == enemyID);
+
+				enemy.sensorsContacts[0]--;
+				return;
+			}
+
+			if ((int)fixtureB.UserData <= -100 && (int)fixtureB.UserData > -200
+				&& ((int)fixtureA.UserData == 2
+				|| (int)fixtureA.UserData == 3))
+			{
+				int enemyID = -((int)fixtureB.UserData + 100);
+
+				Enemy enemy = enemies
+					.FirstOrDefault(i => i.id == enemyID);
+
+				enemy.sensorsContacts[0]--;
+				return;
+			}
+
+			if ((int)fixtureA.UserData <= -200 && (int)fixtureA.UserData > -300
+				&& ((int)fixtureB.UserData == 2
+				|| (int)fixtureB.UserData == 3))
+			{
+				int enemyID = -((int)fixtureA.UserData + 200);
+
+				Enemy enemy = enemies
+					.FirstOrDefault(i => i.id == enemyID);
+
+				enemy.sensorsContacts[1]--;
+				return;
+			}
+
+			if ((int)fixtureB.UserData <= -200 && (int)fixtureB.UserData > -300
+				&& ((int)fixtureA.UserData == 2
+				|| (int)fixtureA.UserData == 3))
+			{
+				int enemyID = -((int)fixtureB.UserData + 200);
+
+				Enemy enemy = enemies
+					.FirstOrDefault(i => i.id == enemyID);
+
+				enemy.sensorsContacts[1]--;
+				return;
 			}
 		}
 
