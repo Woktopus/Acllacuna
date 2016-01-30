@@ -14,7 +14,7 @@ namespace Acllacuna
         public Body body { get; set; }
         public Vector2 bodySize { get; set; }
         //public Image image { get; set; }
-        public Image[,] images  { get; set; }
+        public Image[,] images { get; set; }
 
 
         public PlatformeDirection pattern { get; set; }
@@ -30,7 +30,7 @@ namespace Acllacuna
         {
         }
 
-        public void LoadContent(World world, Vector2 size, Vector2 position, ContentManager Content, string texturePath, PlatformeDirection pattern,  float maxDist, float speed)
+        public void LoadContent(World world, Vector2 size, Vector2 position, ContentManager Content, string texturePath, PlatformeDirection pattern, float maxDist, float speed)
         {
             //Initialisation du body 
             body = BodyFactory.CreateRectangle(world, size.X, size.Y, 1f);
@@ -85,7 +85,7 @@ namespace Acllacuna
 
         public void Update(GameTime gameTime)
         {
-            dist += (speedDirection.Length() * (float)gameTime.ElapsedGameTime.Milliseconds)/1000;
+            dist += (speedDirection.Length() * (float)gameTime.ElapsedGameTime.Milliseconds) / 1000;
             if (dist >= maxDist)
             {
                 if (pattern == PlatformeDirection.RIGHT_LEFT)
@@ -117,7 +117,7 @@ namespace Acllacuna
             {
                 for (int j = 0; j < bodySize.X; j++)
                 {
-                    images[i,j].position = ConvertUnits.ToDisplayUnits(body.Position - new Vector2(bodySize.X/2,bodySize.Y/2) + new Vector2(j, i)+ new Vector2(0.5f,0.5f));
+                    images[i, j].position = ConvertUnits.ToDisplayUnits(body.Position - new Vector2(bodySize.X / 2, bodySize.Y / 2) + new Vector2(j, i) + new Vector2(0.5f, 0.5f));
                 }
             }
         }
