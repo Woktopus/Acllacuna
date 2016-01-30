@@ -99,9 +99,9 @@ namespace Acllacuna
 			base.UnloadContent();
 		}
 
-		public override void Update(GameTime gameTime)
+		public override void Update(GameTime gameTime, Game game)
 		{
-			base.Update(gameTime);
+			base.Update(gameTime, game);
 
 			// variable time step but never less then 30 Hz
 			world.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalSeconds, (1f / PhysicsUtils.FPS)));

@@ -60,8 +60,8 @@ namespace Acllacuna
 		{
 			if (texture != null)
 			{
-				origin = new Vector2(sourceRect.Width / 2, sourceRect.Height / 2);
-				spriteBatch.Draw(texture, position, sourceRect, textureColor * alpha, rotation, origin, scale, SpriteEffects.None, 0.0f);
+				origin = new Vector2(-(sourceRect.Width * scale.X) / 2, -(sourceRect.Height * scale.Y) / 2);
+				spriteBatch.Draw(texture, position + origin, sourceRect, textureColor * alpha, rotation, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
 			}
 		}
 

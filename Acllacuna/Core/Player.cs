@@ -1,7 +1,10 @@
-﻿using FarseerPhysics.Collision.Shapes;
+﻿using FarseerPhysics;
+using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 
@@ -11,15 +14,20 @@ namespace Acllacuna
 	{
 		Body body;
 
+		Image image;
+
+		Vector2 size;
+
 		public Player()
 		{
+			image = new Image();
+
+			size = new Vector2(2.5f, 3f);
 		}
 
-		public void LoadContent(World world, Vector2 position)
+		public void LoadContent(World world, ContentManager content, Vector2 position)
 		{
-			Vector2 size = new Vector2(0.5f, 1.5f);
-
-			body = BodyFactory.CreateRectangle(world, size.X, size.Y, 1f);
+			body = BodyFactory.CreateRectangle(world, size.X, size.Y - (size.X / 2), 1f);
 
 			body.BodyType = BodyType.Dynamic;
 
@@ -31,9 +39,13 @@ namespace Acllacuna
 
 			CircleShape circle = new CircleShape(size.X / 2, 1f);
 
-			circle.Position = new Vector2(0, size.Y / 2);
+			circle.Position = new Vector2(0, (size.Y - (size.X / 2)) / 2);
 
 			body.CreateFixture(circle);
+
+			image.LoadContent(content, "Graphics/virgin", Color.White, GetDrawPosition());
+
+			image.ScaleToMeters(size);
 		}
 
 		public void Update(GameTime gameTime, World world)
@@ -62,6 +74,18 @@ namespace Acllacuna
 				float jumpVelocity = PhysicsUtils.GetVerticalSpeedToReach(world, 2);
 				body.LinearVelocity = new Vector2(velocity.X, -jumpVelocity);
 			}
+
+			image.position = GetDrawPosition();
+		}
+
+		public void Draw(SpriteBatch spriteBatch)
+		{
+			image.Draw(spriteBatch);
+		}
+
+		private Vector2 GetDrawPosition()
+		{
+			return ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, (size.Y / 2) / 2));
 		}
 	}
 }
