@@ -40,6 +40,11 @@ namespace Acllacuna
 			feet = new Fixture[3];
 		}
 
+		public Vector2 GetPositionFromBody()
+		{
+			return body.Position;
+		}
+
 		public void LoadContent(World world, ContentManager content, Vector2 position)
 		{
 			SetSize();

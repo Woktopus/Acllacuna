@@ -11,7 +11,7 @@ namespace Acllacuna
     {
         #region Variables
 
-        Scene currentScene;
+        public Scene currentScene;
         Scene newScene;
 
         /// <summary>

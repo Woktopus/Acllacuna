@@ -88,7 +88,10 @@ namespace Acllacuna
 
             // TODO: Add your drawing code here
             // Start drawing
-            spriteBatch.Begin();
+			if (!(SceneManager.Instance.currentScene is PhysicsScene))
+			{
+				spriteBatch.Begin();
+			}
             SceneManager.Instance.Draw(spriteBatch);
             // Stop drawing
             spriteBatch.End();

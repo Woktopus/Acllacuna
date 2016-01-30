@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FarseerPhysics.Dynamics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System;
 
@@ -35,5 +36,11 @@ namespace Acllacuna
 
 			image.ScaleToMeters(size);
 		}
+
+		protected override void SetVelocity(World world)
+		{
+
+		}
+		
 	}
 }

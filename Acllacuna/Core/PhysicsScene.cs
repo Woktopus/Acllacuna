@@ -27,6 +27,8 @@ namespace Acllacuna
 		protected DebugViewXNA debugView;
 		protected Matrix projection;
 
+		Camera camera;
+
         Player player;
 
         public List<CollectibleItem> collectibleItems { get; set; }
@@ -37,12 +39,12 @@ namespace Acllacuna
 
 		public PhysicsScene()
 		{
-
 			world = null;
+
 			gravity = new Vector2(0, 20);
+
+			camera = new Camera();
             
-
-
 			player = new Player();
 
             collectibleItems = new List<CollectibleItem>();
@@ -78,6 +80,9 @@ namespace Acllacuna
 
 			world.Gravity = gravity;
 
+			camera.viewportWidth = graph.Viewport.Width;
+			camera.viewportHeight = graph.Viewport.Height;
+
 			// NOTE: you should probably unregister on destructor or wherever is relevant...
 
 			if (debugView == null)
@@ -93,9 +98,8 @@ namespace Acllacuna
 				0f, 1f
 			);
 
-			player.LoadContent(world, content, new Vector2(10, 0));
-
-
+			player.LoadContent(world, content, new Vector2(12, 10));
+			
             map.LoadContent(content, world);
 
             CollectibleItem item = new CollectibleItem();
@@ -103,7 +107,7 @@ namespace Acllacuna
             collectibleItems.Add(item);
 
 			Enemy enemy = new Enemy();
-			enemy.LoadContent(world, content, new Vector2(12, 0));
+			enemy.LoadContent(world, content, new Vector2(10, 10));
 			enemies.Add(enemy);
         }
 
@@ -111,10 +115,9 @@ namespace Acllacuna
 		{
             BeginContactForCollectibleItem(contact);
 			BeginContactForPlayer(contact);
+
             return true;
         }
-
-		
 
 		void onEndContact( Contact contact )
 		{
@@ -194,7 +197,6 @@ namespace Acllacuna
 				player.contactsWithFloor++;
 			}
 		}
-    
             
 		private void EndContactForPlayer(Contact contact)
 		{
@@ -233,6 +235,15 @@ namespace Acllacuna
 		public override void Update(GameTime gameTime, Game game)
 		{
 			base.Update(gameTime, game);
+
+			foreach (Enemy enemy in enemies)
+			{
+				enemy.Update(gameTime, world);
+			}
+
+			player.Update(gameTime, world);
+
+			camera.CenterOn(ConvertUnits.ToDisplayUnits(player.GetPositionFromBody()), map);
             
             // variable time step but never less then 30 Hz
 			world.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalSeconds, (1f / PhysicsUtils.FPS)));
@@ -240,6 +251,10 @@ namespace Acllacuna
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
+			spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, camera.TranslationMatrix);
+
+			map.Draw(spriteBatch);
+
             foreach (CollectibleItem item in collectibleItems)
             {
                 item.Draw(spriteBatch);
@@ -251,10 +266,8 @@ namespace Acllacuna
 			}
 
 			player.Draw(spriteBatch);
-
-            map.Draw(spriteBatch);
             
-            debugView.RenderDebugData(ref projection);
+            //debugView.RenderDebugData(ref projection);
 		}
 	}
 }

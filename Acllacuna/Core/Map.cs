@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Acllacuna
 {
-    class Map
+    public class Map
     {
         int[,] map;
 
@@ -17,7 +17,17 @@ namespace Acllacuna
 
         List<Block> listBlock;
         String pathMap;
-        Parser pars;
+		Parser pars;
+
+		public float GetRealWidth()
+		{
+			return (float)(pars.width * 2);
+		}
+
+		public float GetRealHeight()
+		{
+			return (float)(pars.height * 2);
+		}
 
         public Map(String path)
         {

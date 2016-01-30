@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FarseerPhysics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 
@@ -41,8 +42,8 @@ namespace Acllacuna
 		private Vector2 ClampedPosition(Vector2 position, Map map)
 		{
 			var cameraMax = new Vector2(
-				map.width - (viewportWidth / zoom / 2),
-				map.height - (viewportHeight / zoom / 2));
+				ConvertUnits.ToDisplayUnits(map.GetRealWidth()) - (viewportWidth / zoom / 2),
+				ConvertUnits.ToDisplayUnits(map.GetRealHeight()) - (viewportHeight / zoom / 2));
 
 			return Vector2.Clamp(
 				position,
@@ -50,9 +51,9 @@ namespace Acllacuna
 			   cameraMax);
 		}
 
-		public void CenterOn(Vector2 position)
+		public void CenterOn(Vector2 position, Map map)
 		{
-			this.position = ClampedPosition(position);
+			this.position = ClampedPosition(position, map);
 		}
 
 		public Vector2 WorldToScreen(Vector2 worldPosition)
