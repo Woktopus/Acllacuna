@@ -11,57 +11,56 @@ using System.Text;
 
 namespace Acllacuna
 {
-    public class CollectibleItem
+    public class Projectile
     {
-
         private static int NextId = 0;
 
         public int id { get; set; }
         public Body body { get; set; }
+        public Vector2 bodySize { get; set; }
         public Image image { get; set; }
-        public  CollectibleItemType type { get; set; }
-        public Vector2 bodyPosition { get; set; }
+        public DirectionEnum direction { get; set; }
+        public Vector2 speedDirection { get; set; }
+        public float speed { get; set; }
 
 
-        public CollectibleItem()
+
+        public Projectile()
         {
             this.id = NextId;
             NextId++;
         }
 
-
-        public void LoadContent(World world, Vector2 size, Vector2 position, ContentManager Content, CollectibleItemType type)
+        public void LoadContent(World world, Vector2 size, Vector2 position, ContentManager Content, string texturePath, DirectionEnum direction, float speed)
         {
             //Initialisation du body
             body = BodyFactory.CreateRectangle(world, size.X, size.Y, 1f);
-            body.BodyType = BodyType.Static;
-            body.IsSensor = true;
+            body.FixtureList[0].UserData = (int)6;
+            body.BodyType = BodyType.Kinematic;
             body.Position = position;
-            bodyPosition = position;
-            body.FixtureList[0].UserData = (int)(500+id);
+            this.bodySize = size;
 
-            //Initialisation de l'image
+            //Initialisation de l'image du block
             Vector2 imagePosition = new Vector2(ConvertUnits.ToDisplayUnits(position.X), ConvertUnits.ToDisplayUnits(position.Y));
             image = new Image();
+            image.LoadContent(Content, texturePath, Color.Purple, imagePosition);
+            image.ScaleToMeters(size);
 
-            string texturePath = "";
-            if (type == CollectibleItemType.HEALTH)
+            if (direction == DirectionEnum.LEFT)
             {
-                texturePath = "Graphics/Collectible/plume";
+                image.rotation = 180f;
+                this.speedDirection = new Vector2(-1,0);
             }
             else
             {
-                texturePath = "Graphics/cube1";
+                this.speedDirection = new Vector2(1, 0);
             }
 
-            image.LoadContent(Content, texturePath, Color.White, imagePosition);
-            image.ScaleToMeters(size);
-
-            this.type = type;
-
+           
+            this.speed = speed;
         }
 
-        public void Update()
+        public void Update(GameTime gameTime)
         {
 
         }
@@ -70,5 +69,6 @@ namespace Acllacuna
         {
             image.Draw(spriteBatch);
         }
+
     }
 }

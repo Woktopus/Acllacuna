@@ -1,4 +1,5 @@
-﻿using FarseerPhysics;
+﻿using System;
+using System.Collections.Generic;using FarseerPhysics;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Dynamics.Contacts;
@@ -7,17 +8,18 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 
 namespace Acllacuna
 {
 	public class Player
 	{
+        private PhysicsScene physicsScene; 
+
 		protected Body body;
 
 		protected Fixture[] feet;
 
-		protected Image image;
+		protected Animation animation;
 
 		protected Vector2 size;
 
@@ -25,19 +27,28 @@ namespace Acllacuna
 
 		protected float desiredHorizontalVelocity;
 
+		protected bool hasJumped;
+
+		protected bool hasMoved;
+
         //Stats
+        public DirectionEnum directionRegard { get; set; }
         public int Health { get; set; }
         public int Ammo { get; set; }
 
 		public Player()
 		{
-			image = new Image();
+			animation = new Animation();
 
 			contactsWithFloor = 0;
 
             Health = 50;
 
 			feet = new Fixture[3];
+
+			hasJumped = false;
+
+			hasMoved = false;
 		}
 
 		public Vector2 GetPositionFromBody()
@@ -45,9 +56,11 @@ namespace Acllacuna
 			return body.Position;
 		}
 
-		public void LoadContent(World world, ContentManager content, Vector2 position)
+        public void LoadContent(World world, ContentManager content, Vector2 position, PhysicsScene physicsScene)
 		{
 			SetSize();
+
+            this.physicsScene = physicsScene;
 
 			body = BodyFactory.CreateRectangle(world, size.X, size.Y - 0.1f, 1f);
 			
@@ -71,6 +84,8 @@ namespace Acllacuna
 			feet[1] = body.CreateFixture(circle2);
 			feet[2] = body.CreateFixture(circle3);
 
+            directionRegard = DirectionEnum.RIGHT;
+
 			SetIDS();
 
 			LoadAnimation(content);
@@ -91,9 +106,13 @@ namespace Acllacuna
 
 		protected virtual void LoadAnimation(ContentManager content)
 		{
-			image.LoadContent(content, "Graphics/virgin", Color.White, GetDrawPosition());
+			animation.LoadContent(content, "Graphics/Spritesheet", Color.White, GetDrawPosition(), 150, new Vector2(4, 4));
 
-			image.ScaleToMeters(size);
+			animation.SelectAnimation(0);
+
+			animation.ScaleToMeters(size);
+
+			animation.isActive = true;
 		}
 
 		public void Update(GameTime gameTime, World world)
@@ -103,6 +122,19 @@ namespace Acllacuna
 			feet[2].Friction = 1000;
 
 			SetVelocity(world);
+
+			if (hasMoved && animation.isEnded && contactsWithFloor > 0)
+			{
+				animation.SelectAnimation(1);
+				animation.loop = false;
+			}
+
+			if (hasJumped)
+			{
+				hasJumped = false;
+				animation.SelectAnimation(2);
+				animation.loop = false;
+			}
 
 			if (desiredHorizontalVelocity != 0)
 			{
@@ -116,7 +148,8 @@ namespace Acllacuna
 				contactEdge.Contact.ResetFriction();
 			}
 
-			image.position = GetDrawPosition();
+			animation.position = GetDrawPosition();
+			animation.Update(gameTime);
 		}
 
 		protected virtual void SetVelocity(World world)
@@ -124,16 +157,22 @@ namespace Acllacuna
 			KeyboardState keyboardInput = ServiceHelper.Get<InputManagerService>().Keyboard.GetState();
 
 			Vector2 velocity = body.LinearVelocity;
+			
+			hasMoved = false;
 
-			desiredHorizontalVelocity = 0f;
+			desiredHorizontalVelocity = velocity.X * 0.95f;
 			if (keyboardInput.IsKeyDown(Keys.Left))
 			{
 				desiredHorizontalVelocity = MathHelper.Max(velocity.X - 0.5f, -5.0f);
+				hasMoved = true;
+                this.directionRegard = DirectionEnum.LEFT;
 			}
 			if (keyboardInput.IsKeyDown(Keys.Right))
 			{
 				desiredHorizontalVelocity = MathHelper.Min(velocity.X + 0.5f, 5.0f);
-			}
+				hasMoved = true;
+                this.directionRegard = DirectionEnum.RIGHT;
+            }
 
 			float velocityChange = desiredHorizontalVelocity - velocity.X;
 			float impulse = body.Mass * velocityChange;
@@ -144,12 +183,26 @@ namespace Acllacuna
 			{
 				float jumpVelocity = PhysicsUtils.GetVerticalSpeedToReach(world, 2);
 				body.LinearVelocity = new Vector2(velocity.X, -jumpVelocity);
+				hasJumped = true;
 			}
+
+            if (keyboardInput.IsKeyDown(Keys.Space))
+            {
+                this.physicsScene.projectileFactory.LaunchProjectile(this.directionRegard, new Vector2(1, 1), body.Position, "Graphics/Projectile/lame_hitbox", 5);
+            }
 		}
+
+        public void LaunchProjectile()
+        {
+            if (Ammo > 0)
+            {
+                
+            }
+        }
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			image.Draw(spriteBatch);
+			animation.Draw(spriteBatch);
 		}
 
 		protected Vector2 GetDrawPosition()

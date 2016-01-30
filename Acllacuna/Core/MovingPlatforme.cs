@@ -41,12 +41,6 @@ namespace Acllacuna
             body.Position = position;
             this.bodySize = size;
 
-            //Initialisation de l'image du block
-            //Vector2 imagePosition = new Vector2(ConvertUnits.ToDisplayUnits(position.X), ConvertUnits.ToDisplayUnits(position.Y));
-            //image = new Image();
-            //image.LoadContent(Content, texturePath, Color.White, imagePosition);
-            //image.ScaleToMeters(size);
-
             //Initialise la liste d'images
             images = new Image[(int)size.Y, (int)size.X];
             for (int i = 0; i < size.Y; i++)

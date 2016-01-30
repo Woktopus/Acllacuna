@@ -18,9 +18,9 @@ using FarseerPhysics.Dynamics.Contacts;
 
 namespace Acllacuna
 {
-	class PhysicsScene : Scene
+	public class PhysicsScene : Scene
 	{
-		protected World world;
+		public World world;
 
 		protected Vector2 gravity;
 
@@ -31,9 +31,12 @@ namespace Acllacuna
 
         Player player;
 
-        public List<CollectibleItem> collectibleItems { get; set; }
+        public ProjectileFactory projectileFactory { get; set; }
 
+        public List<CollectibleItem> collectibleItems { get; set; }
 		public List<Enemy> enemies;
+        public List<Projectile> projectiles { get; set; }
+
 
         public Map map;
 
@@ -53,6 +56,9 @@ namespace Acllacuna
 		
             map = new Map("");
 
+            projectiles = new List<Projectile>();
+            projectileFactory = new ProjectileFactory();
+            
         }
 
         public override void LoadContent(ContentManager content, GraphicsDevice graph)
@@ -98,16 +104,18 @@ namespace Acllacuna
 				0f, 1f
 			);
 
-			player.LoadContent(world, content, new Vector2(12, 10));
+            projectileFactory.LoadContent(this, content);
+
+			player.LoadContent(world, content, new Vector2(12, 10), this);
 			
             map.LoadContent(content, world);
 
             CollectibleItem item = new CollectibleItem();
-            item.LoadContent(world, new Vector2(1, 1), new Vector2(21, 8), content, "Graphics/Collectible/plume", CollectibleItemType.HEALTH);
+            item.LoadContent(world, new Vector2(1, 1), new Vector2(21, 8), content,  CollectibleItemType.AMMO);
             collectibleItems.Add(item);
 
 			Enemy enemy = new Enemy();
-			enemy.LoadContent(world, content, new Vector2(10, 10));
+			enemy.LoadContent(world, content, new Vector2(10, 10), this);
 			enemies.Add(enemy);
         }
 
@@ -143,6 +151,7 @@ namespace Acllacuna
                     if (player.Health < 100)
                     {
                         player.Health += 20;
+                        item.body.Dispose();
                         collectibleItems.Remove(item);
                     }
                     
@@ -150,6 +159,9 @@ namespace Acllacuna
                 if (item.type == CollectibleItemType.AMMO)
                 {
                     //Ajouter munition ici
+                    player.Ammo += 5;
+                    item.body.Dispose();
+                    collectibleItems.Remove(item);
                 }
             }
             if ((int)fixtureB.UserData >= 500 && (int)fixtureB.UserData<600
@@ -174,6 +186,9 @@ namespace Acllacuna
                 if (item.type == CollectibleItemType.AMMO)
                 {
                     //Ajouter munition ici
+                    player.Ammo += 5;
+                    item.body.Dispose();
+                    collectibleItems.Remove(item);
                 }
             }
 
@@ -236,6 +251,11 @@ namespace Acllacuna
 		{
 			base.Update(gameTime, game);
 
+            foreach (Projectile projectile in projectiles)
+            {
+                projectile.Update(gameTime);
+            }
+
 			foreach (Enemy enemy in enemies)
 			{
 				enemy.Update(gameTime, world);
@@ -260,14 +280,21 @@ namespace Acllacuna
                 item.Draw(spriteBatch);
 			}
 
+            foreach (Projectile projectile in projectiles)
+            {
+                projectile.Draw(spriteBatch);
+            }
+
 			foreach (Enemy enemy in enemies)
 			{
 				enemy.Draw(spriteBatch);
 			}
 
 			player.Draw(spriteBatch);
-            
-            //debugView.RenderDebugData(ref projection);
+
+			Matrix cameraMatrix = camera.DebugMatrix;
+
+			debugView.RenderDebugData(ref projection, ref cameraMatrix);
 		}
 	}
 }

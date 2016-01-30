@@ -14,6 +14,10 @@ namespace Acllacuna
 
 		private Vector2 currentFrame;
 
+		public bool loop;
+
+		public bool isEnded;
+
 		// Can be modified without fucking up everything
 		public bool isActive { get; set; }
 
@@ -29,9 +33,12 @@ namespace Acllacuna
 
 		public bool SelectAnimation(int index)
 		{
+			isEnded = false;
+
+			currentFrame.X = 0;
 			currentFrame.Y = index;
 
-			if (currentFrame.Y * FrameHeight >= texture.Height)
+			if (currentFrame.Y > frames.Y)
 			{
 				currentFrame.Y = 0;
 
@@ -63,6 +70,10 @@ namespace Acllacuna
 			sourceRect = new Rectangle((int)currentFrame.X * FrameWidth, (int)currentFrame.Y * FrameHeight, FrameWidth, FrameHeight);
 
 			isActive = false;
+
+			loop = false;
+
+			isEnded = false;
 		}
 
 		public override void UnloadContent()
@@ -84,6 +95,11 @@ namespace Acllacuna
 					if (currentFrame.X * FrameWidth >= texture.Width)
 					{
 						currentFrame.X = 0;
+						if(!loop)
+						{
+							currentFrame.Y = 0;
+							isEnded = true;
+						}
 					}
 				}
 			}

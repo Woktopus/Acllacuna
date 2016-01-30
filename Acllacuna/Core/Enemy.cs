@@ -32,9 +32,11 @@ namespace Acllacuna
 
 		protected override void LoadAnimation(ContentManager content)
 		{
-			image.LoadContent(content, "Graphics/virgin", Color.DarkRed, GetDrawPosition());
+			animation.LoadContent(content, "Graphics/Spritesheet", Color.DarkRed, GetDrawPosition(), 200, new Vector2(4, 4));
 
-			image.ScaleToMeters(size);
+			animation.SelectAnimation(0);
+
+			animation.ScaleToMeters(size);
 		}
 
 		protected override void SetVelocity(World world)
