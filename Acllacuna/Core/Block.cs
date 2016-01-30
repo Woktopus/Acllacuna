@@ -29,10 +29,10 @@ namespace Acllacuna
                 body = BodyFactory.CreateRectangle(world, size.X, size.Y, 1f);
                 body.BodyType = BodyType.Static;
                 body.Position = position;
+
+
+                body.FixtureList[0].UserData = (int)2;
             }
-
-			body.FixtureList[0].UserData = (int)2;
-
             //Initialisation de l'image du block
             Vector2 imagePosition = new Vector2(ConvertUnits.ToDisplayUnits(position.X),ConvertUnits.ToDisplayUnits(position.Y));
             image = new Image();

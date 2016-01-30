@@ -81,7 +81,7 @@ namespace Acllacuna
 				0f, 1f
 			);
 
-            p.LoadContent(world, new Vector2(3, 1), new Vector2(10, 10), content, "cube1", PlatformeDirection.RIGHT_LEFT, 6, 5);
+            p.LoadContent(world, new Vector2(3, 1), new Vector2(10, 10), content, "Graphics/cube1", PlatformeDirection.RIGHT_LEFT, 6, 5);
             map.LoadContent(content,world);
 		}
 

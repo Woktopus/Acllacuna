@@ -12,10 +12,11 @@ namespace Acllacuna
         String path;
         List<string> list = new List<string>();
         char[] separator = { ';' };
+        public int width { get; set; }
+        public int height { get; set; }
 
 
-
-    public Parser(string path)
+        public Parser(string path)
         {
             
             this.path = path;
@@ -52,6 +53,8 @@ namespace Acllacuna
         {
             
             String[] taille = list[0].Split(separator);
+            height = int.Parse(taille[0]);
+            width = int.Parse(taille[1]);
             int[,] map = new int[int.Parse(taille[1]), int.Parse(taille[0])];
             list.RemoveAt(0);
             int i = 0,j=0;
