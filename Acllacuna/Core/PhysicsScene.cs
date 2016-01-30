@@ -168,6 +168,22 @@ namespace Acllacuna
                 else if ((int)fixtureB.UserData >= 100 && (int)fixtureB.UserData < 200)
                 {
                     //enemy
+                    int enemyId = (int)fixtureB.UserData - 100;
+                    Enemy enemy = enemies.FirstOrDefault(e => e.id == enemyId);
+                    if (enemy == null)
+                    {
+                        return;
+                    }
+                    proj.body.Dispose();
+                    projectiles.Remove(proj);
+                    enemy.Health -= 10;
+                    if (enemy.Health <= 0)
+                    {
+                        enemy.body.Dispose();
+                        enemies.Remove(enemy);
+                    }
+
+
                 }
 
             }
@@ -199,6 +215,21 @@ namespace Acllacuna
                 else if ((int)fixtureA.UserData >= 100 && (int)fixtureA.UserData < 200)
                 {
                     //enemy
+                    int enemyId = (int)fixtureA.UserData - 100;
+                    Enemy enemy = enemies.FirstOrDefault(e => e.id == enemyId);
+                    if (enemy == null)
+                    {
+                        return;
+                    }
+                    proj.body.Dispose();
+                    projectiles.Remove(proj);
+                    enemy.Health -= 10;
+                    if (enemy.Health <= 0)
+                    {
+                        enemy.body.Dispose();
+                        enemies.Remove(enemy);
+                    }
+
                 }
             }
 

@@ -16,7 +16,7 @@ namespace Acllacuna
 	{
         private PhysicsScene physicsScene;
 
-        protected Body body;
+        public Body body;
 
         protected Fixture[] feet;
 
