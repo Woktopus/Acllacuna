@@ -75,14 +75,21 @@ namespace Acllacuna
 			CircleShape circle1 = new CircleShape(0.1f, 1f);
 			CircleShape circle2 = new CircleShape(0.1f, 1f);
 			CircleShape circle3 = new CircleShape(0.1f, 1f);
+			CircleShape circle4 = new CircleShape(0.1f, 1f);
+			CircleShape circle5 = new CircleShape(0.1f, 1f);
 
-			circle1.Position = new Vector2(-((size.X/ 2) - 0.1f), (size.Y - 0.1f) / 2);
+			circle1.Position = new Vector2(-((size.X / 2) - 0.2f), (size.Y - 0.1f) / 2);
 			circle2.Position = new Vector2(0, (size.Y - 0.1f) / 2);
-			circle3.Position = new Vector2((size.X / 2) - 0.1f, (size.Y - 0.1f) / 2);
+			circle3.Position = new Vector2((size.X / 2) - 0.2f, (size.Y - 0.1f) / 2);
+			circle4.Position = new Vector2(-size.X / 2, 0);
+			circle5.Position = new Vector2(size.X / 2, 0);
 
 			feet[0] = body.CreateFixture(circle1);
 			feet[1] = body.CreateFixture(circle2);
 			feet[2] = body.CreateFixture(circle3);
+
+			body.CreateFixture(circle4).UserData = 0;
+			body.CreateFixture(circle5).UserData = 0;
 
             directionRegard = DirectionEnum.RIGHT;
 
