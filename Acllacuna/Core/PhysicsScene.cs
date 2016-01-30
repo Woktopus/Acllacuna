@@ -143,6 +143,16 @@ namespace Acllacuna
             Fixture fixtureA = contact.FixtureA;
             Fixture fixtureB = contact.FixtureB;
 
+            if ((int)fixtureA.UserData >= 600 && (int)fixtureA.UserData < 700)
+            {
+                int projectileId = (int)fixtureA.UserData - 600;
+
+            }
+            if ((int)fixtureB.UserData >= 600 && (int)fixtureB.UserData < 700)
+            {
+                int projectileId = (int)fixtureB.UserData - 600;
+
+            }
 
         }
 
