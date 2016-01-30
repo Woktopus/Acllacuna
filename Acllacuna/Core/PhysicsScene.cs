@@ -29,6 +29,8 @@ namespace Acllacuna
 		Player player;
 
 		MovingPlatforme platform;
+        Block b;
+        public Dictionary<int,CollectibleItem> collectibleItems { get; set; }
 
 		public PhysicsScene()
 		{
@@ -39,6 +41,8 @@ namespace Acllacuna
 			player = new Player();
 
 			platform = new MovingPlatforme();
+            b = new Block();
+            collectibleItems = new Dictionary<int, CollectibleItem>();
 		}
 
 		public override void LoadContent(ContentManager content, GraphicsDevice graph)
@@ -84,7 +88,12 @@ namespace Acllacuna
 			player.LoadContent(world, content, new Vector2(10, 0));
 
 			platform.LoadContent(world, new Vector2(6, 1), new Vector2(10, 10), content, "Graphics/cube2", PlatformeDirection.LEFT_RIGHT, 3f, 3f);
-		}
+            b.LoadContent(world, new Vector2(5, 2), new Vector2(20, 10), content, "Graphics/cube1");
+
+            CollectibleItem item = new CollectibleItem();
+            item.LoadContent(world, new Vector2(1, 1), new Vector2(21, 8), content, "Graphics/Collectible/plume");
+            collectibleItems.Add(item.id,item);
+        }
 
 		bool onBeginContact( Contact contact )
 		{
@@ -137,7 +146,6 @@ namespace Acllacuna
 			base.Update(gameTime, game);
 
 			platform.Update(gameTime);
-
 			player.Update(gameTime, world);
 
 			// variable time step but never less then 30 Hz
@@ -147,7 +155,11 @@ namespace Acllacuna
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			platform.Draw(spriteBatch);
-
+            b.Draw(spriteBatch);
+            foreach (KeyValuePair<int,CollectibleItem> item in collectibleItems)
+            {
+                item.Value.Draw(spriteBatch);
+            }
 			player.Draw(spriteBatch);
 
 			debugView.RenderDebugData(ref projection);
