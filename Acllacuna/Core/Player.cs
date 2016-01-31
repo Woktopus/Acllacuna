@@ -119,11 +119,7 @@ namespace Acllacuna
 
 		public void Damage(int damage)
 		{
-<<<<<<< HEAD
             if (isInvul) return;
-=======
-			if (isInvul) return;
->>>>>>> origin/master
 			Health -= damage;
 			isDamaged = true;
 			isInvul = true;
