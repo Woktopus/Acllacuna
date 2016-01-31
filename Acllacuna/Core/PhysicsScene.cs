@@ -129,6 +129,7 @@ namespace Acllacuna
             BeginContactForProjectile(contact);
             BeginContactForCollectibleItem(contact);
             BeginContactForPlayer(contact);
+            BeginContactForSpike(contact);
             BeginContactForEnemy(contact);
 
             return true;
