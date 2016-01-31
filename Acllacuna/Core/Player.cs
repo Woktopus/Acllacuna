@@ -119,6 +119,7 @@ namespace Acllacuna
 
 		public void Damage(int damage)
 		{
+			if (isInvul) return;
 			Health -= damage;
 			isDamaged = true;
 			isInvul = true;
@@ -240,6 +241,15 @@ namespace Acllacuna
 			animation.isActive = true;
 
 			text.LoadContent(content, "Graphics/Font/aztec", Color.Red, "", ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, -size.Y / 2)));
+
+			Vector2 scaleRitual = new Vector2(0.3f, 0.3f);
+
+			ritual1.LoadContent(content, "Graphics/symbole1", Color.White, Vector2.Zero);
+			ritual1.scale = scaleRitual;
+			ritual2.LoadContent(content, "Graphics/symbole2", Color.White, Vector2.Zero);
+			ritual2.scale = scaleRitual;
+			ritual3.LoadContent(content, "Graphics/symbole3", Color.White, Vector2.Zero);
+			ritual3.scale = scaleRitual;
 		}
 
 		public void Update(GameTime gameTime, World world)
@@ -482,7 +492,7 @@ namespace Acllacuna
         public void LaunchProjectile()
         {
             this.physicsScene.projectileFactory.LaunchProjectile(this.directionRegard,
-            new Vector2(1, 1), body.Position, "Graphics/Projectile/lame_hitbox", 10);
+            new Vector2(1, 1), body.Position, "Graphics/Projectile/couteau", 10);
             Ammo--;
         }
 
@@ -501,6 +511,30 @@ namespace Acllacuna
                 }
             }
 			text.Draw(spriteBatch);
+
+			float width = (ritual1.SourceRect.Width * ritual1.scale.X);
+
+			Vector2 ritualPos = (ConvertUnits.ToDisplayUnits(body.Position) + new Vector2(-width, -ConvertUnits.ToDisplayUnits(size.Y) / 2));
+			for (int i = 0; i < currentRitual; i++)
+			{
+				int temp = ritualValues[i];
+				if (temp == 1)
+				{
+					ritual1.position = ritualPos;
+					ritual1.Draw(spriteBatch);
+				}
+				if (temp == 2)
+				{
+					ritual2.position = ritualPos;
+					ritual2.Draw(spriteBatch);
+				}
+				if (temp == 3)
+				{
+					ritual3.position = ritualPos;
+					ritual3.Draw(spriteBatch);
+				}
+				ritualPos += new Vector2(width, 0);
+			}
 		}
 
         public Vector2 GetDrawPosition()

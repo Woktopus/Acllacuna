@@ -25,7 +25,7 @@ namespace Acllacuna
             this.path = path;
             mondico = new Dictionary<int, string>();
             mondico.Add(1, "Graphics/TileMap/cactus_bottom");
-            mondico.Add(2, "Graphics/TileMap/cactus_bottom");
+            mondico.Add(2, "Graphics/TileMap/stonebrick");
             parse = new Parser("Map/Map1Dyn.txt");
             listMov = new List<MovingPlatforme>();
             listEnnemy = new List<Enemy>();

@@ -103,7 +103,6 @@ namespace Acllacuna
             camera.viewportWidth = graph.Viewport.Width;
             camera.viewportHeight = graph.Viewport.Height;
             camera.zoom = 0.85f;
-            // NOTE: you should probably unregister on destructor or wherever is relevant...
 
             if (debugView == null)
             {
@@ -132,7 +131,7 @@ namespace Acllacuna
             collectibleItems.Add(item);*/
 
 			lifeBarFrame.LoadContent(content, "Graphics/cadre", Color.White, Vector2.Zero);
-			lifeBar.LoadContent(content, "Graphics/lifeBar", Color.White, Vector2.Zero);
+			lifeBar.LoadContent(content, "Graphics/Lifebar2", Color.White, Vector2.Zero);
 
 			boss.LoadContent(content, world, ConvertUnits.ToDisplayUnits(new Vector2(10, 0)), new Vector2(20, 20));
         }
@@ -293,7 +292,6 @@ namespace Acllacuna
 					}
 				}
 			}
-
 		}
 
 
@@ -305,7 +303,7 @@ namespace Acllacuna
             if ((int)fixtureA.UserData == 2000)
             {
                 //Cas player
-				if ((int)fixtureB.UserData == 0 && !player.isInvul)
+                if ((int)fixtureB.UserData == 0)
                 {
                     player.Damage(25);
                 }
@@ -317,11 +315,8 @@ namespace Acllacuna
                     if (enemy == null)
                     {
                         return;
-					}
-					if (!enemy.isInvul)
-					{
-						enemy.Damage(25);
-					}
+                    }
+                    enemy.Damage(25);
                     if (enemy.Health <= 0)
                     {
                         enemy.body.Dispose();
@@ -332,7 +327,7 @@ namespace Acllacuna
             else if ((int)fixtureB.UserData == 2000)
             {
                 //cas player
-				if ((int)fixtureA.UserData == 0 && !player.isInvul)
+                if ((int)fixtureA.UserData == 0)
                 {
                     player.Damage(25);
                 }
@@ -344,11 +339,8 @@ namespace Acllacuna
                     if (enemy == null)
                     {
                         return;
-					}
-					if (!enemy.isInvul)
-					{
-						enemy.Damage(25);
-					}
+                    }
+                    enemy.Damage(25);
                     if (enemy.Health <= 0)
                     {
                         enemy.body.Dispose();
@@ -397,11 +389,8 @@ namespace Acllacuna
                         return;
                     }
                     proj.body.Dispose();
-					projectiles.Remove(proj);
-					if (!enemy.isInvul)
-					{
-						enemy.Damage(10);
-					}
+                    projectiles.Remove(proj);
+                    enemy.Damage(10);
                     if (enemy.Health <= 0)
                     {
                         enemy.body.Dispose();
@@ -447,11 +436,8 @@ namespace Acllacuna
                         return;
                     }
                     proj.body.Dispose();
-					projectiles.Remove(proj);
-					if (!enemy.isInvul)
-					{
-						enemy.Damage(10);
-					}
+                    projectiles.Remove(proj);
+					enemy.Damage(10);
                     if (enemy.Health <= 0)
                     {
                         enemy.body.Dispose();
@@ -577,11 +563,11 @@ namespace Acllacuna
                 player.contactsWithFloor--;
                 return;
             }
-            if ((int)fixtureA.UserData == 0 && (int)fixtureB.UserData >=100 && (int)fixtureB.UserData < 200 && !player.isInvul)
+            if ((int)fixtureA.UserData == 0 && (int)fixtureB.UserData >=100 && (int)fixtureB.UserData < 200)
             {
                 player.Damage(10);
             }
-			if ((int)fixtureB.UserData == 0 && (int)fixtureA.UserData >= 100 && (int)fixtureA.UserData < 200 && !player.isInvul)
+            if ((int)fixtureB.UserData == 0 && (int)fixtureA.UserData >= 100 && (int)fixtureA.UserData < 200)
             {
                 player.Damage(10);
             }
@@ -699,7 +685,7 @@ namespace Acllacuna
 			camera.CenterOn(ConvertUnits.ToDisplayUnits(player.GetPositionFromBody()), map);
 
 			lifeBar.position = new Vector2(camera.ScreenToWorld(new Vector2(graphicDevice.Viewport.Width / 2, 0)).X , camera.ScreenToWorld(new Vector2(0, 50)).Y);
-			lifeBar.scale = new Vector2(player.Health / 10, 0.5f);
+			lifeBar.scale = new Vector2(player.Health / 125f, 0.25f);
 
 			lifeBarFrame.position = new Vector2(camera.ScreenToWorld(new Vector2(graphicDevice.Viewport.Width / 2, 0)).X - 1, camera.ScreenToWorld(new Vector2(0, 50)).Y - 1);
 			lifeBarFrame.scale = new Vector2(0.31f, 0.099f);
@@ -741,7 +727,7 @@ namespace Acllacuna
 
             Matrix cameraMatrix = camera.DebugMatrix;
 
-            debugView.RenderDebugData(ref projection, ref cameraMatrix);
+            //debugView.RenderDebugData(ref projection, ref cameraMatrix);
         }
     }
 }
