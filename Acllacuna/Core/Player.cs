@@ -349,6 +349,13 @@ namespace Acllacuna
         public void Attack()
         {
             this.isAttacking = true;
+            dagger.Attack();
+        }
+
+        public void EndAttack()
+        {
+            this.isAttacking = false;
+            dagger.EndAttack();
         }
 
 		public void Draw(SpriteBatch spriteBatch)
@@ -357,11 +364,21 @@ namespace Acllacuna
 			if (directionRegard == DirectionEnum.RIGHT)
 			{
 				animation.Draw(spriteBatch);
+                if (isAttacking)
+                {
+
+                    EndAttack();
+                }
 			}
 			else
 			{
 				animation.DrawFlipHorizontally(spriteBatch);
-			}
+                if (isAttacking)
+                {
+
+                    EndAttack();
+                }
+            }
 		}
 
         protected Vector2 GetDrawPosition()

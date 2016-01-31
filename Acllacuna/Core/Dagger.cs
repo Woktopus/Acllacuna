@@ -31,13 +31,17 @@ namespace Acllacuna
             body.BodyType = BodyType.Kinematic;
             body.Position = position;
             bodyPosition = position;
+            body.FixtureList[0].UserData = 1500;
             if(isAtacking)
             {
                 body.Enabled = true;
+                body.Awake = false;
             }
             else
             {
                 body.Enabled = false;
+                body.Awake = true;
+
             }
 
             Vector2 imagePosition = new Vector2(ConvertUnits.ToDisplayUnits(position.X), ConvertUnits.ToDisplayUnits(position.Y));
@@ -46,6 +50,18 @@ namespace Acllacuna
             image.ScaleToMeters(size);
         }
 
+
+        public void Attack()
+        {
+            this.isAtacking = true;
+            body.Enabled = true;
+        }
+
+        public void EndAttack()
+        {
+            this.isAtacking = false;
+            body.Enabled = false;
+        }
 
 
         public void Update(GameTime gameTime)
