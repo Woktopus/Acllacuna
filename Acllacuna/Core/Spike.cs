@@ -18,8 +18,6 @@ namespace Acllacuna
         public Image image { get; set; }
         public Vector2 ImagePosition { get; set; }
 
-
-
         public Spike()
         {
 
@@ -31,6 +29,7 @@ namespace Acllacuna
             body.BodyType = BodyType.Static;
             body.Position = position;
             body.FixtureList[0].UserData = 2000;
+            body.IsSensor = true;
 
             Vector2 imagePosition = new Vector2(ConvertUnits.ToDisplayUnits(position.X), ConvertUnits.ToDisplayUnits(position.Y));
             image = new Image();
