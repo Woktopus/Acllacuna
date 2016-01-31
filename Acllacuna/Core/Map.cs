@@ -38,6 +38,9 @@ namespace Acllacuna
             mondico.Add(1, "Graphics/cube1");
             mondico.Add(2, "Graphics/cube2");
             mondico.Add(3, "Graphics/spike");
+            mondico.Add(4, "Graphics/spike_bas");
+            mondico.Add(5, "Graphics/spike_droite");
+            mondico.Add(6, "Graphics/spike_gauche");
             pathMap = path;
             pars = new Parser("Map/Map1.txt");
             
@@ -57,7 +60,7 @@ namespace Acllacuna
                             b.LoadContent(world, new Vector2(2, 2), new Vector2((i * 2) + 1, (j * 2) + 1), Content, mondico[Math.Abs(map[i, j])], false);
                             listBlock.Add(b);
                     } else if (map[i, j] > 0) {
-                        if (map[i, j] == 3)
+                        if (map[i, j] >=3 && map[i, j]<=6)
                         {
                             Spike s = new Spike();
                             s.LoadContent(Content, world, new Vector2(1.50f, 1.50f), new Vector2((i * 2) + 1, (j * 2) + 1), mondico[Math.Abs(map[i, j])]);
