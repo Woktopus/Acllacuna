@@ -60,7 +60,7 @@ namespace Acllacuna
                         if (map[i, j] == 3)
                         {
                             Spike s = new Spike();
-                            s.LoadContent(Content, world, new Vector2(2, 2), new Vector2((i * 2) + 1, (j * 2) + 1), mondico[Math.Abs(map[i, j])]);
+                            s.LoadContent(Content, world, new Vector2(1.50f, 1.50f), new Vector2((i * 2) + 1, (j * 2) + 1), mondico[Math.Abs(map[i, j])]);
                             listSpike.Add(s);
                         }
                         else

@@ -34,7 +34,7 @@ namespace Acllacuna
             Vector2 imagePosition = new Vector2(ConvertUnits.ToDisplayUnits(position.X), ConvertUnits.ToDisplayUnits(position.Y));
             image = new Image();
             image.LoadContent(Content, texturePath, Color.White, imagePosition);
-            image.ScaleToMeters(size);
+            image.ScaleToMeters(new Vector2(2,2));
             this.ImagePosition = imagePosition;
 
         }
