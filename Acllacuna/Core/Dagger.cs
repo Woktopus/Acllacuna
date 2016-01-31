@@ -49,6 +49,7 @@ namespace Acllacuna
 
         public void Update(GameTime gameTime)
         {
+            image.position = bodyPosition;
             if (isAtacking)
             {
                 body.Enabled = true;
@@ -63,8 +64,9 @@ namespace Acllacuna
         {
             if (isAtacking)
             {
-
+                image.Draw(spriteBatch);
             }
+            image.Draw(spriteBatch);
         }
     }
 }

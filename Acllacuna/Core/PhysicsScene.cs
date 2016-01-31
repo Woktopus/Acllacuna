@@ -27,7 +27,6 @@ namespace Acllacuna
         Camera camera;
 
         Player player;
-        Dagger playerDagger;
 
         public ProjectileFactory projectileFactory { get; set; }
 
@@ -49,8 +48,6 @@ namespace Acllacuna
             camera = new Camera();
 
             player = new Player();
-            playerDagger = new Dagger();
-            player.dagger = playerDagger;
 
             collectibleItems = new List<CollectibleItem>();
 
@@ -113,6 +110,7 @@ namespace Acllacuna
             projectileFactory.LoadContent(this, content);
 
             player.LoadContent(world, content, new Vector2(14, 10), this);
+
 
             map.LoadContent(content, world);
             dynMap.LoadContent(content, world);
@@ -515,7 +513,6 @@ namespace Acllacuna
             }
 
             player.Update(gameTime, world);
-
             camera.CenterOn(ConvertUnits.ToDisplayUnits(player.GetPositionFromBody()), map);
 
             // variable time step but never less then 30 Hz
@@ -527,7 +524,7 @@ namespace Acllacuna
 			spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, camera.TranslationMatrix);
             mapBack.Draw(spriteBatch);
 
-            map.Draw(spriteBatch);
+            //map.Draw(spriteBatch);
             dynMap.Draw(spriteBatch);
             foreach (CollectibleItem item in collectibleItems)
             {
@@ -545,10 +542,9 @@ namespace Acllacuna
             }
 
             player.Draw(spriteBatch);
-
             Matrix cameraMatrix = camera.DebugMatrix;
 
-            //debugView.RenderDebugData(ref projection, ref cameraMatrix);
+            debugView.RenderDebugData(ref projection, ref cameraMatrix);
         }
     }
 }

@@ -65,7 +65,7 @@ namespace Acllacuna
         {
             animation = new Animation();
 
-            dagger = null;
+            dagger = new Dagger();
 
             contactsWithFloor = 0;
 
@@ -114,6 +114,8 @@ namespace Acllacuna
             body.Position = position;
 
             body.Mass = 50;
+
+            dagger.LoadContent(content, world, new Vector2(1, 1), this.GetPositionFromBody(), "Graphics/lame_hitbox");
 
             CircleShape circle1 = new CircleShape(0.1f, 1f);
             CircleShape circle2 = new CircleShape(0.1f, 1f);
@@ -262,6 +264,8 @@ namespace Acllacuna
 
 			animation.position = GetDrawPosition();
 			animation.Update(gameTime);
+            dagger.bodyPosition = this.GetPositionFromBody();
+            dagger.Update(gameTime);
 		}
 
 		protected virtual void SetVelocity(World world, GameTime gameTime)
@@ -338,6 +342,7 @@ namespace Acllacuna
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
+            dagger.Draw(spriteBatch);
 			if (directionRegard == DirectionEnum.RIGHT)
 			{
 				animation.Draw(spriteBatch);
