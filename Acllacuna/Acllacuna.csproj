@@ -62,6 +62,7 @@
     <Compile Include="Core\ProjectileFactory.cs" />
     <Compile Include="Core\Scene.cs" />
     <Compile Include="Core\SceneManager.cs" />
+    <Compile Include="Core\Spike.cs" />
     <Compile Include="Core\SplashScreen.cs" />
     <Compile Include="Core\Text.cs" />
     <Compile Include="Core\TitleScene.cs" />

@@ -35,11 +35,11 @@ namespace Acllacuna
         {
             //Initialisation du body
             body = BodyFactory.CreateRectangle(world, size.X, size.Y, 1f);
-            body.FixtureList[0].UserData = (int)(600+id);
-            body.BodyType = BodyType.Kinematic;
+            body.FixtureList[0].UserData = (int)(1000+id);
+            body.BodyType = BodyType.Dynamic;
             body.Position = position;
             this.bodySize = size;
-            body.IsSensor = true;
+            body.FixtureList[0].IsSensor = true;
 
             //Initialisation de l'image du block
             Vector2 imagePosition = new Vector2(ConvertUnits.ToDisplayUnits(position.X), ConvertUnits.ToDisplayUnits(position.Y));
@@ -62,6 +62,7 @@ namespace Acllacuna
 
         public void Update(GameTime gameTime)
         {
+            body.ApplyForce(-PhysicsUtils.gravity);
             if (direction == DirectionEnum.RIGHT)
             {
                 Vector2 impulse = new Vector2(1,0)* speed;
