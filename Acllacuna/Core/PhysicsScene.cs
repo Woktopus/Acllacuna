@@ -141,6 +141,61 @@ namespace Acllacuna
             EndContactForEnemy(contact);
         }
 
+        private void BeginContactForSpike(Contact contact)
+        {
+            Fixture fixtureA = contact.FixtureA;
+            Fixture fixtureB = contact.FixtureB;
+
+            if ((int)fixtureA.UserData == 2000)
+            {
+                //Cas player
+                if ((int)fixtureB.UserData == 0)
+                {
+                    player.Health -= 25;
+                }
+                //cas enemy
+                else if ((int)fixtureB.UserData >= 100 && (int)fixtureB.UserData < 200)
+                {
+                    int enemyId = (int)fixtureB.UserData - 100;
+                    Enemy enemy = enemies.FirstOrDefault(e => e.id == enemyId);
+                    if (enemy == null)
+                    {
+                        return;
+                    }
+                    enemy.Health -= 25;
+                    if (enemy.Health <= 0)
+                    {
+                        enemy.body.Dispose();
+                        enemies.Remove(enemy);
+                    }
+                }
+            }
+            else if ((int)fixtureB.UserData == 2000)
+            {
+                //cas player
+                if ((int)fixtureA.UserData == 0)
+                {
+                    player.Health -= 25;
+                }
+                //cas enemy
+                if ((int)fixtureA.UserData >= 100 && (int)fixtureA.UserData < 200)
+                {
+                    int enemyId = (int)fixtureA.UserData - 100;
+                    Enemy enemy = enemies.FirstOrDefault(e => e.id == enemyId);
+                    if (enemy == null)
+                    {
+                        return;
+                    }
+                    enemy.Health -= 25;
+                    if (enemy.Health <= 0)
+                    {
+                        enemy.body.Dispose();
+                        enemies.Remove(enemy);
+                    }
+                }
+            }
+        }
+
         private void BeginContactForProjectile(Contact contact)
         {
             Fixture fixtureA = contact.FixtureA;
@@ -477,7 +532,7 @@ namespace Acllacuna
 
             foreach (Projectile projectile in projectiles)
             {
-                //projectile.Draw(spriteBatch);
+                projectile.Draw(spriteBatch);
             }
 
             foreach (Enemy enemy in enemies)

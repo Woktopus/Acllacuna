@@ -1,4 +1,6 @@
-﻿using FarseerPhysics.Dynamics;
+﻿using FarseerPhysics;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,6 +16,8 @@ namespace Acllacuna
 
         public Body body { get; set; }
         public Image image { get; set; }
+        public Vector2 ImagePosition { get; set; }
+
 
 
         public Spike()
@@ -21,8 +25,18 @@ namespace Acllacuna
 
         }
 
-        public void LoadContent(ContentManager Content, World world)
+        public void LoadContent(ContentManager Content, World world, Vector2 size, Vector2 position, string texturePath)
         {
+            body = BodyFactory.CreateRectangle(world, size.X, size.Y, 1f);
+            body.BodyType = BodyType.Static;
+            body.Position = position;
+            body.FixtureList[0].UserData = 2000;
+
+            Vector2 imagePosition = new Vector2(ConvertUnits.ToDisplayUnits(position.X), ConvertUnits.ToDisplayUnits(position.Y));
+            image = new Image();
+            image.LoadContent(Content, texturePath, Color.White, imagePosition);
+            image.ScaleToMeters(size);
+            this.ImagePosition = imagePosition;
 
         }
 
@@ -33,7 +47,7 @@ namespace Acllacuna
 
         public void Draw(SpriteBatch spriteBatch)
         {
-
+            image.Draw(spriteBatch);
         }
     }
 }
