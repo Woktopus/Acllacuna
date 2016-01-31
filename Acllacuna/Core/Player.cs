@@ -429,7 +429,7 @@ namespace Acllacuna
         public void LaunchProjectile()
         {
             this.physicsScene.projectileFactory.LaunchProjectile(this.directionRegard,
-            new Vector2(1, 1), body.Position, "Graphics/Projectile/lame_hitbox", 10);
+            new Vector2(1, 1), body.Position, "Graphics/Projectile/couteau", 10);
             Ammo--;
         }
 

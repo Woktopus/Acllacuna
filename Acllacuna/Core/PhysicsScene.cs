@@ -97,7 +97,7 @@ namespace Acllacuna
 
             camera.viewportWidth = graph.Viewport.Width;
             camera.viewportHeight = graph.Viewport.Height;
-            camera.zoom = 0.85f;
+            camera.zoom = 0.50f;
             // NOTE: you should probably unregister on destructor or wherever is relevant...
 
             if (debugView == null)
