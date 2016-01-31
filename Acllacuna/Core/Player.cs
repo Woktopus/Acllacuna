@@ -44,18 +44,25 @@ namespace Acllacuna
         TimeSpan laserSpawnTime = TimeSpan.FromSeconds(SECONDS_IN_MINUTE / RATE_OF_FIRE);
         TimeSpan previousLaserSpawnTime = TimeSpan.Zero;
 
+        //Attackcooldown
+        const float RATE_OF_HIT = 150f;
+        TimeSpan attackSpawnTime = TimeSpan.FromSeconds(SECONDS_IN_MINUTE / RATE_OF_HIT);
+        TimeSpan previousHitSpawnTime = TimeSpan.Zero;
+
         //Stats
         public DirectionEnum directionRegard { get; set; }
         public int Health { get; set; }
 
 		public bool isDamaged;
 
+        public bool isAttacking;
+
         public int Ammo { get; set; }
 
         public Player()
         {
             animation = new Animation();
-
+            
             contactsWithFloor = 0;
 
             Health = 100;
@@ -300,6 +307,15 @@ namespace Acllacuna
                     }
                 }
             }
+
+            if ( keyboardInput.IsKeyDown(Keys.C))
+            {
+                if (gameTime.TotalGameTime - previousHitSpawnTime > attackSpawnTime)
+                {
+                    previousHitSpawnTime = gameTime.TotalGameTime;
+                    Attack();
+                }
+            }
         }
 
         public void LaunchProjectile()
@@ -307,6 +323,11 @@ namespace Acllacuna
             this.physicsScene.projectileFactory.LaunchProjectile(this.directionRegard,
             new Vector2(1, 1), body.Position, "Graphics/Projectile/lame_hitbox", 10);
             Ammo--;
+        }
+
+        public void Attack()
+        {
+
         }
 
 		public void Draw(SpriteBatch spriteBatch)
