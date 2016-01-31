@@ -91,7 +91,7 @@ namespace Acllacuna
 
             camera.viewportWidth = graph.Viewport.Width;
             camera.viewportHeight = graph.Viewport.Height;
-            camera.zoom = 0.15f;
+            camera.zoom = 0.85f;
             // NOTE: you should probably unregister on destructor or wherever is relevant...
 
             if (debugView == null)
@@ -129,6 +129,7 @@ namespace Acllacuna
             BeginContactForCollectibleItem(contact);
             BeginContactForPlayer(contact);
             BeginContactForSpike(contact);
+            BeginContactForDagger(contact);
             BeginContactForEnemy(contact);
 
             return true;
@@ -151,17 +152,20 @@ namespace Acllacuna
             {
                 if((int)fb.UserData >= 100 && (int)fb.UserData < 200)
                 {
-                    int enemyId = (int)fb.UserData - 100;
-                    Enemy enemy = enemies.FirstOrDefault(e => e.id == enemyId);
-                    if (enemy == null)
+                    if (player.Health > 0 && player.isAttacking)
                     {
-                        return;
-                    }
-                    enemy.Damage(10);
-                    if (enemy.Health <= 0)
-                    {
-                        enemy.body.Dispose();
-                        enemies.Remove(enemy);
+                        int enemyId = (int)fb.UserData - 100;
+                        Enemy enemy = enemies.FirstOrDefault(e => e.id == enemyId);
+                        if (enemy == null)
+                        {
+                            return;
+                        }
+                        enemy.Damage(10);
+                        if (enemy.Health <= 0)
+                        {
+                            enemy.body.Dispose();
+                            enemies.Remove(enemy);
+                        } 
                     }
                 }
             }
@@ -169,17 +173,20 @@ namespace Acllacuna
             {
                 if ((int)fa.UserData >= 100 && (int)fa.UserData < 200)
                 {
-                    int enemyId = (int)fb.UserData - 100;
-                    Enemy enemy = enemies.FirstOrDefault(e => e.id == enemyId);
-                    if (enemy == null)
+                    if (player.Health > 0 && player.isAttacking)
                     {
-                        return;
-                    }
-                    enemy.Damage(10);
-                    if (enemy.Health <= 0)
-                    {
-                        enemy.body.Dispose();
-                        enemies.Remove(enemy);
+                        int enemyId = (int)fb.UserData - 100;
+                        Enemy enemy = enemies.FirstOrDefault(e => e.id == enemyId);
+                        if (enemy == null)
+                        {
+                            return;
+                        }
+                        enemy.Damage(10);
+                        if (enemy.Health <= 0)
+                        {
+                            enemy.body.Dispose();
+                            enemies.Remove(enemy);
+                        } 
                     }
                 }
             }
@@ -454,6 +461,14 @@ namespace Acllacuna
             {
                 player.contactsWithFloor--;
                 return;
+            }
+            if ((int)fixtureA.UserData == 0 && (int)fixtureB.UserData >=100 && (int)fixtureB.UserData < 200)
+            {
+                player.Damage(10);
+            }
+            if ((int)fixtureB.UserData == 0 && (int)fixtureA.UserData >= 100 && (int)fixtureA.UserData < 200)
+            {
+                player.Damage(10);
             }
         }
 
