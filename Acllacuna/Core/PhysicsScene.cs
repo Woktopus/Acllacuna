@@ -136,6 +136,7 @@ namespace Acllacuna
             BeginContactForCollectibleItem(contact);
             BeginContactForPlayer(contact);
             BeginContactForSpike(contact);
+            BeginContactForDagger(contact);
             BeginContactForEnemy(contact);
 
             return true;
@@ -149,6 +150,56 @@ namespace Acllacuna
         }
 
         //here
+        public void BeginContactForDagger(Contact contact)
+        {
+            Fixture fa = contact.FixtureA;
+            Fixture fb = contact.FixtureB;
+            
+            if ((int)fa.UserData == 1500)
+            {
+                if((int)fb.UserData >= 100 && (int)fb.UserData < 200)
+                {
+                    if (player.Health > 0 && player.isAttacking)
+                    {
+                        int enemyId = (int)fb.UserData - 100;
+                        Enemy enemy = enemies.FirstOrDefault(e => e.id == enemyId);
+                        if (enemy == null)
+                        {
+                            return;
+                        }
+                        enemy.Damage(10);
+                        if (enemy.Health <= 0)
+                        {
+                            enemy.body.Dispose();
+                            enemies.Remove(enemy);
+                        } 
+                    }
+                }
+            }
+            if ((int)fb.UserData == 1500)
+            {
+                if ((int)fa.UserData >= 100 && (int)fa.UserData < 200)
+                {
+                    if (player.Health > 0 && player.isAttacking)
+                    {
+                        int enemyId = (int)fb.UserData - 100;
+                        Enemy enemy = enemies.FirstOrDefault(e => e.id == enemyId);
+                        if (enemy == null)
+                        {
+                            return;
+                        }
+                        enemy.Damage(10);
+                        if (enemy.Health <= 0)
+                        {
+                            enemy.body.Dispose();
+                            enemies.Remove(enemy);
+                        } 
+                    }
+                }
+            }
+
+        }
+
 
         private void BeginContactForSpike(Contact contact)
         {
@@ -418,6 +469,14 @@ namespace Acllacuna
                 player.contactsWithFloor--;
                 return;
             }
+            if ((int)fixtureA.UserData == 0 && (int)fixtureB.UserData >=100 && (int)fixtureB.UserData < 200)
+            {
+                player.Damage(10);
+            }
+            if ((int)fixtureB.UserData == 0 && (int)fixtureA.UserData >= 100 && (int)fixtureA.UserData < 200)
+            {
+                player.Damage(10);
+            }
         }
 
         private void BeginContactForEnemy(Contact contact)
@@ -566,7 +625,7 @@ namespace Acllacuna
 
             Matrix cameraMatrix = camera.DebugMatrix;
 
-            debugView.RenderDebugData(ref projection, ref cameraMatrix);
+            //debugView.RenderDebugData(ref projection, ref cameraMatrix);
         }
     }
 }

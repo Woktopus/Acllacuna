@@ -104,6 +104,10 @@ namespace Acllacuna
 		{
 			Health -= damage;
 			isDamaged = true;
+            if (Health <=0)
+            {
+                body.Dispose();
+            }
 		}
 
         public Vector2 GetPositionFromBody()
@@ -221,97 +225,103 @@ namespace Acllacuna
 
 		public void Update(GameTime gameTime, World world)
 		{
-			if (isAttacking)
-			{
-				attackDurationTimer += gameTime.ElapsedGameTime.Milliseconds;
-				if (attackDurationTimer > ATTACK_DURATION)
-				{
-					attackDurationTimer = 0;
-					isAttacking = false;
-					animation.SelectAnimation(0);
-				}
-			}
-
-			feet[0].Friction = 1000;
-			feet[1].Friction = 1000;
-			feet[2].Friction = 1000;
-
-			bumpers[1].Friction = 1000;
-			bumpers[4].Friction = 1000;
-
-			SetVelocity(world, gameTime);
-
-			if (hasMoved)
-			{
-				feet[0].Friction = 0;
-				feet[1].Friction = 0;
-				feet[2].Friction = 0;
-
-				bumpers[1].Friction = 0;
-				bumpers[4].Friction = 0;
-			}
-
-			for (ContactEdge contactEdge = body.ContactList; contactEdge != null; contactEdge = contactEdge.Next)
-			{
-				contactEdge.Contact.ResetFriction();
-			}
-
-			if (isDamaged)
-			{
-				isDamaged = false;
-				float impulse;
-
-				if (directionRegard == DirectionEnum.LEFT)
-				{
-					float velocityChange = 16 - body.LinearVelocity.X;
-					impulse = body.Mass * velocityChange;
-				}
-				else
-				{
-					float velocityChange = -16 - body.LinearVelocity.X;
-					impulse = body.Mass * velocityChange;
-				}
-
-				body.ApplyLinearImpulse(new Vector2(impulse, 0), body.WorldCenter);
-				float jumpVelocity = PhysicsUtils.GetVerticalSpeedToReach(world, 2);
-				body.LinearVelocity = new Vector2(body.LinearVelocity.X, -jumpVelocity);
-
-				animation.SelectAnimation(4);
-				animation.loop = false;
-			}
-            else if(isAttacking)
+            if (Health > 0)
             {
-                animation.SelectAnimation(3);
-                animation.loop = false;
-            }
-			else
-			{
-				if (hasMoved && animation.isEnded && contactsWithFloor > 0)
-				{
-					animation.SelectAnimation(1);
-					animation.loop = false;
-				}
+                if (isAttacking)
+                {
+                    attackDurationTimer += gameTime.ElapsedGameTime.Milliseconds;
+                    if (attackDurationTimer > ATTACK_DURATION)
+                    {
+                        attackDurationTimer = 0;
+                        isAttacking = false;
+                        animation.SelectAnimation(0);
+                    }
+                }
 
-				if (hasJumped)
-				{
-					hasJumped = false;
-					animation.SelectAnimation(2);
-					animation.loop = false;
-				}
-			}
+                feet[0].Friction = 1000;
+                feet[1].Friction = 1000;
+                feet[2].Friction = 1000;
 
-			animation.position = GetDrawPosition();
-			animation.Update(gameTime);
-           
-            if(this.directionRegard == DirectionEnum.LEFT){
-                dagger.bodyPosition = new Vector2(this.GetPositionFromBody().X - 1.5f, this.GetPositionFromBody().Y);
-                dagger.direc = DirectionEnum.LEFT;
+                bumpers[1].Friction = 1000;
+                bumpers[4].Friction = 1000;
+
+                SetVelocity(world, gameTime);
+
+                if (hasMoved)
+                {
+                    feet[0].Friction = 0;
+                    feet[1].Friction = 0;
+                    feet[2].Friction = 0;
+
+                    bumpers[1].Friction = 0;
+                    bumpers[4].Friction = 0;
+                }
+
+                for (ContactEdge contactEdge = body.ContactList; contactEdge != null; contactEdge = contactEdge.Next)
+                {
+                    contactEdge.Contact.ResetFriction();
+                }
+
+                if (isDamaged)
+                {
+                    isDamaged = false;
+                    float impulse;
+
+                    if (directionRegard == DirectionEnum.LEFT)
+                    {
+                        float velocityChange = 16 - body.LinearVelocity.X;
+                        impulse = body.Mass * velocityChange;
+                    }
+                    else
+                    {
+                        float velocityChange = -16 - body.LinearVelocity.X;
+                        impulse = body.Mass * velocityChange;
+                    }
+
+                    body.ApplyLinearImpulse(new Vector2(impulse, 0), body.WorldCenter);
+                    float jumpVelocity = PhysicsUtils.GetVerticalSpeedToReach(world, 2);
+                    body.LinearVelocity = new Vector2(body.LinearVelocity.X, -jumpVelocity);
+
+                    animation.SelectAnimation(4);
+                    animation.loop = false;
+                }
+                else if (isAttacking)
+                {
+                    animation.SelectAnimation(3);
+                    animation.loop = false;
+                }
+                else
+                {
+                    if (hasMoved && animation.isEnded && contactsWithFloor > 0)
+                    {
+                        animation.SelectAnimation(1);
+                        animation.loop = false;
+                    }
+
+                    if (hasJumped)
+                    {
+                        hasJumped = false;
+                        animation.SelectAnimation(2);
+                        animation.loop = false;
+                    }
+                }
+
+                animation.position = GetDrawPosition();
+                animation.Update(gameTime);
+
+                if (this.directionRegard == DirectionEnum.LEFT)
+                {
+                    dagger.bodyPosition = new Vector2(this.GetPositionFromBody().X - 1.5f, this.GetPositionFromBody().Y);
+                    dagger.direc = DirectionEnum.LEFT;
+                }
+                else
+                {
+                    dagger.bodyPosition = new Vector2(this.GetPositionFromBody().X + 1.5f, this.GetPositionFromBody().Y);
+                    dagger.direc = DirectionEnum.RIGHT;
+                }
+                dagger.Update(gameTime); 
             }
-            else
-            {
-                dagger.bodyPosition = new Vector2(this.GetPositionFromBody().X + 1.5f, this.GetPositionFromBody().Y);
-                dagger.direc = DirectionEnum.RIGHT;
-            }
+
             dagger.Update(gameTime);
 
 			UpdateRitual();
@@ -425,14 +435,17 @@ namespace Acllacuna
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-            dagger.Draw(spriteBatch);
-			if (directionRegard == DirectionEnum.RIGHT)
-			{
-				animation.Draw(spriteBatch);
-			}
-			else
-			{
-				animation.DrawFlipHorizontally(spriteBatch);
+            if (Health >0)
+            {
+                dagger.Draw(spriteBatch);
+                if (directionRegard == DirectionEnum.RIGHT)
+                {
+                    animation.Draw(spriteBatch);
+                }
+                else
+                {
+                    animation.DrawFlipHorizontally(spriteBatch);
+                }
             }
 			ritual.Draw(spriteBatch);
 		}

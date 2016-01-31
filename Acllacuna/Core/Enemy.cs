@@ -26,7 +26,7 @@ namespace Acllacuna
 		{
 			id = NextID;
 			NextID++;
-            Health = 500;
+            Health = 50;
 
 			direction = DirectionEnum.LEFT;
 			shouldMove = true;
