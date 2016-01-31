@@ -152,7 +152,7 @@ namespace Acllacuna
                 //Cas player
                 if ((int)fixtureB.UserData == 0)
                 {
-                    player.Health -= 25;
+                    player.Damage(25);
                 }
                 //cas enemy
                 else if ((int)fixtureB.UserData >= 100 && (int)fixtureB.UserData < 200)
@@ -163,7 +163,7 @@ namespace Acllacuna
                     {
                         return;
                     }
-                    enemy.Health -= 25;
+                    enemy.Damage(25);
                     if (enemy.Health <= 0)
                     {
                         enemy.body.Dispose();
@@ -176,7 +176,7 @@ namespace Acllacuna
                 //cas player
                 if ((int)fixtureA.UserData == 0)
                 {
-                    player.Health -= 25;
+                    player.Damage(25);
                 }
                 //cas enemy
                 if ((int)fixtureA.UserData >= 100 && (int)fixtureA.UserData < 200)
@@ -187,7 +187,7 @@ namespace Acllacuna
                     {
                         return;
                     }
-                    enemy.Health -= 25;
+                    enemy.Damage(25);
                     if (enemy.Health <= 0)
                     {
                         enemy.body.Dispose();
