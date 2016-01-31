@@ -113,16 +113,14 @@ namespace Acllacuna
 
 
             map.LoadContent(content, world);
-            dynMap.LoadContent(content, world);
+            dynMap.LoadContent(content, world,this);
             mapBack.LoadContent(content);
-
+            enemies = dynMap.listEnnemy;
             CollectibleItem item = new CollectibleItem();
             item.LoadContent(world, new Vector2(1, 1), new Vector2(21, 8), content, CollectibleItemType.AMMO);
             collectibleItems.Add(item);
 
-            Enemy enemy = new Enemy();
-            enemy.LoadContent(world, content, new Vector2(10, 10), this);
-            enemies.Add(enemy);
+
         }
 
         bool onBeginContact(Contact contact)
@@ -442,6 +440,10 @@ namespace Acllacuna
 
             Enemy enemy = enemies
                 .FirstOrDefault(i => i.id == enemyID);
+            if (enemy == null)
+            {
+                return;
+            }
 
             enemy.sensorsContacts[sensorID]++;
         }
