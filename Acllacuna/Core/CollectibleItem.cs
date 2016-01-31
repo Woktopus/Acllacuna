@@ -51,7 +51,7 @@ namespace Acllacuna
             }
             else
             {
-                texturePath = "Graphics/cube1";
+                texturePath = "Graphics/TileMap/torchStone";
             }
 
             image.LoadContent(Content, texturePath, Color.White, imagePosition);

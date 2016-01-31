@@ -115,17 +115,33 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Spritesheet.png" />
-    <Content Include="Content\Graphics\TileMap\furnace.png" />
-    <Content Include="Content\Graphics\TileMap\furnace2.png" />
-    <Content Include="Content\Graphics\TileMap\spike.png" />
-    <Content Include="Content\Graphics\TileMap\spike_bas.png" />
-    <Content Include="Content\Graphics\TileMap\spike_droite.png" />
-    <Content Include="Content\Graphics\TileMap\spike_gauche.png" />
-    <Content Include="Content\Graphics\TileMap\stonebrick.png" />
+    <Content Include="Content\Graphics\TileMap\furnace.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\TileMap\furnace2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\TileMap\spike.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\TileMap\spike_bas.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\TileMap\spike_droite.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\TileMap\spike_gauche.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\TileMap\stonebrick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\TileMap\stoneSol.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\TileMap\torchStone.png" />
+    <Content Include="Content\Graphics\TileMap\torchStone.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Transition\fade.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
