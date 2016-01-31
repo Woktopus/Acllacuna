@@ -16,6 +16,7 @@ namespace Acllacuna
         public Dictionary<int, string> mondico { get; set; }
 
         List<Block> listBlock;
+        List<Spike> listSpike;
         String pathMap;
 		Parser pars;
 
@@ -32,6 +33,7 @@ namespace Acllacuna
         public Map(String path)
         {
             listBlock = new List<Block>();
+            listSpike = new List<Spike>();
             mondico = new Dictionary<int, string>();
             mondico.Add(1, "Graphics/cube1");
             mondico.Add(2, "Graphics/cube2");
@@ -50,15 +52,23 @@ namespace Acllacuna
                 for (int j = 0; j <= map.GetLength(1)-1; j++)
                 {
                     if (map[i,j] < 0)
-                    {
-                        Block b = new Block();
-
-                        b.LoadContent(world, new Vector2(2, 2), new Vector2((i * 2) + 1, (j * 2) + 1), Content,mondico[Math.Abs(map[i,j])], false);
-                        listBlock.Add(b);
+                    {                        
+                            Block b = new Block();
+                            b.LoadContent(world, new Vector2(2, 2), new Vector2((i * 2) + 1, (j * 2) + 1), Content, mondico[Math.Abs(map[i, j])], false);
+                            listBlock.Add(b);
                     } else if (map[i, j] > 0) {
-                        Block b = new Block();
-                        b.LoadContent(world, new Vector2(2, 2), new Vector2((i * 2)+1, (j * 2) + 1), Content, mondico[Math.Abs(map[i, j])], true);
-                        listBlock.Add(b);
+                        if (map[i, j] == 3)
+                        {
+                            Spike s = new Spike();
+                            s.LoadContent(Content, world, new Vector2(2, 2), new Vector2((i * 2) + 1, (j * 2) + 1), mondico[Math.Abs(map[i, j])]);
+                            listSpike.Add(s);
+                        }
+                        else
+                        {
+                            Block b = new Block();
+                            b.LoadContent(world, new Vector2(2, 2), new Vector2((i * 2) + 1, (j * 2) + 1), Content, mondico[Math.Abs(map[i, j])], true);
+                            listBlock.Add(b);
+                        }
                     }
                 }
             }
@@ -72,6 +82,11 @@ namespace Acllacuna
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach (Block b in listBlock)
+            {
+                b.Draw(spriteBatch);
+            }
+
+            foreach (Spike b in listSpike)
             {
                 b.Draw(spriteBatch);
             }
