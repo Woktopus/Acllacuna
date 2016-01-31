@@ -46,6 +46,9 @@ namespace Acllacuna
 		Image lifeBarFrame;
 		Image lifeBar;
 
+        Image projectileBarFrame;
+        Image projectileBar;
+
 		Boss boss;
 
         public PhysicsScene()
@@ -69,6 +72,9 @@ namespace Acllacuna
 
 			lifeBarFrame = new Image();
 			lifeBar = new Image();
+
+            projectileBarFrame = new Image();
+            projectileBar = new Image();
 
 			boss = new Boss();
         }
@@ -133,6 +139,10 @@ namespace Acllacuna
 
 			lifeBarFrame.LoadContent(content, "Graphics/cadre", Color.White, Vector2.Zero);
 			lifeBar.LoadContent(content, "Graphics/Lifebar2", Color.White, Vector2.Zero);
+
+            projectileBarFrame.LoadContent(content, "Graphics/cadre", Color.White, Vector2.Zero);
+            projectileBar.LoadContent(content, "Graphics/Lifebar2", Color.Purple, Vector2.Zero);
+
 
 			boss.LoadContent(content, world, ConvertUnits.ToDisplayUnits(new Vector2(10, 0)), new Vector2(20, 20));
         }
@@ -481,7 +491,10 @@ namespace Acllacuna
                 if (item.type == CollectibleItemType.AMMO)
                 {
                     //Ajouter munition ici
-                    player.Ammo += 5;
+                    player.Ammo += 10;
+
+                    if (player.Ammo >= 100) player.Ammo = 100;
+
                     item.body.Dispose();
                     collectibleItems.Remove(item);
                     return;
@@ -514,7 +527,8 @@ namespace Acllacuna
                 if (item.type == CollectibleItemType.AMMO)
                 {
                     //Ajouter munition ici
-                    player.Ammo += 5;
+                    player.Ammo += 10;
+                    if (player.Ammo >= 100) player.Ammo = 100;
                     item.body.Dispose();
                     collectibleItems.Remove(item);
                     return;
@@ -688,8 +702,14 @@ namespace Acllacuna
 			lifeBar.position = new Vector2(camera.ScreenToWorld(new Vector2(graphicDevice.Viewport.Width / 2, 0)).X , camera.ScreenToWorld(new Vector2(0, 50)).Y);
 			lifeBar.scale = new Vector2(player.Health / 125f, 0.25f);
 
+            projectileBar.position = new Vector2(camera.ScreenToWorld(new Vector2(graphicDevice.Viewport.Width / 2, 0)).X, camera.ScreenToWorld(new Vector2(0, 90)).Y);
+            projectileBar.scale = new Vector2(player.Ammo / 125f, 0.25f);
+
 			lifeBarFrame.position = new Vector2(camera.ScreenToWorld(new Vector2(graphicDevice.Viewport.Width / 2, 0)).X - 1, camera.ScreenToWorld(new Vector2(0, 50)).Y - 1);
 			lifeBarFrame.scale = new Vector2(0.31f, 0.099f);
+
+            projectileBarFrame.position = new Vector2(camera.ScreenToWorld(new Vector2(graphicDevice.Viewport.Width / 2, 0)).X - 1, camera.ScreenToWorld(new Vector2(0, 90)).Y - 1);
+            projectileBarFrame.scale = new Vector2(0.31f, 0.099f);
 
 			boss.Update(gameTime);
 
@@ -725,6 +745,9 @@ namespace Acllacuna
 
 			lifeBar.Draw(spriteBatch);
 			lifeBarFrame.Draw(spriteBatch);
+
+            projectileBar.Draw(spriteBatch);
+            projectileBarFrame.Draw(spriteBatch);
 
             Matrix cameraMatrix = camera.DebugMatrix;
 
