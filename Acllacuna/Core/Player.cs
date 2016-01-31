@@ -14,6 +14,10 @@ namespace Acllacuna
 {
 	public class Player
 	{
+		const string ritual1 = " inti ";
+		const string ritual2 = " killa ";
+		const string ritual3 = " pitina ";
+
         private PhysicsScene physicsScene;
 
         public Body body;
@@ -64,7 +68,7 @@ namespace Acllacuna
 
         public int Ammo { get; set; }
 
-		public Text text;
+		public Text ritual;
 
         public Player()
         {
@@ -75,7 +79,7 @@ namespace Acllacuna
 
             contactsWithFloor = 0;
 
-            Health = 100;
+            Health = 75;
             Ammo = 100;
 
             feet = new Fixture[3];
@@ -91,7 +95,7 @@ namespace Acllacuna
 
 			isAttacking = false;
 
-			text = new Text();
+			ritual = new Text();
         }
 
 
@@ -212,7 +216,7 @@ namespace Acllacuna
 
 			animation.isActive = true;
 
-			//text.LoadContent(content, )
+			ritual.LoadContent(content, "Graphics/Font/aztec", Color.Red, "", ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, -size.Y / 2)));
 		}
 
 		public void Update(GameTime gameTime, World world)
@@ -309,7 +313,48 @@ namespace Acllacuna
                 dagger.direc = DirectionEnum.RIGHT;
             }
             dagger.Update(gameTime);
+
+			UpdateRitual();
+
+			ritual.position = ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, -size.Y / 2));
         }
+
+		public void UpdateRitual()
+		{
+			KeyboardState keyboardInput = ServiceHelper.Get<InputManagerService>().Keyboard.GetState();
+			KeyboardState prevInput = ServiceHelper.Get<InputManagerService>().Keyboard.GetPrevState();
+
+			if (keyboardInput.IsKeyDown(Keys.A))
+			{
+				if (prevInput.IsKeyDown(Keys.D1) && keyboardInput.IsKeyUp(Keys.D1))
+				{
+					ritual.text += ritual1;
+					return;
+				}
+				if (prevInput.IsKeyDown(Keys.D2) && keyboardInput.IsKeyUp(Keys.D2))
+				{
+					ritual.text += ritual2;
+					return;
+				}
+				if (prevInput.IsKeyDown(Keys.D3) && keyboardInput.IsKeyUp(Keys.D3))
+				{
+					ritual.text += ritual3;
+					return;
+				}
+			}
+			else if (prevInput.IsKeyDown(Keys.A))
+			{
+				if (ritual.text == ritual1 + ritual2 + ritual3)
+				{
+					if (Ammo >= 50)
+					{
+						Ammo -= 50;
+						Health = 100;
+					}
+				}
+				ritual.text = "";
+			}
+		}
 
         public virtual void SetVelocity(World world, GameTime gameTime)
 		{
@@ -389,6 +434,7 @@ namespace Acllacuna
 			{
 				animation.DrawFlipHorizontally(spriteBatch);
             }
+			ritual.Draw(spriteBatch);
 		}
 
         public Vector2 GetDrawPosition()

@@ -151,3 +151,20 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/redsheet.png
 
+#begin Graphics/Font/aztec.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Graphics/Font/aztec.spritefont
+
+#begin Graphics/lifeBar.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:TextureFormat=Color
+/build:Graphics/lifeBar.png
+
