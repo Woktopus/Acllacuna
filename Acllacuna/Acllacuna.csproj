@@ -60,6 +60,7 @@
     <Compile Include="Core\MenuScene.cs" />
     <Compile Include="Core\Projectile.cs" />
     <Compile Include="Core\ProjectileFactory.cs" />
+    <Compile Include="Core\Weapon.cs" />
     <Compile Include="Core\Scene.cs" />
     <Compile Include="Core\SceneManager.cs" />
     <Compile Include="Core\Spike.cs" />

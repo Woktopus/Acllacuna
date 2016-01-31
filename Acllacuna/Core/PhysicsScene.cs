@@ -236,7 +236,7 @@ namespace Acllacuna
                     }
                     proj.body.Dispose();
                     projectiles.Remove(proj);
-                    enemy.Health -= 10;
+                    enemy.Damage(10);
                     if (enemy.Health <= 0)
                     {
                         enemy.body.Dispose();
@@ -283,7 +283,7 @@ namespace Acllacuna
                     }
                     proj.body.Dispose();
                     projectiles.Remove(proj);
-                    enemy.Health -= 10;
+					enemy.Damage(10);
                     if (enemy.Health <= 0)
                     {
                         enemy.body.Dispose();

@@ -47,6 +47,9 @@ namespace Acllacuna
         //Stats
         public DirectionEnum directionRegard { get; set; }
         public int Health { get; set; }
+
+		public bool isDamaged;
+
         public int Ammo { get; set; }
 
         public Player()
@@ -66,7 +69,15 @@ namespace Acllacuna
             hasMoved = false;
 
             projectileCooldown = 0f;
+
+			isDamaged = false;
         }
+
+		public void Damage(int damage)
+		{
+			Health -= damage;
+			isDamaged = true;
+		}
 
         public Vector2 GetPositionFromBody()
         {
@@ -185,6 +196,27 @@ namespace Acllacuna
 
 			SetVelocity(world, gameTime);
 
+			if (isDamaged)
+			{
+				isDamaged = false;
+				float impulse;
+
+				if (directionRegard == DirectionEnum.LEFT)
+				{
+					float velocityChange = 8 - body.LinearVelocity.X;
+					impulse = body.Mass * velocityChange;
+				}
+				else
+				{
+					float velocityChange = -8 - body.LinearVelocity.X;
+					impulse = body.Mass * velocityChange;
+				}
+
+				body.ApplyLinearImpulse(new Vector2(impulse, 0), body.WorldCenter);
+				float jumpVelocity = PhysicsUtils.GetVerticalSpeedToReach(world, 4);
+				body.LinearVelocity = new Vector2(body.LinearVelocity.X, -jumpVelocity);
+			}
+
 			if (hasMoved && animation.isEnded && contactsWithFloor > 0)
 			{
 				animation.SelectAnimation(1);
@@ -229,7 +261,7 @@ namespace Acllacuna
 				hasMoved = true;
                 this.directionRegard = DirectionEnum.LEFT;
             }
-            if (keyboardInput.IsKeyDown(Keys.Right))
+			if (keyboardInput.IsKeyDown(Keys.Right))
             {
                 desiredHorizontalVelocity = MathHelper.Min(velocity.X + 0.5f, 5.0f);
                 hasMoved = true;
