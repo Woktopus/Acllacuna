@@ -16,13 +16,13 @@ namespace Acllacuna
 
         public override void LoadContent(ContentManager Content, GraphicsDevice graph)
         {
-            jouer = new Button(Content.Load<Texture2D>("Graphics/Menu/jouer"),graph);
+            jouer = new Button(Content.Load<Texture2D>("Graphics/JOUER"),graph);
             jouer.Position = new Vector2(250, 50);
 
-            option = new Button(Content.Load<Texture2D>("Graphics/Menu/option"), graph);
+            option = new Button(Content.Load<Texture2D>("Graphics/OPTIONS"), graph);
             option.Position = new Vector2(250, 200);
 
-            quitter = new Button(Content.Load<Texture2D>("Graphics/Menu/quitter"), graph);
+            quitter = new Button(Content.Load<Texture2D>("Graphics/QUITTER"), graph);
             quitter.Position = new Vector2(250, 350);
 
             base.LoadContent(Content, graph);
