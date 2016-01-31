@@ -35,7 +35,7 @@ namespace Acllacuna
             listBlock = new List<Block>();
             listSpike = new List<Spike>();
             mondico = new Dictionary<int, string>();
-            mondico.Add(1, "Graphics/TileMap/cube1");
+            mondico.Add(1, "Graphics/TileMap/cactus_bottom");
             mondico.Add(2, "Graphics/TileMap/cube2");
             mondico.Add(3, "Graphics/TileMap/spike");
             mondico.Add(4, "Graphics/TileMap/spike_bas");
