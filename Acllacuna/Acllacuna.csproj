@@ -94,6 +94,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\couteau.png" />
+    <Content Include="Content\Graphics\Fondmenu.PNG" />
     <Content Include="Content\Graphics\JOUER.png" />
     <Content Include="Content\Graphics\Lifebar2.PNG" />
     <Content Include="Content\Graphics\OPTIONS.png" />
