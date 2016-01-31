@@ -75,8 +75,6 @@ namespace Acllacuna
 
             projectileBarFrame = new Image();
             projectileBar = new Image();
-
-			boss = new Boss();
         }
 
         public override void LoadContent(ContentManager content, GraphicsDevice graph)
@@ -130,7 +128,10 @@ namespace Acllacuna
 
 
             map.LoadContent(content, world);
-            dynMap.LoadContent(content, world,this);
+			dynMap.LoadContent(content, world, this);
+
+			boss = dynMap.boss;
+
             mapBack.LoadContent(content);
             enemies = dynMap.listEnnemy;
             CollectibleItem item = new CollectibleItem();
@@ -142,9 +143,6 @@ namespace Acllacuna
 
             projectileBarFrame.LoadContent(content, "Graphics/cadre", Color.White, Vector2.Zero);
             projectileBar.LoadContent(content, "Graphics/Lifebar2", Color.Purple, Vector2.Zero);
-
-
-			boss.LoadContent(content, world, ConvertUnits.ToDisplayUnits(new Vector2(10, 0)), new Vector2(20, 20));
         }
 
         bool onBeginContact(Contact contact)
@@ -204,7 +202,8 @@ namespace Acllacuna
 				if (boss.health <= 0)
 				{
 					boss.isDead = true;
-					player.text.text = wintext;
+					player.isMessage = true;
+					player.message = Player.GAGNE;
 				}
 			}
 
@@ -216,7 +215,8 @@ namespace Acllacuna
 				if (boss.health <= 0)
 				{
 					boss.isDead = true;
-					player.text.text = wintext;
+					player.isMessage = true;
+					player.message = Player.GAGNE;
 				}
 			}
 
@@ -711,8 +711,6 @@ namespace Acllacuna
             projectileBarFrame.position = new Vector2(camera.ScreenToWorld(new Vector2(graphicDevice.Viewport.Width / 2, 0)).X - 1, camera.ScreenToWorld(new Vector2(0, 90)).Y - 1);
             projectileBarFrame.scale = new Vector2(0.31f, 0.099f);
 
-			boss.Update(gameTime);
-
             // variable time step but never less then 30 Hz
             world.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalSeconds, (1f / PhysicsUtils.FPS)));
         }
@@ -738,8 +736,6 @@ namespace Acllacuna
             {
                 enemy.Draw(spriteBatch);
             }
-
-			boss.Draw(spriteBatch);
 
             player.Draw(spriteBatch);
 

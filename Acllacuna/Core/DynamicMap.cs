@@ -18,7 +18,7 @@ namespace Acllacuna
         List<MovingPlatforme> listMov;
         public List<Enemy> listEnnemy;
         World world;
-        Boss boss;
+        public Boss boss;
 
 
         public DynamicMap(String path)

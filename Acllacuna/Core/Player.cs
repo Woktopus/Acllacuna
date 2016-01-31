@@ -77,7 +77,11 @@ namespace Acllacuna
 
 		public int currentRitual;
 
-		public Text text;
+		public static Image PERDU;
+		public static Image GAGNE;
+
+		public Image message;
+		public bool isMessage;
 
         public Player()
         {
@@ -112,7 +116,11 @@ namespace Acllacuna
 			ritualValues = new int[3];
 			currentRitual = 0;
 
-			text = new Text();
+			PERDU = new Image();
+			GAGNE = new Image();
+
+			message = new Image();
+			isMessage = false;
         }
 
 
@@ -126,7 +134,8 @@ namespace Acllacuna
             if (Health <= 0)
             {
                 body.Dispose();
-				text.text = "GAME OVER";
+				isMessage = true;
+				message = PERDU;
             }
 		}
 
@@ -240,8 +249,6 @@ namespace Acllacuna
 
 			animation.isActive = true;
 
-			text.LoadContent(content, "Graphics/Font/aztec", Color.Red, "", ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, -size.Y / 2)));
-
 			Vector2 scaleRitual = new Vector2(0.3f, 0.3f);
 
 			ritual1.LoadContent(content, "Graphics/symbole1", Color.White, Vector2.Zero);
@@ -250,6 +257,9 @@ namespace Acllacuna
 			ritual2.scale = scaleRitual;
 			ritual3.LoadContent(content, "Graphics/symbole3", Color.White, Vector2.Zero);
 			ritual3.scale = scaleRitual;
+
+			PERDU.LoadContent(content, "Graphics/PERDU", Color.White, Vector2.Zero);
+			GAGNE.LoadContent(content, "Graphics/GAGNE", Color.White, Vector2.Zero);
 		}
 
 		public void Update(GameTime gameTime, World world)
@@ -360,7 +370,7 @@ namespace Acllacuna
 
             dagger.Update(gameTime);
 
-			text.position = ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, -size.Y / 2));
+			message.position = ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, -size.Y / 2));
 
 			if (isInvul)
 			{
@@ -514,7 +524,11 @@ namespace Acllacuna
                     animation.DrawFlipHorizontally(spriteBatch);
                 }
             }
-			text.Draw(spriteBatch);
+			if(isMessage)
+			{
+				message.position = ConvertUnits.ToDisplayUnits(body.Position);
+				message.Draw(spriteBatch);
+			}
 
 			float width = (ritual1.SourceRect.Width * ritual1.scale.X);
 
