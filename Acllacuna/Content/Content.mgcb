@@ -134,3 +134,9 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/Spritesheet.png
 
+#begin Song/VirginInca.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Song/VirginInca.wav
+

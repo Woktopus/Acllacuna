@@ -33,7 +33,6 @@ namespace Acllacuna
             parse.LoadContent(Content);
             map = parse.dynMap();
 
-            Console.WriteLine(map.GetLength(1));
             for (int i = 0; i <= map.GetLength(0) - 1; i++)
             {
                 if (map[i,0] == 1)
