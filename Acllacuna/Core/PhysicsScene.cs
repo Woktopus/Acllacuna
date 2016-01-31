@@ -91,7 +91,7 @@ namespace Acllacuna
 
             camera.viewportWidth = graph.Viewport.Width;
             camera.viewportHeight = graph.Viewport.Height;
-            camera.zoom = 0.85f;
+            camera.zoom = 0.15f;
             // NOTE: you should probably unregister on destructor or wherever is relevant...
 
             if (debugView == null)
@@ -142,6 +142,50 @@ namespace Acllacuna
         }
 
         //here
+        public void BeginContactForDagger(Contact contact)
+        {
+            Fixture fa = contact.FixtureA;
+            Fixture fb = contact.FixtureB;
+            
+            if ((int)fa.UserData == 1500)
+            {
+                if((int)fb.UserData >= 100 && (int)fb.UserData < 200)
+                {
+                    int enemyId = (int)fb.UserData - 100;
+                    Enemy enemy = enemies.FirstOrDefault(e => e.id == enemyId);
+                    if (enemy == null)
+                    {
+                        return;
+                    }
+                    enemy.Damage(10);
+                    if (enemy.Health <= 0)
+                    {
+                        enemy.body.Dispose();
+                        enemies.Remove(enemy);
+                    }
+                }
+            }
+            if ((int)fb.UserData == 1500)
+            {
+                if ((int)fa.UserData >= 100 && (int)fa.UserData < 200)
+                {
+                    int enemyId = (int)fb.UserData - 100;
+                    Enemy enemy = enemies.FirstOrDefault(e => e.id == enemyId);
+                    if (enemy == null)
+                    {
+                        return;
+                    }
+                    enemy.Damage(10);
+                    if (enemy.Health <= 0)
+                    {
+                        enemy.body.Dispose();
+                        enemies.Remove(enemy);
+                    }
+                }
+            }
+
+        }
+
 
         private void BeginContactForSpike(Contact contact)
         {
