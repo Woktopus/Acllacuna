@@ -390,6 +390,10 @@ namespace Acllacuna
 
 			if (keyboardInput.IsKeyDown(Keys.A))
 			{
+				if (currentRitual >= 3)
+				{
+					return;
+				}
 				if (prevInput.IsKeyDown(Keys.D1) && keyboardInput.IsKeyUp(Keys.D1))
 				{
 					ritualValues[currentRitual] = 1;
@@ -515,7 +519,7 @@ namespace Acllacuna
 			float width = (ritual1.SourceRect.Width * ritual1.scale.X);
 
 			Vector2 ritualPos = (ConvertUnits.ToDisplayUnits(body.Position) + new Vector2(-width, -ConvertUnits.ToDisplayUnits(size.Y) / 2));
-			for (int i = 0; i < currentRitual; i++)
+			for (int i = 0; i < Math.Min(currentRitual, 3); i++)
 			{
 				int temp = ritualValues[i];
 				if (temp == 1)
