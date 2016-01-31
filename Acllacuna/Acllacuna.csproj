@@ -95,9 +95,11 @@
     </Content>
     <Content Include="Content\Graphics\couteau.png" />
     <Content Include="Content\Graphics\Fondmenu.PNG" />
+    <Content Include="Content\Graphics\GAGNE.png" />
     <Content Include="Content\Graphics\JOUER.png" />
     <Content Include="Content\Graphics\Lifebar2.PNG" />
     <Content Include="Content\Graphics\OPTIONS.png" />
+    <Content Include="Content\Graphics\PERDU.png" />
     <Content Include="Content\Graphics\QUITTER.png" />
     <Content Include="Content\Graphics\symbole1.png" />
     <Content Include="Content\Graphics\symbole2.png" />
