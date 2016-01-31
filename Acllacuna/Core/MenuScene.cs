@@ -19,7 +19,7 @@ namespace Acllacuna
         {
             bg = new Image();
             bg.LoadContent(Content, "Graphics/Fondmenu", Color.White, new Vector2(0, 0));
-            bg.scale = new Vector2(graph.Viewport.Width, graph.Viewport.Height) / new Vector2(bg.SourceRect.Width, bg.SourceRect.Height);  
+            bg.scale = new Vector2(graph.Viewport.Width, graph.Viewport.Height) / new Vector2(bg.SourceRect.Width, bg.SourceRect.Height)*2;  
 
             jouer = new Button(Content.Load<Texture2D>("Graphics/JOUER"),graph);
             jouer.Position = new Vector2(250, 50);

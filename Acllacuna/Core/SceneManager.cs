@@ -103,7 +103,7 @@ namespace Acllacuna
 
         public void Initialize()
         {
-            currentScene = new PhysicsScene();
+            currentScene = new SplashScreen();
             fade = new Transition();
             //inputManager = new InputManager();
         }
