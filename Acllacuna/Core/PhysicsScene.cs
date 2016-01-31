@@ -19,6 +19,8 @@ namespace Acllacuna
 {
     public class PhysicsScene : Scene
 	{
+		public const string wintext = "CONGRATULATIONS !";
+
 		public World world;
 
         protected DebugViewXNA debugView;
@@ -44,6 +46,8 @@ namespace Acllacuna
 		Image lifeBarFrame;
 		Image lifeBar;
 
+		Boss boss;
+
         public PhysicsScene()
         {
             world = null;
@@ -66,6 +70,7 @@ namespace Acllacuna
 			lifeBarFrame = new Image();
 			lifeBar = new Image();
 
+			boss = new Boss();
         }
 
         public override void LoadContent(ContentManager content, GraphicsDevice graph)
@@ -115,7 +120,7 @@ namespace Acllacuna
 
             projectileFactory.LoadContent(this, content);
 
-            player.LoadContent(world, content, new Vector2(14, 10), this);
+            player.LoadContent(world, content, new Vector2(18, 10), this);
 
 
             map.LoadContent(content, world);
@@ -128,6 +133,8 @@ namespace Acllacuna
 
 			lifeBarFrame.LoadContent(content, "Graphics/cadre", Color.White, Vector2.Zero);
 			lifeBar.LoadContent(content, "Graphics/lifeBar", Color.White, Vector2.Zero);
+
+			boss.LoadContent(content, world, ConvertUnits.ToDisplayUnits(new Vector2(10, 0)), new Vector2(20, 20));
         }
 
         bool onBeginContact(Contact contact)
@@ -138,6 +145,20 @@ namespace Acllacuna
             BeginContactForSpike(contact);
             BeginContactForDagger(contact);
             BeginContactForEnemy(contact);
+			BeginContactForBoss(contact);
+
+			Fixture fa = contact.FixtureA;
+			Fixture fb = contact.FixtureB;
+
+			if ((int)fa.UserData == 9000 && ((int)fb.UserData == 0 || (int)fb.UserData == 1))
+			{
+				return false;
+			}
+
+			if ((int)fb.UserData == 9000 && ((int)fa.UserData == 0 || (int)fb.UserData == 1))
+			{
+				return false;
+			}
 
             return true;
         }
@@ -149,62 +170,131 @@ namespace Acllacuna
             EndContactForEnemy(contact);
         }
 
-        //here
-        public void BeginContactForDagger(Contact contact)
-        {
-            Fixture fa = contact.FixtureA;
-            Fixture fb = contact.FixtureB;
-            
-            if ((int)fa.UserData == 1500)
-            {
-                if((int)fb.UserData >= 100 && (int)fb.UserData < 200)
-                {
-                    if (player.Health > 0 && player.isAttacking)
-                    {
-                        int enemyId = (int)fb.UserData - 100;
-                        Enemy enemy = enemies.FirstOrDefault(e => e.id == enemyId);
-                        if (enemy == null)
-                        {
-                            return;
-                        }
+		//here
+		public void BeginContactForBoss(Contact contact)
+		{
+			Fixture fa = contact.FixtureA;
+			Fixture fb = contact.FixtureB;
+
+			if ((int)fa.UserData == 11000 && (int)fb.UserData == 0)
+			{
+				player.Damage(25);
+			}
+
+			if ((int)fb.UserData == 11000 && (int)fa.UserData == 0)
+			{
+				player.Damage(25);
+			}
+
+			if ((int)fa.UserData == 10000
+				&& ((int)fb.UserData == 1500
+				|| ((int)fb.UserData >= 1000 && (int)fb.UserData < 1100)))
+			{
+				boss.health -= 30;
+				if (boss.health <= 0)
+				{
+					boss.isDead = true;
+					player.text.text = wintext;
+				}
+			}
+
+			if ((int)fb.UserData == 10000
+				&& ((int)fa.UserData == 1500
+				|| ((int)fa.UserData >= 1000 && (int)fa.UserData < 1100)))
+			{
+				boss.health -= 30;
+				if (boss.health <= 0)
+				{
+					boss.isDead = true;
+					player.text.text = wintext;
+				}
+			}
+
+			if ((int)fa.UserData == 10000
+				&& ((int)fb.UserData >= 1000 && (int)fb.UserData < 1100))
+			{
+				int projectileId = (int)fb.UserData - 1000;
+				Projectile proj = projectiles.FirstOrDefault(p => p.id == projectileId);
+
+				if (proj == null)
+				{
+					return;
+				}
+
+				proj.body.Dispose();
+				projectiles.Remove(proj);
+			}
+
+			if ((int)fb.UserData == 10000
+				&& ((int)fa.UserData >= 1000 && (int)fa.UserData < 1100))
+			{
+				int projectileId = (int)fa.UserData - 1000;
+				Projectile proj = projectiles.FirstOrDefault(p => p.id == projectileId);
+
+				if (proj == null)
+				{
+					return;
+				}
+
+				proj.body.Dispose();
+				projectiles.Remove(proj);
+			}
+		}
+		public void BeginContactForDagger(Contact contact)
+		{
+			Fixture fa = contact.FixtureA;
+			Fixture fb = contact.FixtureB;
+
+			if ((int)fa.UserData == 1500)
+			{
+				if ((int)fb.UserData >= 100 && (int)fb.UserData < 200)
+				{
+					if (player.Health > 0 && player.isAttacking)
+					{
+						int enemyId = (int)fb.UserData - 100;
+						Enemy enemy = enemies.FirstOrDefault(e => e.id == enemyId);
+						if (enemy == null)
+						{
+							return;
+						}
 						if (!enemy.isInvul)
 						{
 							enemy.Damage(10);
 						}
 						if (enemy.Health <= 0)
-                        {
-                            enemy.body.Dispose();
-                            enemies.Remove(enemy);
-                        } 
-                    }
-                }
-            }
-            if ((int)fb.UserData == 1500)
-            {
-                if ((int)fa.UserData >= 100 && (int)fa.UserData < 200)
-                {
-                    if (player.Health > 0 && player.isAttacking)
-                    {
-                        int enemyId = (int)fb.UserData - 100;
-                        Enemy enemy = enemies.FirstOrDefault(e => e.id == enemyId);
-                        if (enemy == null)
-                        {
-                            return;
+						{
+							enemy.body.Dispose();
+							enemies.Remove(enemy);
+						}
+					}
+				}
+			}
+			if ((int)fb.UserData == 1500)
+			{
+				if ((int)fa.UserData >= 100 && (int)fa.UserData < 200)
+				{
+					if (player.Health > 0 && player.isAttacking)
+					{
+						int enemyId = (int)fb.UserData - 100;
+						Enemy enemy = enemies.FirstOrDefault(e => e.id == enemyId);
+						if (enemy == null)
+						{
+							return;
 						}
 						if (!enemy.isInvul)
 						{
 							enemy.Damage(10);
 						}
-                        if (enemy.Health <= 0)
-                        {
-                            enemy.body.Dispose();
-                            enemies.Remove(enemy);
-                        } 
-                    }
-                }
-            }
+						if (enemy.Health <= 0)
+						{
+							enemy.body.Dispose();
+							enemies.Remove(enemy);
+						}
+					}
+				}
+			}
 
-        }
+		}
 
 
         private void BeginContactForSpike(Contact contact)
@@ -608,11 +698,13 @@ namespace Acllacuna
             player.Update(gameTime, world);
 			camera.CenterOn(ConvertUnits.ToDisplayUnits(player.GetPositionFromBody()), map);
 
-			lifeBar.position = new Vector2(ConvertUnits.ToDisplayUnits(player.body.Position.X), camera.ScreenToWorld(new Vector2(0, 50)).Y);
+			lifeBar.position = new Vector2(camera.ScreenToWorld(new Vector2(graphicDevice.Viewport.Width / 2, 0)).X , camera.ScreenToWorld(new Vector2(0, 50)).Y);
 			lifeBar.scale = new Vector2(player.Health / 10, 0.5f);
 
-			lifeBarFrame.position = new Vector2(ConvertUnits.ToDisplayUnits(player.body.Position.X) - 1, camera.ScreenToWorld(new Vector2(0, 50)).Y - 1);
+			lifeBarFrame.position = new Vector2(camera.ScreenToWorld(new Vector2(graphicDevice.Viewport.Width / 2, 0)).X - 1, camera.ScreenToWorld(new Vector2(0, 50)).Y - 1);
 			lifeBarFrame.scale = new Vector2(0.31f, 0.099f);
+
+			boss.Update(gameTime);
 
             // variable time step but never less then 30 Hz
             world.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalSeconds, (1f / PhysicsUtils.FPS)));
@@ -640,6 +732,8 @@ namespace Acllacuna
                 enemy.Draw(spriteBatch);
             }
 
+			boss.Draw(spriteBatch);
+
             player.Draw(spriteBatch);
 
 			lifeBar.Draw(spriteBatch);
@@ -647,7 +741,7 @@ namespace Acllacuna
 
             Matrix cameraMatrix = camera.DebugMatrix;
 
-            //debugView.RenderDebugData(ref projection, ref cameraMatrix);
+            debugView.RenderDebugData(ref projection, ref cameraMatrix);
         }
     }
 }

@@ -14,10 +14,6 @@ namespace Acllacuna
 {
 	public class Player
 	{
-		const string ritual1 = " inti ";
-		const string ritual2 = " killa ";
-		const string ritual3 = " pitina ";
-
         private PhysicsScene physicsScene;
 
         public Body body;
@@ -73,7 +69,15 @@ namespace Acllacuna
 
         public int Ammo { get; set; }
 
-		public Text ritual;
+		public Image ritual1;
+		public Image ritual2;
+		public Image ritual3;
+
+		public int[] ritualValues;
+
+		public int currentRitual;
+
+		public Text text;
 
         public Player()
         {
@@ -101,7 +105,14 @@ namespace Acllacuna
 
 			isAttacking = false;
 
-			ritual = new Text();
+			ritual1 = new Image();
+			ritual2 = new Image();
+			ritual3 = new Image();
+
+			ritualValues = new int[3];
+			currentRitual = 0;
+
+			text = new Text();
         }
 
 
@@ -111,10 +122,10 @@ namespace Acllacuna
 			Health -= damage;
 			isDamaged = true;
 			isInvul = true;
-            if (Health <=0)
+            if (Health <= 0)
             {
                 body.Dispose();
-				ritual.text = "GAME OVER";
+				text.text = "GAME OVER";
             }
 		}
 
@@ -228,7 +239,7 @@ namespace Acllacuna
 
 			animation.isActive = true;
 
-			ritual.LoadContent(content, "Graphics/Font/aztec", Color.Red, "", ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, -size.Y / 2)));
+			text.LoadContent(content, "Graphics/Font/aztec", Color.Red, "", ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, -size.Y / 2)));
 		}
 
 		public void Update(GameTime gameTime, World world)
@@ -339,7 +350,7 @@ namespace Acllacuna
 
             dagger.Update(gameTime);
 
-			ritual.position = ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, -size.Y / 2));
+			text.position = ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, -size.Y / 2));
 
 			if (isInvul)
 			{
@@ -371,23 +382,27 @@ namespace Acllacuna
 			{
 				if (prevInput.IsKeyDown(Keys.D1) && keyboardInput.IsKeyUp(Keys.D1))
 				{
-					ritual.text += ritual1;
+					ritualValues[currentRitual] = 1;
+					currentRitual++;
 					return;
 				}
 				if (prevInput.IsKeyDown(Keys.D2) && keyboardInput.IsKeyUp(Keys.D2))
 				{
-					ritual.text += ritual2;
+					ritualValues[currentRitual] = 2;
+					currentRitual++;
 					return;
 				}
 				if (prevInput.IsKeyDown(Keys.D3) && keyboardInput.IsKeyUp(Keys.D3))
 				{
-					ritual.text += ritual3;
+					ritualValues[currentRitual] = 3;
+					currentRitual++;
 					return;
 				}
 			}
 			else if (prevInput.IsKeyDown(Keys.A))
 			{
-				if (ritual.text == ritual1 + ritual2 + ritual3)
+				if (currentRitual == 3
+					&& (ritualValues[0] == 1 && ritualValues[1] == 2 && ritualValues[2] == 3))
 				{
 					if (Ammo >= 50)
 					{
@@ -395,7 +410,10 @@ namespace Acllacuna
 						Health = 100;
 					}
 				}
-				ritual.text = "";
+				currentRitual = 0;
+				ritualValues[0] = -1;
+				ritualValues[1] = -1;
+				ritualValues[2] = -1;
 			}
 		}
 
@@ -482,7 +500,7 @@ namespace Acllacuna
                     animation.DrawFlipHorizontally(spriteBatch);
                 }
             }
-			ritual.Draw(spriteBatch);
+			text.Draw(spriteBatch);
 		}
 
         public Vector2 GetDrawPosition()
