@@ -18,6 +18,7 @@ namespace Acllacuna
         List<MovingPlatforme> listMov;
         public List<Enemy> listEnnemy;
         World world;
+        Boss boss;
 
 
         public DynamicMap(String path)
@@ -26,9 +27,10 @@ namespace Acllacuna
             mondico = new Dictionary<int, string>();
             mondico.Add(1, "Graphics/TileMap/cactus_bottom");
             mondico.Add(2, "Graphics/TileMap/stonebrick");
-            parse = new Parser("Map/Map1Dyn.txt");
+            parse = new Parser("Map/MapBossDyn.txt");
             listMov = new List<MovingPlatforme>();
             listEnnemy = new List<Enemy>();
+            boss = new Boss();
 
         }
 
@@ -50,8 +52,14 @@ namespace Acllacuna
                     en.LoadContent(world, Content, new Vector2(map[i, 1], map[i, 2]),phy);
                     listEnnemy.Add(en);
                 }
-                
+            else if (map[i, 0] == 3)
+            { //BOSS
+                Boss bo = new Boss();
+                bo.LoadContent(Content, world, new Vector2(map[i, 1], map[i, 2]), new Vector2(map[i, 3], map[i, 4]));
+                    boss = bo;
             }
+
+        }
         }
 
         public void Update(GameTime gameTime)
@@ -64,6 +72,7 @@ namespace Acllacuna
             {
                 en.Update(gameTime,world);
             }
+            boss.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -77,6 +86,7 @@ namespace Acllacuna
             {
                 en.Draw(spriteBatch);
             }
+            boss.Draw(spriteBatch);
         }
     }
 }

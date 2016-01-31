@@ -47,7 +47,7 @@ namespace Acllacuna
             mondico.Add(10, "Graphics/TileMap/furnace");
             mondico.Add(11, "Graphics/TileMap/furnace2");
             pathMap = path;
-            pars = new Parser("Map/Map1.txt");
+            pars = new Parser("Map/MapBoss.txt");
             
         }
 
