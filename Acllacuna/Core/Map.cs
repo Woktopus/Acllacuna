@@ -35,12 +35,12 @@ namespace Acllacuna
             listBlock = new List<Block>();
             listSpike = new List<Spike>();
             mondico = new Dictionary<int, string>();
-            mondico.Add(1, "Graphics/cube1");
-            mondico.Add(2, "Graphics/cube2");
-            mondico.Add(3, "Graphics/spike");
-            mondico.Add(4, "Graphics/spike_bas");
-            mondico.Add(5, "Graphics/spike_droite");
-            mondico.Add(6, "Graphics/spike_gauche");
+            mondico.Add(1, "Graphics/TileMap/cube1");
+            mondico.Add(2, "Graphics/TileMap/cube2");
+            mondico.Add(3, "Graphics/TileMap/spike");
+            mondico.Add(4, "Graphics/TileMap/spike_bas");
+            mondico.Add(5, "Graphics/TileMap/spike_droite");
+            mondico.Add(6, "Graphics/TileMap/spike_gauche");
             pathMap = path;
             pars = new Parser("Map/Map1.txt");
             
