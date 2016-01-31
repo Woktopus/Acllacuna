@@ -54,9 +54,7 @@ namespace Acllacuna
                 }
             else if (map[i, 0] == 3)
             { //BOSS
-                Boss bo = new Boss();
-                bo.LoadContent(Content, world, new Vector2(map[i, 1], map[i, 2]), new Vector2(map[i, 3], map[i, 4]));
-                    boss = bo;
+              boss.LoadContent(Content, world, new Vector2(map[i, 1], map[i, 2]), new Vector2(map[i, 3], map[i, 4]));
             }
 
         }
