@@ -143,6 +143,8 @@ namespace Acllacuna
             EndContactForEnemy(contact);
         }
 
+        //here
+
         private void BeginContactForSpike(Contact contact)
         {
             Fixture fixtureA = contact.FixtureA;

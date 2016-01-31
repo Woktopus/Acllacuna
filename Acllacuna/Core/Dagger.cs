@@ -19,6 +19,8 @@ namespace Acllacuna
         public Vector2 bodyPosition { get; set; }
         public DirectionEnum direc { get; set; }
 
+        public Player player { get; set; }
+
         public Dagger()
         {
 
@@ -32,17 +34,6 @@ namespace Acllacuna
             body.Position = position;
             bodyPosition = position;
             body.FixtureList[0].UserData = 1500;
-            if(isAtacking)
-            {
-                body.Enabled = true;
-                body.Awake = false;
-            }
-            else
-            {
-                body.Enabled = false;
-                body.Awake = true;
-
-            }
 
             Vector2 imagePosition = new Vector2(ConvertUnits.ToDisplayUnits(position.X), ConvertUnits.ToDisplayUnits(position.Y));
             image = new Image();
@@ -51,17 +42,6 @@ namespace Acllacuna
         }
 
 
-        public void Attack()
-        {
-            this.isAtacking = true;
-            body.Enabled = true;
-        }
-
-        public void EndAttack()
-        {
-            this.isAtacking = false;
-            body.Enabled = false;
-        }
 
 
         public void Update(GameTime gameTime)
@@ -76,19 +56,21 @@ namespace Acllacuna
                 image.position = new Vector2(ConvertUnits.ToDisplayUnits(body.Position.X), ConvertUnits.ToDisplayUnits(body.Position.Y));
             }
             body.Position = bodyPosition;
-            if (isAtacking)
+            if (player.isAttacking)
             {
-                body.Enabled = true;
+                body.IsSensor = false;
+                //body.Enabled = true;       
             }
             else
             {
-                body.Enabled = false;
+                body.IsSensor = true;
+               //body.Enabled = false;
             }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (isAtacking)
+            if (player.isAttacking)
             {
                 if (direc == DirectionEnum.LEFT)
                 {

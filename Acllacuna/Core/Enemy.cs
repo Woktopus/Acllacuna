@@ -41,13 +41,13 @@ namespace Acllacuna
 			contactsWithFloor = 1;
 		}
 
-		protected override void SetSize()
+		public override void SetSize()
 		{
 			this.size = new Vector2(2.5f, 4f);
 			this.sizeRatio = new Vector2(0.7f, 0.9f);
 		}
 
-		protected override void SetIDS()
+		public override void SetIDS()
 		{
 			body.FixtureList[0].UserData = (int)100;
 			feet[0].UserData = (int)(100 + id);
@@ -65,7 +65,7 @@ namespace Acllacuna
 			bumpers[9].UserData = (int)100;
 		}
 
-		protected override void LoadAnimation(ContentManager content)
+		public override void LoadAnimation(ContentManager content)
 		{
 			animation.LoadContent(content, "Graphics/redsheet", Color.White, GetDrawPosition(), 200, new Vector2(3, 4));
 
@@ -103,7 +103,7 @@ namespace Acllacuna
 			sensors[3].IsSensor = true;
 		}
 
-		protected override void SetVelocity(World world, GameTime gameTime)
+		public override void SetVelocity(World world, GameTime gameTime)
 		{
 			if (sensorsContacts[0] == 0 || sensorsContacts[2] > 0)
 			{

@@ -20,23 +20,23 @@ namespace Acllacuna
 
         public Dagger dagger;
 
-        protected Fixture[] feet;
+        public Fixture[] feet;
 
-		protected Fixture[] bumpers;
+		public Fixture[] bumpers;
 
-		protected Animation animation;
+		public Animation animation;
 
-        protected Vector2 size;
+        public Vector2 size;
 
-		protected Vector2 sizeRatio;
+		public Vector2 sizeRatio;
 
         public int contactsWithFloor;
 
-        protected float desiredHorizontalVelocity;
+        public float desiredHorizontalVelocity;
 
-        protected bool hasJumped;
+        public bool hasJumped;
 
-        protected bool hasMoved;
+        public bool hasMoved;
 
         public float projectileCooldown;
 
@@ -66,6 +66,7 @@ namespace Acllacuna
             animation = new Animation();
 
             dagger = new Dagger();
+            dagger.player = this;
 
             contactsWithFloor = 0;
 
@@ -168,13 +169,13 @@ namespace Acllacuna
 			LoadAnimation(content);
 		}
 
-		protected virtual void SetSize()
+		public virtual void SetSize()
 		{
 			this.size = new Vector2(2.5f, 3f);
 			this.sizeRatio = new Vector2(0.7f, 0.9f);
 		}
 
-		protected virtual void SetIDS()
+		public virtual void SetIDS()
 		{
 			body.FixtureList[0].UserData = (int)0;
 			feet[0].UserData = (int)1;
@@ -192,7 +193,7 @@ namespace Acllacuna
 			bumpers[9].UserData = (int)0;
 		}
 
-		protected virtual void LoadAnimation(ContentManager content)
+		public virtual void LoadAnimation(ContentManager content)
 		{
 			animation.LoadContent(content, "Graphics/Spritesheet", Color.White, GetDrawPosition(), 150, new Vector2(4, 5));
 
@@ -205,6 +206,8 @@ namespace Acllacuna
 
 		public void Update(GameTime gameTime, World world)
 		{
+            
+            animation.SetSpeed(150);
 			feet[0].Friction = 1000;
 			feet[1].Friction = 1000;
 			feet[2].Friction = 1000;
@@ -234,6 +237,12 @@ namespace Acllacuna
 				animation.SelectAnimation(4);
 				animation.loop = false;
 			}
+            else if(isAttacking)
+            {
+                animation.SetSpeed(50);
+                animation.SelectAnimation(3);
+                animation.loop = false;
+            }
 			else
 			{
 				if (hasMoved && animation.isEnded && contactsWithFloor > 0)
@@ -257,6 +266,8 @@ namespace Acllacuna
 				feet[2].Friction = 0;
 			}
 
+            
+
 			for (ContactEdge contactEdge = body.ContactList; contactEdge != null; contactEdge = contactEdge.Next)
 			{
 				contactEdge.Contact.ResetFriction();
@@ -276,10 +287,9 @@ namespace Acllacuna
             }
             dagger.Update(gameTime);
 
-
         }
 
-        protected virtual void SetVelocity(World world, GameTime gameTime)
+        public virtual void SetVelocity(World world, GameTime gameTime)
 		{
 			KeyboardState keyboardInput = ServiceHelper.Get<InputManagerService>().Keyboard.GetState();
 
@@ -349,13 +359,14 @@ namespace Acllacuna
         public void Attack()
         {
             this.isAttacking = true;
-            dagger.Attack();
         }
 
         public void EndAttack()
         {
-            this.isAttacking = false;
-            dagger.EndAttack();
+            if (animation.isEnded)
+            {
+                this.isAttacking = false;
+            }
         }
 
 		public void Draw(SpriteBatch spriteBatch)
@@ -364,24 +375,14 @@ namespace Acllacuna
 			if (directionRegard == DirectionEnum.RIGHT)
 			{
 				animation.Draw(spriteBatch);
-                if (isAttacking)
-                {
-
-                    EndAttack();
-                }
 			}
 			else
 			{
 				animation.DrawFlipHorizontally(spriteBatch);
-                if (isAttacking)
-                {
-
-                    EndAttack();
-                }
             }
 		}
 
-        protected Vector2 GetDrawPosition()
+        public Vector2 GetDrawPosition()
         {
             return ConvertUnits.ToDisplayUnits(body.Position);
         }
