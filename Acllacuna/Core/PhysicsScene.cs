@@ -167,8 +167,11 @@ namespace Acllacuna
                         {
                             return;
                         }
-                        enemy.Damage(10);
-                        if (enemy.Health <= 0)
+						if (!enemy.isInvul)
+						{
+							enemy.Damage(10);
+						}
+						if (enemy.Health <= 0)
                         {
                             enemy.body.Dispose();
                             enemies.Remove(enemy);
@@ -187,8 +190,11 @@ namespace Acllacuna
                         if (enemy == null)
                         {
                             return;
-                        }
-                        enemy.Damage(10);
+						}
+						if (!enemy.isInvul)
+						{
+							enemy.Damage(10);
+						}
                         if (enemy.Health <= 0)
                         {
                             enemy.body.Dispose();
@@ -209,7 +215,7 @@ namespace Acllacuna
             if ((int)fixtureA.UserData == 2000)
             {
                 //Cas player
-                if ((int)fixtureB.UserData == 0)
+				if ((int)fixtureB.UserData == 0 && !player.isInvul)
                 {
                     player.Damage(25);
                 }
@@ -221,8 +227,11 @@ namespace Acllacuna
                     if (enemy == null)
                     {
                         return;
-                    }
-                    enemy.Damage(25);
+					}
+					if (!enemy.isInvul)
+					{
+						enemy.Damage(25);
+					}
                     if (enemy.Health <= 0)
                     {
                         enemy.body.Dispose();
@@ -233,7 +242,7 @@ namespace Acllacuna
             else if ((int)fixtureB.UserData == 2000)
             {
                 //cas player
-                if ((int)fixtureA.UserData == 0)
+				if ((int)fixtureA.UserData == 0 && !player.isInvul)
                 {
                     player.Damage(25);
                 }
@@ -245,8 +254,11 @@ namespace Acllacuna
                     if (enemy == null)
                     {
                         return;
-                    }
-                    enemy.Damage(25);
+					}
+					if (!enemy.isInvul)
+					{
+						enemy.Damage(25);
+					}
                     if (enemy.Health <= 0)
                     {
                         enemy.body.Dispose();
@@ -295,8 +307,11 @@ namespace Acllacuna
                         return;
                     }
                     proj.body.Dispose();
-                    projectiles.Remove(proj);
-                    enemy.Damage(10);
+					projectiles.Remove(proj);
+					if (!enemy.isInvul)
+					{
+						enemy.Damage(10);
+					}
                     if (enemy.Health <= 0)
                     {
                         enemy.body.Dispose();
@@ -342,8 +357,11 @@ namespace Acllacuna
                         return;
                     }
                     proj.body.Dispose();
-                    projectiles.Remove(proj);
-					enemy.Damage(10);
+					projectiles.Remove(proj);
+					if (!enemy.isInvul)
+					{
+						enemy.Damage(10);
+					}
                     if (enemy.Health <= 0)
                     {
                         enemy.body.Dispose();
@@ -469,11 +487,11 @@ namespace Acllacuna
                 player.contactsWithFloor--;
                 return;
             }
-            if ((int)fixtureA.UserData == 0 && (int)fixtureB.UserData >=100 && (int)fixtureB.UserData < 200)
+            if ((int)fixtureA.UserData == 0 && (int)fixtureB.UserData >=100 && (int)fixtureB.UserData < 200 && !player.isInvul)
             {
                 player.Damage(10);
             }
-            if ((int)fixtureB.UserData == 0 && (int)fixtureA.UserData >= 100 && (int)fixtureA.UserData < 200)
+			if ((int)fixtureB.UserData == 0 && (int)fixtureA.UserData >= 100 && (int)fixtureA.UserData < 200 && !player.isInvul)
             {
                 player.Damage(10);
             }
