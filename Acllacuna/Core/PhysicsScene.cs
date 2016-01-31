@@ -524,7 +524,7 @@ namespace Acllacuna
 			spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, camera.TranslationMatrix);
             mapBack.Draw(spriteBatch);
 
-            //map.Draw(spriteBatch);
+            map.Draw(spriteBatch);
             dynMap.Draw(spriteBatch);
             foreach (CollectibleItem item in collectibleItems)
             {

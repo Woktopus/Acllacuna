@@ -1,6 +1,7 @@
 ﻿using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
 using FarseerPhysics.Dynamics;
+using FarseerPhysics.Dynamics.Contacts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System;
@@ -25,7 +26,7 @@ namespace Acllacuna
 		{
 			id = NextID;
 			NextID++;
-            Health = 20;
+            Health = 500;
 
 			direction = DirectionEnum.LEFT;
 			shouldMove = true;
@@ -66,9 +67,9 @@ namespace Acllacuna
 
 		protected override void LoadAnimation(ContentManager content)
 		{
-			animation.LoadContent(content, "Graphics/Spritesheet", Color.DarkRed, GetDrawPosition(), 200, new Vector2(4, 5));
+			animation.LoadContent(content, "Graphics/redsheet", Color.White, GetDrawPosition(), 200, new Vector2(3, 4));
 
-			animation.SelectAnimation(1);
+			animation.SelectAnimation(0);
 
 			animation.ScaleToMeters(size);
 
@@ -137,5 +138,71 @@ namespace Acllacuna
 			body.ApplyLinearImpulse(new Vector2(impulse, 0), body.WorldCenter);
 		}
 		
+        public void Update(GameTime gameTime, World world )
+        {
+            feet[0].Friction = 1000;
+            feet[1].Friction = 1000;
+            feet[2].Friction = 1000;
+
+            SetVelocity(world, gameTime);
+
+            if (isDamaged)
+            {
+                isDamaged = false;
+                float impulse;
+
+                if (directionRegard == DirectionEnum.LEFT)
+                {
+                    float velocityChange = 8 - body.LinearVelocity.X;
+                    impulse = body.Mass * velocityChange;
+                }
+                else
+                {
+                    float velocityChange = -8 - body.LinearVelocity.X;
+                    impulse = body.Mass * velocityChange;
+                }
+
+                body.ApplyLinearImpulse(new Vector2(impulse, 0), body.WorldCenter);
+                float jumpVelocity = PhysicsUtils.GetVerticalSpeedToReach(world, 4);
+                body.LinearVelocity = new Vector2(body.LinearVelocity.X, -jumpVelocity);
+
+                animation.SelectAnimation(3);
+                animation.loop = false;
+            }
+            else
+            {
+                if (hasMoved && animation.isEnded && contactsWithFloor > 0)
+                {
+                    animation.SelectAnimation(1);
+                    animation.loop = false;
+                }
+
+                if (hasJumped)
+                {
+                    hasJumped = false;
+                    animation.SelectAnimation(2);
+                    animation.loop = false;
+                }
+
+            }
+
+            if (hasMoved)
+            {
+                feet[0].Friction = 0;
+                feet[1].Friction = 0;
+                feet[2].Friction = 0;
+            }
+
+            for (ContactEdge contactEdge = body.ContactList; contactEdge != null; contactEdge = contactEdge.Next)
+            {
+                contactEdge.Contact.ResetFriction();
+            }
+
+            animation.position = GetDrawPosition();
+            animation.Update(gameTime);
+            dagger.bodyPosition = this.GetPositionFromBody();
+            dagger.Update(gameTime);
+        }
+
 	}
 }
