@@ -47,9 +47,12 @@ namespace Acllacuna
         TimeSpan previousLaserSpawnTime = TimeSpan.Zero;
 
         //Attackcooldown
-        const float RATE_OF_HIT = 150f;
+        const float RATE_OF_HIT = 300f;
         TimeSpan attackSpawnTime = TimeSpan.FromSeconds(SECONDS_IN_MINUTE / RATE_OF_HIT);
         TimeSpan previousHitSpawnTime = TimeSpan.Zero;
+
+		const float ATTACK_DURATION = 800f;
+		float attackDurationTimer = 0;
 
         //Stats
         public DirectionEnum directionRegard { get; set; }
@@ -206,8 +209,17 @@ namespace Acllacuna
 
 		public void Update(GameTime gameTime, World world)
 		{
-            
-            animation.SetSpeed(150);
+			if (isAttacking)
+			{
+				attackDurationTimer += gameTime.ElapsedGameTime.Milliseconds;
+				if (attackDurationTimer > ATTACK_DURATION)
+				{
+					attackDurationTimer = 0;
+					isAttacking = false;
+					animation.SelectAnimation(0);
+				}
+			}
+
 			feet[0].Friction = 1000;
 			feet[1].Friction = 1000;
 			feet[2].Friction = 1000;
@@ -239,17 +251,17 @@ namespace Acllacuna
 
 				if (directionRegard == DirectionEnum.LEFT)
 				{
-					float velocityChange = 8 - body.LinearVelocity.X;
+					float velocityChange = 16 - body.LinearVelocity.X;
 					impulse = body.Mass * velocityChange;
 				}
 				else
 				{
-					float velocityChange = -8 - body.LinearVelocity.X;
+					float velocityChange = -16 - body.LinearVelocity.X;
 					impulse = body.Mass * velocityChange;
 				}
 
 				body.ApplyLinearImpulse(new Vector2(impulse, 0), body.WorldCenter);
-				float jumpVelocity = PhysicsUtils.GetVerticalSpeedToReach(world, 4);
+				float jumpVelocity = PhysicsUtils.GetVerticalSpeedToReach(world, 2);
 				body.LinearVelocity = new Vector2(body.LinearVelocity.X, -jumpVelocity);
 
 				animation.SelectAnimation(4);
@@ -257,7 +269,6 @@ namespace Acllacuna
 			}
             else if(isAttacking)
             {
-                animation.SetSpeed(50);
                 animation.SelectAnimation(3);
                 animation.loop = false;
             }
@@ -290,7 +301,6 @@ namespace Acllacuna
                 dagger.direc = DirectionEnum.RIGHT;
             }
             dagger.Update(gameTime);
-
         }
 
         public virtual void SetVelocity(World world, GameTime gameTime)
@@ -347,8 +357,8 @@ namespace Acllacuna
             {
                 if (gameTime.TotalGameTime - previousHitSpawnTime > attackSpawnTime)
                 {
-                    previousHitSpawnTime = gameTime.TotalGameTime;
-                    Attack();
+					previousHitSpawnTime = gameTime.TotalGameTime;
+					this.isAttacking = true;
                 }
             }
         }
@@ -358,19 +368,6 @@ namespace Acllacuna
             this.physicsScene.projectileFactory.LaunchProjectile(this.directionRegard,
             new Vector2(1, 1), body.Position, "Graphics/Projectile/lame_hitbox", 10);
             Ammo--;
-        }
-
-        public void Attack()
-        {
-            this.isAttacking = true;
-        }
-
-        public void EndAttack()
-        {
-            if (animation.isEnded)
-            {
-                this.isAttacking = false;
-            }
         }
 
 		public void Draw(SpriteBatch spriteBatch)

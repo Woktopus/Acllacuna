@@ -32,8 +32,9 @@ namespace Acllacuna
             body = BodyFactory.CreateRectangle(world, size.X, size.Y, 1f);
             body.BodyType = BodyType.Kinematic;
             body.Position = position;
-            bodyPosition = position;
-            body.FixtureList[0].UserData = 1500;
+			bodyPosition = position;
+			body.FixtureList[0].UserData = 1500;
+			body.FixtureList[0].IsSensor = true;
 
             Vector2 imagePosition = new Vector2(ConvertUnits.ToDisplayUnits(position.X), ConvertUnits.ToDisplayUnits(position.Y));
             image = new Image();
@@ -55,17 +56,8 @@ namespace Acllacuna
             {
                 image.position = new Vector2(ConvertUnits.ToDisplayUnits(body.Position.X), ConvertUnits.ToDisplayUnits(body.Position.Y));
             }
+
             body.Position = bodyPosition;
-            if (player.isAttacking)
-            {
-                body.IsSensor = false;
-                //body.Enabled = true;       
-            }
-            else
-            {
-                body.IsSensor = true;
-               //body.Enabled = false;
-            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
