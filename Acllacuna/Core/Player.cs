@@ -64,6 +64,8 @@ namespace Acllacuna
 
         public int Ammo { get; set; }
 
+		public Text text;
+
         public Player()
         {
             animation = new Animation();
@@ -86,6 +88,10 @@ namespace Acllacuna
             projectileCooldown = 0f;
 
 			isDamaged = false;
+
+			isAttacking = false;
+
+			text = new Text();
         }
 
 
@@ -205,6 +211,8 @@ namespace Acllacuna
 			animation.ScaleToMeters(size);
 
 			animation.isActive = true;
+
+			//text.LoadContent(content, )
 		}
 
 		public void Update(GameTime gameTime, World world)
