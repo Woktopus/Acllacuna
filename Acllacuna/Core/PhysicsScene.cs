@@ -27,6 +27,7 @@ namespace Acllacuna
         Camera camera;
 
         Player player;
+        Dagger playerDagger;
 
         public ProjectileFactory projectileFactory { get; set; }
 
@@ -48,6 +49,8 @@ namespace Acllacuna
             camera = new Camera();
 
             player = new Player();
+            playerDagger = new Dagger();
+            player.dagger = playerDagger;
 
             collectibleItems = new List<CollectibleItem>();
 

@@ -18,6 +18,8 @@ namespace Acllacuna
 
         public Body body;
 
+        public Dagger dagger;
+
         protected Fixture[] feet;
 
 		protected Fixture[] bumpers;
@@ -62,7 +64,9 @@ namespace Acllacuna
         public Player()
         {
             animation = new Animation();
-            
+
+            dagger = null;
+
             contactsWithFloor = 0;
 
             Health = 100;
@@ -79,6 +83,8 @@ namespace Acllacuna
 
 			isDamaged = false;
         }
+
+
 
 		public void Damage(int damage)
 		{
@@ -327,7 +333,7 @@ namespace Acllacuna
 
         public void Attack()
         {
-
+            this.isAttacking = true;
         }
 
 		public void Draw(SpriteBatch spriteBatch)
