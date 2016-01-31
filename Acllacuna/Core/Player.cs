@@ -215,19 +215,24 @@ namespace Acllacuna
 				body.ApplyLinearImpulse(new Vector2(impulse, 0), body.WorldCenter);
 				float jumpVelocity = PhysicsUtils.GetVerticalSpeedToReach(world, 4);
 				body.LinearVelocity = new Vector2(body.LinearVelocity.X, -jumpVelocity);
-			}
 
-			if (hasMoved && animation.isEnded && contactsWithFloor > 0)
-			{
-				animation.SelectAnimation(1);
+				animation.SelectAnimation(4);
 				animation.loop = false;
 			}
-
-			if (hasJumped)
+			else
 			{
-				hasJumped = false;
-				animation.SelectAnimation(2);
-				animation.loop = false;
+				if (hasMoved && animation.isEnded && contactsWithFloor > 0)
+				{
+					animation.SelectAnimation(1);
+					animation.loop = false;
+				}
+
+				if (hasJumped)
+				{
+					hasJumped = false;
+					animation.SelectAnimation(2);
+					animation.loop = false;
+				}
 			}
 
 			if (desiredHorizontalVelocity != 0)

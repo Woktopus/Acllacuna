@@ -36,6 +36,8 @@ namespace Acllacuna
 			sensorsContacts[1] = 0;
 			sensorsContacts[2] = 0;
 			sensorsContacts[3] = 0;
+
+			contactsWithFloor = 1;
 		}
 
 		protected override void SetSize()
@@ -66,9 +68,11 @@ namespace Acllacuna
 		{
 			animation.LoadContent(content, "Graphics/Spritesheet", Color.DarkRed, GetDrawPosition(), 200, new Vector2(4, 5));
 
-			animation.SelectAnimation(0);
+			animation.SelectAnimation(1);
 
 			animation.ScaleToMeters(size);
+
+			animation.isActive = true;
 		}
 
 		public override void LoadContent(World world, ContentManager content, Vector2 position, PhysicsScene physicsScene)
