@@ -88,7 +88,7 @@ namespace Acllacuna
                 String[] objetDyn = ligne.Split(separator);
                 foreach (String a in objetDyn)
                 {
-                    listDyn[i,j] = int.Parse(a);
+                listDyn[i,j] = int.Parse(a);
                     j++;
                 }
                 i++;

@@ -58,7 +58,7 @@ namespace Acllacuna
 		const float ATTACK_DURATION = 800f;
 		float attackDurationTimer = 0;
 
-		public const float INVUL_DURATION = 1000f;
+		public const float INVUL_DURATION = 1500f;
 		public float invulDurationTimer = 0;
 
         //Stats
@@ -108,6 +108,7 @@ namespace Acllacuna
 
 		public void Damage(int damage)
 		{
+            if (isInvul) return;
 			Health -= damage;
 			isDamaged = true;
 			isInvul = true;

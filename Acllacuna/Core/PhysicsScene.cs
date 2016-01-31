@@ -97,7 +97,7 @@ namespace Acllacuna
 
             camera.viewportWidth = graph.Viewport.Width;
             camera.viewportHeight = graph.Viewport.Height;
-            camera.zoom = 0.15f;
+            camera.zoom = 0.85f;
             // NOTE: you should probably unregister on destructor or wherever is relevant...
 
             if (debugView == null)
@@ -167,11 +167,8 @@ namespace Acllacuna
                         {
                             return;
                         }
-						if (!enemy.isInvul)
-						{
-							enemy.Damage(10);
-						}
-						if (enemy.Health <= 0)
+                        enemy.Damage(10);
+                        if (enemy.Health <= 0)
                         {
                             enemy.body.Dispose();
                             enemies.Remove(enemy);
@@ -190,11 +187,8 @@ namespace Acllacuna
                         if (enemy == null)
                         {
                             return;
-						}
-						if (!enemy.isInvul)
-						{
-							enemy.Damage(10);
-						}
+                        }
+                        enemy.Damage(10);
                         if (enemy.Health <= 0)
                         {
                             enemy.body.Dispose();
@@ -215,7 +209,7 @@ namespace Acllacuna
             if ((int)fixtureA.UserData == 2000)
             {
                 //Cas player
-				if ((int)fixtureB.UserData == 0 && !player.isInvul)
+                if ((int)fixtureB.UserData == 0)
                 {
                     player.Damage(25);
                 }
@@ -227,11 +221,8 @@ namespace Acllacuna
                     if (enemy == null)
                     {
                         return;
-					}
-					if (!enemy.isInvul)
-					{
-						enemy.Damage(25);
-					}
+                    }
+                    enemy.Damage(25);
                     if (enemy.Health <= 0)
                     {
                         enemy.body.Dispose();
@@ -242,7 +233,7 @@ namespace Acllacuna
             else if ((int)fixtureB.UserData == 2000)
             {
                 //cas player
-				if ((int)fixtureA.UserData == 0 && !player.isInvul)
+                if ((int)fixtureA.UserData == 0)
                 {
                     player.Damage(25);
                 }
@@ -254,11 +245,8 @@ namespace Acllacuna
                     if (enemy == null)
                     {
                         return;
-					}
-					if (!enemy.isInvul)
-					{
-						enemy.Damage(25);
-					}
+                    }
+                    enemy.Damage(25);
                     if (enemy.Health <= 0)
                     {
                         enemy.body.Dispose();
@@ -307,11 +295,8 @@ namespace Acllacuna
                         return;
                     }
                     proj.body.Dispose();
-					projectiles.Remove(proj);
-					if (!enemy.isInvul)
-					{
-						enemy.Damage(10);
-					}
+                    projectiles.Remove(proj);
+                    enemy.Damage(10);
                     if (enemy.Health <= 0)
                     {
                         enemy.body.Dispose();
@@ -357,11 +342,8 @@ namespace Acllacuna
                         return;
                     }
                     proj.body.Dispose();
-					projectiles.Remove(proj);
-					if (!enemy.isInvul)
-					{
-						enemy.Damage(10);
-					}
+                    projectiles.Remove(proj);
+					enemy.Damage(10);
                     if (enemy.Health <= 0)
                     {
                         enemy.body.Dispose();
@@ -487,11 +469,11 @@ namespace Acllacuna
                 player.contactsWithFloor--;
                 return;
             }
-            if ((int)fixtureA.UserData == 0 && (int)fixtureB.UserData >=100 && (int)fixtureB.UserData < 200 && !player.isInvul)
+            if ((int)fixtureA.UserData == 0 && (int)fixtureB.UserData >=100 && (int)fixtureB.UserData < 200)
             {
                 player.Damage(10);
             }
-			if ((int)fixtureB.UserData == 0 && (int)fixtureA.UserData >= 100 && (int)fixtureA.UserData < 200 && !player.isInvul)
+            if ((int)fixtureB.UserData == 0 && (int)fixtureA.UserData >= 100 && (int)fixtureA.UserData < 200)
             {
                 player.Damage(10);
             }
@@ -623,7 +605,7 @@ namespace Acllacuna
 			spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, camera.TranslationMatrix);
             mapBack.Draw(spriteBatch);
 
-            //map.Draw(spriteBatch);
+            map.Draw(spriteBatch);
             dynMap.Draw(spriteBatch);
             foreach (CollectibleItem item in collectibleItems)
             {
