@@ -58,11 +58,16 @@ namespace Acllacuna
 		const float ATTACK_DURATION = 800f;
 		float attackDurationTimer = 0;
 
+		public const float INVUL_DURATION = 1000f;
+		public float invulDurationTimer = 0;
+
         //Stats
         public DirectionEnum directionRegard { get; set; }
         public int Health { get; set; }
 
 		public bool isDamaged;
+
+		public bool isInvul;
 
         public bool isAttacking;
 
@@ -92,6 +97,7 @@ namespace Acllacuna
             projectileCooldown = 0f;
 
 			isDamaged = false;
+			isInvul = false;
 
 			isAttacking = false;
 
@@ -104,9 +110,11 @@ namespace Acllacuna
 		{
 			Health -= damage;
 			isDamaged = true;
+			isInvul = true;
             if (Health <=0)
             {
                 body.Dispose();
+				ritual.text = "GAME OVER";
             }
 		}
 
@@ -264,7 +272,7 @@ namespace Acllacuna
 
                 if (isDamaged)
                 {
-                    isDamaged = false;
+					isDamaged = false;
                     float impulse;
 
                     if (directionRegard == DirectionEnum.LEFT)
@@ -283,7 +291,7 @@ namespace Acllacuna
                     body.LinearVelocity = new Vector2(body.LinearVelocity.X, -jumpVelocity);
 
                     animation.SelectAnimation(4);
-                    animation.loop = false;
+					animation.loop = false;
                 }
                 else if (isAttacking)
                 {
@@ -309,24 +317,49 @@ namespace Acllacuna
                 animation.position = GetDrawPosition();
                 animation.Update(gameTime);
 
-                if (this.directionRegard == DirectionEnum.LEFT)
-                {
-                    dagger.bodyPosition = new Vector2(this.GetPositionFromBody().X - 1.5f, this.GetPositionFromBody().Y);
-                    dagger.direc = DirectionEnum.LEFT;
-                }
-                else
-                {
-                    dagger.bodyPosition = new Vector2(this.GetPositionFromBody().X + 1.5f, this.GetPositionFromBody().Y);
-                    dagger.direc = DirectionEnum.RIGHT;
-                }
+				if (isAttacking)
+				{
+					if (this.directionRegard == DirectionEnum.LEFT)
+					{
+						dagger.bodyPosition = new Vector2(this.GetPositionFromBody().X - 1.5f, this.GetPositionFromBody().Y);
+						dagger.direc = DirectionEnum.LEFT;
+					}
+					else
+					{
+						dagger.bodyPosition = new Vector2(this.GetPositionFromBody().X + 1.5f, this.GetPositionFromBody().Y);
+						dagger.direc = DirectionEnum.RIGHT;
+					}
+				}
+				else
+				{
+					dagger.bodyPosition = Vector2.Zero;
+				}
                 dagger.Update(gameTime); 
             }
 
             dagger.Update(gameTime);
 
-			UpdateRitual();
-
 			ritual.position = ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, -size.Y / 2));
+
+			if (isInvul)
+			{
+				if (animation.textureColor == Color.White)
+				{
+					animation.textureColor = Color.Pink;
+				}
+				else
+				{
+					animation.textureColor = Color.White;
+				}
+
+				invulDurationTimer += gameTime.ElapsedGameTime.Milliseconds;
+				if (invulDurationTimer > INVUL_DURATION)
+				{
+					invulDurationTimer = 0;
+					isInvul = false;
+					animation.textureColor = Color.White;
+				}
+			}
         }
 
 		public void UpdateRitual()
@@ -423,7 +456,9 @@ namespace Acllacuna
 					previousHitSpawnTime = gameTime.TotalGameTime;
 					this.isAttacking = true;
                 }
-            }
+			}
+
+			UpdateRitual();
         }
 
         public void LaunchProjectile()

@@ -142,9 +142,27 @@ namespace Acllacuna
         {
             feet[0].Friction = 1000;
             feet[1].Friction = 1000;
-            feet[2].Friction = 1000;
+			feet[2].Friction = 1000;
 
-            SetVelocity(world, gameTime);
+			bumpers[1].Friction = 1000;
+			bumpers[4].Friction = 1000;
+
+			SetVelocity(world, gameTime);
+
+			if (hasMoved)
+			{
+				feet[0].Friction = 0;
+				feet[1].Friction = 0;
+				feet[2].Friction = 0;
+
+				bumpers[1].Friction = 0;
+				bumpers[4].Friction = 0;
+			}
+
+			for (ContactEdge contactEdge = body.ContactList; contactEdge != null; contactEdge = contactEdge.Next)
+			{
+				contactEdge.Contact.ResetFriction();
+			}
 
             if (isDamaged)
             {
@@ -153,17 +171,17 @@ namespace Acllacuna
 
                 if (directionRegard == DirectionEnum.LEFT)
                 {
-                    float velocityChange = 8 - body.LinearVelocity.X;
+                    float velocityChange = 16 - body.LinearVelocity.X;
                     impulse = body.Mass * velocityChange;
                 }
                 else
                 {
-                    float velocityChange = -8 - body.LinearVelocity.X;
+                    float velocityChange = -16 - body.LinearVelocity.X;
                     impulse = body.Mass * velocityChange;
                 }
 
                 body.ApplyLinearImpulse(new Vector2(impulse, 0), body.WorldCenter);
-                float jumpVelocity = PhysicsUtils.GetVerticalSpeedToReach(world, 4);
+                float jumpVelocity = PhysicsUtils.GetVerticalSpeedToReach(world, 2);
                 body.LinearVelocity = new Vector2(body.LinearVelocity.X, -jumpVelocity);
 
                 animation.SelectAnimation(3);
@@ -186,22 +204,30 @@ namespace Acllacuna
 
             }
 
-            if (hasMoved)
-            {
-                feet[0].Friction = 0;
-                feet[1].Friction = 0;
-                feet[2].Friction = 0;
-            }
-
-            for (ContactEdge contactEdge = body.ContactList; contactEdge != null; contactEdge = contactEdge.Next)
-            {
-                contactEdge.Contact.ResetFriction();
-            }
-
             animation.position = GetDrawPosition();
             animation.Update(gameTime);
             dagger.bodyPosition = this.GetPositionFromBody();
-            dagger.Update(gameTime);
+			dagger.Update(gameTime);
+
+			if (isInvul)
+			{
+				if (animation.textureColor == Color.White)
+				{
+					animation.textureColor = Color.Pink;
+				}
+				else
+				{
+					animation.textureColor = Color.White;
+				}
+
+				invulDurationTimer += gameTime.ElapsedGameTime.Milliseconds;
+				if (invulDurationTimer > INVUL_DURATION)
+				{
+					invulDurationTimer = 0;
+					isInvul = false;
+					animation.textureColor = Color.White;
+				}
+			}
         }
 
 	}
