@@ -209,7 +209,25 @@ namespace Acllacuna
 			feet[1].Friction = 1000;
 			feet[2].Friction = 1000;
 
+			bumpers[1].Friction = 1000;
+			bumpers[4].Friction = 1000;
+
 			SetVelocity(world, gameTime);
+
+			if (hasMoved)
+			{
+				feet[0].Friction = 0;
+				feet[1].Friction = 0;
+				feet[2].Friction = 0;
+
+				bumpers[1].Friction = 0;
+				bumpers[4].Friction = 0;
+			}
+
+			for (ContactEdge contactEdge = body.ContactList; contactEdge != null; contactEdge = contactEdge.Next)
+			{
+				contactEdge.Contact.ResetFriction();
+			}
 
 			if (isDamaged)
 			{
@@ -248,18 +266,6 @@ namespace Acllacuna
 					animation.SelectAnimation(2);
 					animation.loop = false;
 				}
-			}
-
-			if (hasMoved)
-			{
-				feet[0].Friction = 0;
-				feet[1].Friction = 0;
-				feet[2].Friction = 0;
-			}
-
-			for (ContactEdge contactEdge = body.ContactList; contactEdge != null; contactEdge = contactEdge.Next)
-			{
-				contactEdge.Contact.ResetFriction();
 			}
 
 			animation.position = GetDrawPosition();
