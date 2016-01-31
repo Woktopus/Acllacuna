@@ -126,8 +126,8 @@ namespace Acllacuna
             item.LoadContent(world, new Vector2(1, 1), new Vector2(21, 8), content, CollectibleItemType.AMMO);
             collectibleItems.Add(item);
 
-			//lifeBarFrame.LoadContent(content, "Graphics/lifeBarFrame", Color.White, new Vector2(50, 50));
-			lifeBar.LoadContent(content, "Graphics/lifeBar", Color.White, new Vector2(51, 51));
+			lifeBarFrame.LoadContent(content, "Graphics/cadre", Color.White, Vector2.Zero);
+			lifeBar.LoadContent(content, "Graphics/lifeBar", Color.White, Vector2.Zero);
         }
 
         bool onBeginContact(Contact contact)
@@ -593,6 +593,9 @@ namespace Acllacuna
 			lifeBar.position = new Vector2(ConvertUnits.ToDisplayUnits(player.body.Position.X), camera.ScreenToWorld(new Vector2(0, 50)).Y);
 			lifeBar.scale = new Vector2(player.Health / 10, 0.5f);
 
+			lifeBarFrame.position = new Vector2(ConvertUnits.ToDisplayUnits(player.body.Position.X) - 1, camera.ScreenToWorld(new Vector2(0, 50)).Y - 1);
+			lifeBarFrame.scale = new Vector2(0.31f, 0.099f);
+
             // variable time step but never less then 30 Hz
             world.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalSeconds, (1f / PhysicsUtils.FPS)));
         }
@@ -622,6 +625,7 @@ namespace Acllacuna
             player.Draw(spriteBatch);
 
 			lifeBar.Draw(spriteBatch);
+			lifeBarFrame.Draw(spriteBatch);
 
             Matrix cameraMatrix = camera.DebugMatrix;
 

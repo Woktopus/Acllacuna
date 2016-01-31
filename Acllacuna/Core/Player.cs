@@ -79,7 +79,7 @@ namespace Acllacuna
 
             contactsWithFloor = 0;
 
-            Health = 75;
+            Health = 100;
             Ammo = 100;
 
             feet = new Fixture[3];
