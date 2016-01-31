@@ -49,20 +49,20 @@ namespace Acllacuna
 
 		public override void SetIDS()
 		{
-			body.FixtureList[0].UserData = (int)100;
+			body.FixtureList[0].UserData = (int)(100 + id);
 			feet[0].UserData = (int)(100 + id);
 			feet[1].UserData = (int)(100 + id);
 			feet[2].UserData = (int)(100 + id);
-			bumpers[0].UserData = (int)100;
-			bumpers[1].UserData = (int)100;
-			bumpers[2].UserData = (int)100;
-			bumpers[3].UserData = (int)100;
-			bumpers[4].UserData = (int)100;
-			bumpers[5].UserData = (int)100;
-			bumpers[6].UserData = (int)100;
-			bumpers[7].UserData = (int)100;
-			bumpers[8].UserData = (int)100;
-			bumpers[9].UserData = (int)100;
+			bumpers[0].UserData = (int)(100 + id);
+			bumpers[1].UserData = (int)(100 + id);
+			bumpers[2].UserData = (int)(100 + id);
+			bumpers[3].UserData = (int)(100 + id);
+			bumpers[4].UserData = (int)(100 + id);
+			bumpers[5].UserData = (int)(100 + id);
+			bumpers[6].UserData = (int)(100 + id);
+			bumpers[7].UserData = (int)(100 + id);
+			bumpers[8].UserData = (int)(100 + id);
+			bumpers[9].UserData = (int)(100 + id);
 		}
 
 		public override void LoadAnimation(ContentManager content)
@@ -138,7 +138,7 @@ namespace Acllacuna
 			body.ApplyLinearImpulse(new Vector2(impulse, 0), body.WorldCenter);
 		}
 		
-        public void Update(GameTime gameTime, World world )
+        public void Update(GameTime gameTime, World world)
         {
             feet[0].Friction = 1000;
             feet[1].Friction = 1000;
