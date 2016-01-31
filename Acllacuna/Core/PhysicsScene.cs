@@ -123,8 +123,8 @@ namespace Acllacuna
             mapBack.LoadContent(content);
             enemies = dynMap.listEnnemy;
             CollectibleItem item = new CollectibleItem();
-            item.LoadContent(world, new Vector2(1, 1), new Vector2(21, 8), content, CollectibleItemType.AMMO);
-            collectibleItems.Add(item);
+            /*item.LoadContent(world, new Vector2(1, 1), new Vector2(21, 8), content, CollectibleItemType.AMMO);
+            collectibleItems.Add(item);*/
 
 			lifeBarFrame.LoadContent(content, "Graphics/cadre", Color.White, Vector2.Zero);
 			lifeBar.LoadContent(content, "Graphics/lifeBar", Color.White, Vector2.Zero);
