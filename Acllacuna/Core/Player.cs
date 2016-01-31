@@ -14,10 +14,6 @@ namespace Acllacuna
 {
 	public class Player
 	{
-		const string ritual1 = " inti ";
-		const string ritual2 = " killa ";
-		const string ritual3 = " pitina ";
-
         private PhysicsScene physicsScene;
 
         public Body body;
@@ -73,7 +69,15 @@ namespace Acllacuna
 
         public int Ammo { get; set; }
 
-		public Text ritual;
+		public Image ritual1;
+		public Image ritual2;
+		public Image ritual3;
+
+		public int[] ritualValues;
+
+		public int currentRitual;
+
+		public Text text;
 
         public Player()
         {
@@ -101,21 +105,32 @@ namespace Acllacuna
 
 			isAttacking = false;
 
-			ritual = new Text();
+			ritual1 = new Image();
+			ritual2 = new Image();
+			ritual3 = new Image();
+
+			ritualValues = new int[3];
+			currentRitual = 0;
+
+			text = new Text();
         }
 
 
 
 		public void Damage(int damage)
 		{
+<<<<<<< HEAD
             if (isInvul) return;
+=======
+			if (isInvul) return;
+>>>>>>> origin/master
 			Health -= damage;
 			isDamaged = true;
 			isInvul = true;
-            if (Health <=0)
+            if (Health <= 0)
             {
                 body.Dispose();
-				ritual.text = "GAME OVER";
+				text.text = "GAME OVER";
             }
 		}
 
@@ -229,7 +244,16 @@ namespace Acllacuna
 
 			animation.isActive = true;
 
-			ritual.LoadContent(content, "Graphics/Font/aztec", Color.Red, "", ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, -size.Y / 2)));
+			text.LoadContent(content, "Graphics/Font/aztec", Color.Red, "", ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, -size.Y / 2)));
+
+			Vector2 scaleRitual = new Vector2(0.3f, 0.3f);
+
+			ritual1.LoadContent(content, "Graphics/symbole1", Color.White, Vector2.Zero);
+			ritual1.scale = scaleRitual;
+			ritual2.LoadContent(content, "Graphics/symbole2", Color.White, Vector2.Zero);
+			ritual2.scale = scaleRitual;
+			ritual3.LoadContent(content, "Graphics/symbole3", Color.White, Vector2.Zero);
+			ritual3.scale = scaleRitual;
 		}
 
 		public void Update(GameTime gameTime, World world)
@@ -340,7 +364,7 @@ namespace Acllacuna
 
             dagger.Update(gameTime);
 
-			ritual.position = ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, -size.Y / 2));
+			text.position = ConvertUnits.ToDisplayUnits(body.Position + new Vector2(0, -size.Y / 2));
 
 			if (isInvul)
 			{
@@ -372,23 +396,27 @@ namespace Acllacuna
 			{
 				if (prevInput.IsKeyDown(Keys.D1) && keyboardInput.IsKeyUp(Keys.D1))
 				{
-					ritual.text += ritual1;
+					ritualValues[currentRitual] = 1;
+					currentRitual++;
 					return;
 				}
 				if (prevInput.IsKeyDown(Keys.D2) && keyboardInput.IsKeyUp(Keys.D2))
 				{
-					ritual.text += ritual2;
+					ritualValues[currentRitual] = 2;
+					currentRitual++;
 					return;
 				}
 				if (prevInput.IsKeyDown(Keys.D3) && keyboardInput.IsKeyUp(Keys.D3))
 				{
-					ritual.text += ritual3;
+					ritualValues[currentRitual] = 3;
+					currentRitual++;
 					return;
 				}
 			}
 			else if (prevInput.IsKeyDown(Keys.A))
 			{
-				if (ritual.text == ritual1 + ritual2 + ritual3)
+				if (currentRitual == 3
+					&& (ritualValues[0] == 1 && ritualValues[1] == 2 && ritualValues[2] == 3))
 				{
 					if (Ammo >= 50)
 					{
@@ -396,7 +424,10 @@ namespace Acllacuna
 						Health = 100;
 					}
 				}
-				ritual.text = "";
+				currentRitual = 0;
+				ritualValues[0] = -1;
+				ritualValues[1] = -1;
+				ritualValues[2] = -1;
 			}
 		}
 
@@ -465,7 +496,7 @@ namespace Acllacuna
         public void LaunchProjectile()
         {
             this.physicsScene.projectileFactory.LaunchProjectile(this.directionRegard,
-            new Vector2(1, 1), body.Position, "Graphics/Projectile/lame_hitbox", 10);
+            new Vector2(1, 1), body.Position, "Graphics/Projectile/couteau", 10);
             Ammo--;
         }
 
@@ -483,7 +514,31 @@ namespace Acllacuna
                     animation.DrawFlipHorizontally(spriteBatch);
                 }
             }
-			ritual.Draw(spriteBatch);
+			text.Draw(spriteBatch);
+
+			float width = (ritual1.SourceRect.Width * ritual1.scale.X);
+
+			Vector2 ritualPos = (ConvertUnits.ToDisplayUnits(body.Position) + new Vector2(-width, -ConvertUnits.ToDisplayUnits(size.Y) / 2));
+			for (int i = 0; i < currentRitual; i++)
+			{
+				int temp = ritualValues[i];
+				if (temp == 1)
+				{
+					ritual1.position = ritualPos;
+					ritual1.Draw(spriteBatch);
+				}
+				if (temp == 2)
+				{
+					ritual2.position = ritualPos;
+					ritual2.Draw(spriteBatch);
+				}
+				if (temp == 3)
+				{
+					ritual3.position = ritualPos;
+					ritual3.Draw(spriteBatch);
+				}
+				ritualPos += new Vector2(width, 0);
+			}
 		}
 
         public Vector2 GetDrawPosition()

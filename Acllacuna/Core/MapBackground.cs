@@ -19,7 +19,7 @@ namespace Acllacuna
         public MapBackground(String path)
         {
             this.path = path;
-            parse = new Parser("Map/Map1Background.txt");
+            parse = new Parser("Map/MapBossBackground.txt");
             listImage = new List<Image>();
 
         }
