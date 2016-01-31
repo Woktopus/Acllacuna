@@ -264,11 +264,22 @@ namespace Acllacuna
 
 			animation.position = GetDrawPosition();
 			animation.Update(gameTime);
-            dagger.bodyPosition = this.GetPositionFromBody();
+           
+            if(this.directionRegard == DirectionEnum.LEFT){
+                dagger.bodyPosition = new Vector2(this.GetPositionFromBody().X - 1.5f, this.GetPositionFromBody().Y);
+                dagger.direc = DirectionEnum.LEFT;
+            }
+            else
+            {
+                dagger.bodyPosition = new Vector2(this.GetPositionFromBody().X + 1.5f, this.GetPositionFromBody().Y);
+                dagger.direc = DirectionEnum.RIGHT;
+            }
             dagger.Update(gameTime);
-		}
 
-		protected virtual void SetVelocity(World world, GameTime gameTime)
+
+        }
+
+        protected virtual void SetVelocity(World world, GameTime gameTime)
 		{
 			KeyboardState keyboardInput = ServiceHelper.Get<InputManagerService>().Keyboard.GetState();
 
