@@ -43,7 +43,7 @@ namespace Acllacuna
 
 		public override void SetSize()
 		{
-			this.size = new Vector2(2.5f, 4f);
+			this.size = new Vector2(2.5f, 3f);
 			this.sizeRatio = new Vector2(0.7f, 0.9f);
 		}
 

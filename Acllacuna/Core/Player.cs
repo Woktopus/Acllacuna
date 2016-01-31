@@ -153,7 +153,7 @@ namespace Acllacuna
 
             body.Mass = 50;
 
-            dagger.LoadContent(content, world, new Vector2(1, 1), this.GetPositionFromBody(), "Graphics/lame_hitbox");
+            dagger.LoadContent(content, world, new Vector2(1, 0.5f), this.GetPositionFromBody(), "Graphics/lame_hitbox");
 
             CircleShape circle1 = new CircleShape(0.1f, 1f);
             CircleShape circle2 = new CircleShape(0.1f, 1f);
@@ -496,7 +496,7 @@ namespace Acllacuna
         public void LaunchProjectile()
         {
             this.physicsScene.projectileFactory.LaunchProjectile(this.directionRegard,
-            new Vector2(1, 1), body.Position, "Graphics/Projectile/couteau", 10);
+            new Vector2(1, 0.5f), body.Position, "Graphics/Projectile/couteau", 10);
             Ammo--;
         }
 
