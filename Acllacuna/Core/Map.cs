@@ -35,6 +35,7 @@ namespace Acllacuna
             mondico = new Dictionary<int, string>();
             mondico.Add(1, "Graphics/cube1");
             mondico.Add(2, "Graphics/cube2");
+            mondico.Add(3, "Graphics/spike");
             pathMap = path;
             pars = new Parser("Map/Map1.txt");
             
