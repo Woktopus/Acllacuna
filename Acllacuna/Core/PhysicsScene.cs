@@ -97,7 +97,7 @@ namespace Acllacuna
 
             camera.viewportWidth = graph.Viewport.Width;
             camera.viewportHeight = graph.Viewport.Height;
-            camera.zoom = 0.85f;
+            camera.zoom = 0.15f;
             // NOTE: you should probably unregister on destructor or wherever is relevant...
 
             if (debugView == null)
@@ -623,7 +623,7 @@ namespace Acllacuna
 			spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, camera.TranslationMatrix);
             mapBack.Draw(spriteBatch);
 
-            map.Draw(spriteBatch);
+            //map.Draw(spriteBatch);
             dynMap.Draw(spriteBatch);
             foreach (CollectibleItem item in collectibleItems)
             {
@@ -647,7 +647,7 @@ namespace Acllacuna
 
             Matrix cameraMatrix = camera.DebugMatrix;
 
-            //debugView.RenderDebugData(ref projection, ref cameraMatrix);
+            debugView.RenderDebugData(ref projection, ref cameraMatrix);
         }
     }
 }
