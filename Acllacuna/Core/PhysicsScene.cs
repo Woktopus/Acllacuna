@@ -445,6 +445,11 @@ namespace Acllacuna
                 return;
             }
 
+			if (enemy == null)
+			{
+				return;
+			}
+
             enemy.sensorsContacts[sensorID]++;
         }
 
