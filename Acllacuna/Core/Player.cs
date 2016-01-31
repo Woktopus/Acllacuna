@@ -235,7 +235,7 @@ namespace Acllacuna
 				}
 			}
 
-			if (desiredHorizontalVelocity != 0)
+			if (hasMoved)
 			{
 				feet[0].Friction = 0;
 				feet[1].Friction = 0;
