@@ -1,0 +1,2 @@
+﻿0;0
+Id;position.X;position.Y;size.X;size.Y;Direction;Distance;vitesse;texture
