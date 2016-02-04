@@ -203,7 +203,7 @@ namespace Acllacuna
 				{
 					boss.isDead = true;
 					player.isMessage = true;
-					player.message = Player.GAGNE;
+					player.message = player.GAGNE;
 				}
 			}
 
@@ -216,7 +216,7 @@ namespace Acllacuna
 				{
 					boss.isDead = true;
 					player.isMessage = true;
-					player.message = Player.GAGNE;
+					player.message = player.GAGNE;
 				}
 			}
 

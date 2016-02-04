@@ -77,8 +77,8 @@ namespace Acllacuna
 
 		public int currentRitual;
 
-		public static Image PERDU;
-		public static Image GAGNE;
+		public Image PERDU;
+		public Image GAGNE;
 
 		public Image message;
 		public bool isMessage;
